@@ -1,6 +1,6 @@
 # Home Assistant Dashboard - Current State & Context
 
-**Date:** 2025-11-22
+**Date:** 2025-11-23
 **HA Instance:** http://tower.local:8123
 **Dashboard URL:** http://tower.local:8123/clean-home
 **Dashboard Title:** Home
@@ -10,6 +10,12 @@
 - Container name: `homeassistant`
 - Volume mapping: `/mnt/user/appdata/homeassistant` (host) → `/config` (container)
 - Auto-updates: Watchtower (custom integrations in `/config` persist across updates)
+
+**Automations:**
+- File: `/config/automations.yaml` (23 automations total)
+- Local copy: `configs/automations.yaml` in this directory
+- Includes: Soundbar source selector + notification automations
+- Quiet hours: 11pm - 9am (Critical notifications bypass this)
 
 ---
 
@@ -450,10 +456,64 @@ python3 /Users/ciobanu/personal/home-automation/scripts/HyundaiFetchApiTokensSel
 
 ---
 
+## 🔔 Automations
+
+**File:** `automations.yaml` (23 automations total)
+
+### Automation List
+
+**Entertainment (1):**
+1. Soundbar - Change Source (syncs `input_select.soundbar_source` with soundbar)
+
+**Critical Notifications (10) - Bypass quiet hours:**
+1. Car Unlocked (5+ min)
+2. Car Door/Window/Trunk/Hood Open (10+ min)
+3. Kitchen Oven Left On >2 Hours
+4. Kitchen Cooktop Left On >30 Minutes
+5. Appliances Error State
+6. Car Low Tire Pressure (<30 PSI)
+7. Car Fuel Level Critical (<10%)
+8. Car Washer Fluid Low
+9. Car Battery Warning (<20%)
+10. System Device Offline (integrations failing)
+
+**Important Notifications (9) - Active hours 9am-11pm only:**
+1. Kitchen Dishwasher Complete
+2. Kitchen Dishwasher Salt Low
+3. Kitchen Dishwasher Rinse Aid Low
+4. Kitchen Oven Preheating Complete
+5. Kitchen Oven Cooking Complete
+6. Laundry Washing Machine Complete
+7. Laundry Dryer Complete
+8. Climate AC Extreme Temperature (>28C or <18C)
+9. Climate AC Running >8 Hours
+
+**Informational Notifications (3) - Daily summaries at 9am:**
+1. Home Lights Left On Overnight
+2. Entertainment TV Left On Overnight
+3. Daily Summary (lights on, ACs running)
+
+### Notification Settings
+- **Quiet hours:** 11pm - 9am
+- **Active hours:** 9am - 11pm
+- **Service:** `notify.notify` (sends to all registered mobile devices)
+- **Currently registered:** `notify.mobile_app_cosmin_s_s25`
+
+### Updating Automations
+1. Edit `automations.yaml` in this directory
+2. Copy entire file contents
+3. On Unraid: Docker → homeassistant → Console
+4. Run: `vi /config/automations.yaml`
+5. Replace all content (in vi: `gg` then `dG` to delete, paste, `:wq` to save)
+6. Restart Home Assistant container
+
+---
+
 ## ⚠️ Critical Reminders
 
 - **DO NOT** create YAML script files - they cannot be installed via API
 - **DO NOT** use REST API for dashboard updates - use WebSocket API
+- **DO NOT** manually edit automations in HA UI - edit `automations.yaml` and replace entire file
 - **DO NOT** try alternative connection methods - the documented methods WORK
 - **ALWAYS** use `light` card type for dimmable lights (shows brightness slider)
 - **ALWAYS** use `entities` card type for on/off switches (no slider)

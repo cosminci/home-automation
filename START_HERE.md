@@ -14,8 +14,9 @@ The dashboard includes 13 tabs: Scenes + 11 rooms + Car. Features lighting contr
 1. **`HOME_ASSISTANT_STATE.md`** - Complete technical documentation (READ THIS FIRST)
 2. **`START_HERE.md`** - This file (quick start guide)
 3. **`generate_dashboard.py`** - Dashboard generation script ✅ WORKING
-4. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
-5. **`create_soundbar_helpers.md`** - Instructions for creating soundbar dropdown helpers (reference only)
+4. **`automations.yaml`** - All Home Assistant automations (soundbar + notifications) ✅ WORKING
+5. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
+6. **`create_soundbar_helpers.md`** - Instructions for creating soundbar dropdown helpers (reference only)
 
 ### ❌ All Other Files Are Obsolete
 If you see any other `.py`, `.yaml`, or `.md` files, they are junk from previous attempts.
@@ -45,10 +46,66 @@ source ~/.zshrc && curl -s -H "Authorization: Bearer $HA_TOKEN" \
 ```
 
 ### Step 3: Update the Dashboard
-Modify `generate_corrected_dashboard.py` as needed and deploy:
+Modify `generate_dashboard.py` as needed and deploy:
 ```bash
 source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_dashboard.py
 ```
+
+---
+
+## 🔔 Working with Automations
+
+All automations are in `automations.yaml` (23 total).
+
+**To update automations:**
+1. Edit `configs/automations.yaml` directly
+2. Copy the entire file contents
+3. On Unraid server:
+   - Docker tab → homeassistant container → Console
+   - Run: `vi /config/automations.yaml`
+   - Delete all content (in vi: `gg` then `dG`)
+   - Paste new content
+   - Save and exit (`:wq`)
+4. Restart Home Assistant container
+
+**Automations included:**
+- 1 Entertainment: Soundbar source selector
+- 10 Critical notifications (bypass quiet hours 11pm-9am)
+- 9 Important notifications (active hours 9am-11pm only)
+- 3 Informational notifications (daily summaries at 9am)
+
+**Quiet hours:** 11pm - 9am (Critical notifications bypass this)
+**Notification service:** `notify.notify` (sends to all registered mobile devices)
+
+### Automation Categories
+
+Automations are organized into categories in the Home Assistant UI:
+
+**Category Definitions** (stored in `configs/core.category_registry`):
+- **Critical Alerts** (icon: `mdi:alert-circle`) - 10 automations
+- **Important Notifications** (icon: `mdi:bell-alert`) - 9 automations
+- **Daily Summaries** (icon: `mdi:calendar-today`) - 3 automations
+- **Helpers** (icon: `mdi:cog`) - 1 automation
+
+**Setting Up Categories (After Fresh Install):**
+
+1. **Import category definitions:**
+   - Copy contents of `configs/core.category_registry` from this repo
+   - On Unraid server console: `vi /config/.storage/core.category_registry`
+   - Replace content with the copied file
+   - Restart Home Assistant
+
+2. **Assign automations to categories:**
+   - Category assignments are stored in `core.entity_registry` (NOT in git - auto-managed by HA)
+   - After importing automations, manually assign them to categories in the HA UI:
+     - Go to Settings → Automations & Scenes
+     - Click on an automation → Click the gear icon → Select category
+   - Use the automation naming convention to identify categories:
+     - `Critical - ...` → Critical Alerts category
+     - `Important - ...` → Important Notifications category
+     - `Informational - ...` → Daily Summaries category
+
+**Note:** Category-to-automation mappings cannot be automated because they're stored in `core.entity_registry`, which contains ALL entities in your HA instance and is auto-managed by Home Assistant.
 
 ---
 

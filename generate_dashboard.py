@@ -276,7 +276,7 @@ async def create_corrected_dashboard():
                                     "type": "section",
                                     "label": "TV"
                                 },
-                                {"entity": "media_player.77_oled", "name": "LG OLED"},
+                                {"entity": "media_player.77_oled", "name": "77\" OLED"},
                                 {
                                     "type": "section",
                                     "label": "Soundbar"

@@ -1,0 +1,517 @@
+# Home Assistant Automations
+# Complete file - includes soundbar automation + all notifications
+
+# ============================================
+# ENTERTAINMENT AUTOMATIONS
+# ============================================
+
+- id: '1763887403325'
+  alias: Soundbar - Change Source
+  description: ''
+  triggers:
+  - entity_id: input_select.soundbar_source
+    trigger: state
+  actions:
+  - target:
+      entity_id: media_player.soundbar_q990b
+    data:
+      source: '{{ states(''input_select.soundbar_source'') }}'
+    action: media_player.select_source
+
+# ============================================
+# CRITICAL NOTIFICATIONS (bypass quiet hours)
+# ============================================
+
+- id: '1763893201_car_unlocked'
+  alias: Critical - Car Unlocked
+  description: Notify if car unlocked for 5+ minutes
+  triggers:
+  - platform: state
+    entity_id: lock.tucson_door_lock
+    to: unlocked
+    for:
+      minutes: 5
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Car Unlocked'
+      message: Your Tucson has been unlocked for 5 minutes.
+  mode: single
+
+- id: '1763893202_car_openings'
+  alias: Critical - Car Door/Window/Trunk/Hood Open
+  description: Notify if any car opening is open for 10+ minutes
+  triggers:
+  - platform: state
+    entity_id: binary_sensor.tucson_front_left_door
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_front_right_door
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_back_left_door
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_back_right_door
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_front_left_window
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_front_right_window
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_back_left_window
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_back_right_window
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_trunk
+    to: 'on'
+    for:
+      minutes: 10
+  - platform: state
+    entity_id: binary_sensor.tucson_hood
+    to: 'on'
+    for:
+      minutes: 10
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Car {{ trigger.to_state.attributes.friendly_name | default("Opening")
+        }} Open'
+      message: Your Tucson's {{ trigger.to_state.attributes.friendly_name | default("opening")
+        }} has been open for 10 minutes.
+  mode: queued
+  max: 10
+
+- id: '1763893203_oven_left_on'
+  alias: Critical - Kitchen Oven Left On >2 Hours
+  description: Notify if oven running for more than 2 hours
+  triggers:
+  - platform: state
+    entity_id: sensor.oven_operation_state
+    from: inactive
+    for:
+      hours: 2
+  conditions:
+  - condition: template
+    value_template: '{{ states(''sensor.oven_operation_state'') != ''inactive'' }}'
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Oven Left On!'
+      message: 'Your oven has been running for 2 hours. Current state: {{ states(''sensor.oven_operation_state'')
+        }}'
+  mode: single
+
+- id: '1763893204_cooktop_left_on'
+  alias: Critical - Kitchen Cooktop Left On >30 Minutes
+  description: Notify if cooktop running for more than 30 minutes
+  triggers:
+  - platform: state
+    entity_id: sensor.cooktop_operation_state
+    from: inactive
+    for:
+      minutes: 30
+  conditions:
+  - condition: template
+    value_template: '{{ states(''sensor.cooktop_operation_state'') != ''inactive''
+      }}'
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Cooktop Left On!'
+      message: 'Your cooktop has been on for 30 minutes. Current state: {{ states(''sensor.cooktop_operation_state'')
+        }}'
+  mode: single
+
+- id: '1763893205_appliance_errors'
+  alias: Critical - Appliances Error State
+  description: Notify if any appliance reports an error
+  triggers:
+  - platform: state
+    entity_id: sensor.dishwasher_operation_state
+    to: error
+  - platform: state
+    entity_id: sensor.oven_operation_state
+    to: error
+  - platform: state
+    entity_id: sensor.cooktop_operation_state
+    to: error
+  - platform: state
+    entity_id: sensor.washing_machine_operation_state
+    to: error
+  - platform: state
+    entity_id: sensor.dryer_operation_state
+    to: error
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Appliance Error'
+      message: '{{ trigger.to_state.attributes.friendly_name | default("An appliance")
+        }} is reporting an error state.'
+  mode: queued
+  max: 5
+
+- id: '1763893206_car_tire_pressure'
+  alias: Critical - Car Low Tire Pressure
+  description: Notify if any tire pressure is low
+  triggers:
+  - platform: numeric_state
+    entity_id:
+    - sensor.tucson_front_left_tire_pressure
+    - sensor.tucson_front_right_tire_pressure
+    - sensor.tucson_rear_left_tire_pressure
+    - sensor.tucson_rear_right_tire_pressure
+    below: 30
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Low Tire Pressure'
+      message: '{{ trigger.to_state.attributes.friendly_name | default("A tire") }}:
+        {{ trigger.to_state.state }} PSI'
+  mode: queued
+  max: 4
+
+- id: '1763893207_car_fuel_critical'
+  alias: Critical - Car Fuel Level Critical
+  description: Notify if fuel level below 10%
+  triggers:
+  - platform: numeric_state
+    entity_id: sensor.tucson_fuel_level
+    below: 10
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Fuel Level Critical'
+      message: Your Tucson fuel level is at {{ states('sensor.tucson_fuel_level') }}%.
+        Time to refuel!
+  mode: single
+
+- id: '1763893208_car_washer_fluid_low'
+  alias: Critical - Car Washer Fluid Low
+  description: Notify if washer fluid is low
+  triggers:
+  - platform: state
+    entity_id: binary_sensor.tucson_washer_fluid_warning
+    to: 'on'
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Washer Fluid Low'
+      message: Your Tucson's washer fluid is low. Refill soon.
+  mode: single
+
+- id: '1763893209_car_battery_warning'
+  alias: Critical - Car Battery Warning
+  description: Notify if car battery is low
+  triggers:
+  - platform: numeric_state
+    entity_id: sensor.tucson_car_battery_level
+    below: 20
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Car Battery Low'
+      message: Your Tucson's battery is at {{ states('sensor.tucson_car_battery_level')
+        }}%. Consider charging or checking the battery.
+  mode: single
+
+- id: '1763893210_device_offline'
+  alias: Critical - System Device Offline
+  description: Notify if critical devices go offline (integrations failing)
+  triggers:
+  - platform: state
+    entity_id:
+    - climate.ac_living
+    - climate.ac_bedroom
+    - climate.ac_office
+    - climate.ac_iacopewee
+    - sensor.dishwasher_operation_state
+    - sensor.oven_operation_state
+    - sensor.washing_machine_operation_state
+    - sensor.dryer_operation_state
+    to: unavailable
+    for:
+      minutes: 5
+  actions:
+  - service: notify.notify
+    data:
+      title: 'ALERT: Device Offline'
+      message: '{% if trigger.to_state %}{{ trigger.to_state.attributes.friendly_name
+        }}{% else %}A device{% endif %} has gone offline. Check integrations.'
+  mode: queued
+  max: 10
+
+# ============================================
+# IMPORTANT NOTIFICATIONS (active hours 9am-11pm only)
+# ============================================
+
+- id: '1763893211_dishwasher_complete'
+  alias: Important - Kitchen Dishwasher Complete
+  description: Notify when dishwasher cycle is complete
+  triggers:
+  - platform: state
+    entity_id: sensor.dishwasher_program_finished
+    to: present
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: Dishwasher Complete
+      message: Your dishwasher cycle has finished. Time to unload!
+  mode: single
+
+- id: '1763893212_dishwasher_salt_low'
+  alias: Important - Kitchen Dishwasher Salt Low
+  description: Notify when dishwasher salt is low
+  triggers:
+  - platform: state
+    entity_id: sensor.dishwasher_salt_nearly_empty
+    to: present
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: Dishwasher Salt Low
+      message: Your dishwasher needs salt. Refill soon.
+  mode: single
+
+- id: '1763893213_dishwasher_rinse_aid_low'
+  alias: Important - Kitchen Dishwasher Rinse Aid Low
+  description: Notify when dishwasher rinse aid is low
+  triggers:
+  - platform: state
+    entity_id: sensor.dishwasher_rinse_aid_nearly_empty
+    to: present
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: Dishwasher Rinse Aid Low
+      message: Your dishwasher needs rinse aid. Refill soon.
+  mode: single
+
+- id: '1763893214_oven_preheating_complete'
+  alias: Important - Kitchen Oven Preheating Complete
+  description: Notify when oven has finished preheating
+  triggers:
+  - platform: state
+    entity_id:
+    - sensor.oven_pre_heat_finished
+    - sensor.oven_regular_pre_heat_finished
+    to: present
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: Oven Ready
+      message: Your oven has finished preheating and is ready to use.
+  mode: single
+
+- id: '1763893215_oven_cooking_complete'
+  alias: Important - Kitchen Oven Cooking Complete
+  description: Notify when oven cooking cycle is complete
+  triggers:
+  - platform: state
+    entity_id: sensor.oven_program_finished
+    to: present
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: Oven Cooking Complete
+      message: Your oven cooking cycle has finished.
+  mode: single
+
+- id: '1763893216_washing_machine_complete'
+  alias: Important - Laundry Washing Machine Complete
+  description: Notify when washing machine cycle is complete
+  triggers:
+  - platform: state
+    entity_id: sensor.washing_machine_program_finished
+    to: present
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: Washing Machine Complete
+      message: Your washing machine cycle has finished. Transfer to dryer!
+  mode: single
+
+- id: '1763893217_dryer_complete'
+  alias: Important - Laundry Dryer Complete
+  description: Notify when dryer cycle is complete
+  triggers:
+  - platform: state
+    entity_id: sensor.dryer_program_finished
+    to: present
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: Dryer Complete
+      message: Your dryer cycle has finished. Time to fold!
+  mode: single
+
+- id: '1763893218_ac_extreme_temp'
+  alias: Important - Climate AC Extreme Temperature
+  description: Notify if AC set to extreme temperature
+  triggers:
+  - platform: numeric_state
+    entity_id:
+    - climate.ac_living
+    - climate.ac_bedroom
+    - climate.ac_office
+    - climate.ac_iacopewee
+    attribute: temperature
+    above: 28
+  - platform: numeric_state
+    entity_id:
+    - climate.ac_living
+    - climate.ac_bedroom
+    - climate.ac_office
+    - climate.ac_iacopewee
+    attribute: temperature
+    below: 18
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: AC Extreme Temperature
+      message: '{{ trigger.to_state.attributes.friendly_name | default("An AC") }}
+        is set to {{ trigger.to_state.attributes.temperature }}C. This may waste energy.'
+  mode: queued
+  max: 4
+
+- id: '1763893219_ac_running_long'
+  alias: Important - Climate AC Running >8 Hours
+  description: Notify if AC has been running for more than 8 hours
+  triggers:
+  - platform: state
+    entity_id:
+    - climate.ac_living
+    - climate.ac_bedroom
+    - climate.ac_office
+    - climate.ac_iacopewee
+    to:
+    - cool
+    - heat
+    - dry
+    - fan_only
+    for:
+      hours: 8
+  conditions:
+  - condition: time
+    after: '09:00:00'
+    before: '23:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: AC Running Long Time
+      message: '{{ trigger.to_state.attributes.friendly_name | default("An AC") }}
+        has been running for 8 hours. Consider turning it off to save energy.'
+  mode: queued
+  max: 4
+
+# ============================================
+# INFORMATIONAL NOTIFICATIONS (daily summaries at 9am)
+# ============================================
+
+- id: '1763893220_lights_on_all_night'
+  alias: Informational - Home Lights Left On Overnight
+  description: Daily summary of lights left on overnight
+  triggers:
+  - platform: time
+    at: '09:00:00'
+  conditions:
+  - condition: template
+    value_template: '{{ states.light | selectattr(''state'', ''eq'', ''on'') | list
+      | count > 0 }}'
+  actions:
+  - service: notify.notify
+    data:
+      title: Lights Left On Overnight
+      message: '{{ states.light | selectattr(''state'', ''eq'', ''on'') | list | count
+        }} lights were left on overnight.'
+  mode: single
+
+- id: '1763893221_tv_on_all_night'
+  alias: Informational - Entertainment TV Left On Overnight
+  description: Daily summary if TV was left on overnight
+  triggers:
+  - platform: time
+    at: '09:00:00'
+  conditions:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: media_player.lg_webos_tv_oled48c22lb
+      state: 'on'
+    - condition: state
+      entity_id: media_player.samsung_the_frame
+      state: 'on'
+  actions:
+  - service: notify.notify
+    data:
+      title: TV Left On Overnight
+      message: A TV was left on overnight. Consider turning it off to save energy.
+  mode: single
+
+- id: '1763893222_daily_summary'
+  alias: Informational - Daily Summary
+  description: Daily summary at 9am with overnight activity
+  triggers:
+  - platform: time
+    at: '09:00:00'
+  actions:
+  - service: notify.notify
+    data:
+      title: Good Morning - Daily Summary
+      message: 'Home status: {{ states.light | selectattr(''state'', ''eq'', ''on'')
+        | list | count }} lights on, {{ states.climate | selectattr(''state'', ''ne'',
+        ''off'') | list | count }} ACs running.'
+  mode: single
+
