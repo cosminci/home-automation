@@ -1,22 +1,26 @@
-# 🏠 Home Assistant Dashboard - Start Here
+# 🏠 Home Assistant Dashboard
+
+> **Note:** This documentation is optimized for AI agent consumption. While human-readable, it's designed for full vibe coding workflows where an AI agent maintains and evolves the Home Assistant setup.
 
 ## 📋 Quick Context
 
-You are working with a Home Assistant dashboard at **http://tower.local:8123/clean-home** (title: "Home")
+**Home Assistant Instance:** http://tower.local:8123
+**Dashboard URL:** http://tower.local:8123/clean-home
+**Dashboard Title:** Home
 
-The dashboard includes 13 tabs: Scenes + 11 rooms + Car. Features lighting controls, air conditioners (4 rooms), entertainment devices (TVs & soundbar), smart appliances with conditional controls, and Hyundai Tucson vehicle monitoring.
+**Structure:** 13 tabs total (Scenes + 11 rooms + Car/Garage)
+**Features:** Lighting controls, 4 air conditioners, entertainment devices, smart appliances, Hyundai Tucson monitoring
 
 ---
 
 ## 📁 Files in This Directory
 
 ### ✅ Keep These Files
-1. **`HOME_ASSISTANT_STATE.md`** - Complete technical documentation (READ THIS FIRST)
-2. **`START_HERE.md`** - This file (quick start guide)
+1. **`README.md`** - This file (quick start guide for AI agents)
+2. **`HOME_ASSISTANT_STATE.md`** - Complete technical documentation (READ THIS FIRST)
 3. **`generate_dashboard.py`** - Dashboard generation script ✅ WORKING
-4. **`automations.yaml`** - All Home Assistant automations (soundbar + notifications) ✅ WORKING
+4. **`configs/automations.yaml`** - All Home Assistant automations ✅ WORKING
 5. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
-6. **`create_soundbar_helpers.md`** - Instructions for creating soundbar dropdown helpers (reference only)
 
 ### ❌ All Other Files Are Obsolete
 If you see any other `.py`, `.yaml`, or `.md` files, they are junk from previous attempts.
@@ -211,9 +215,6 @@ The dashboard includes:
 - ✅ Use button cards with direct service calls (NO script files)
 - ✅ Compact format (NOT giant buttons filling the screen)
 - ✅ Organized in 3 separate cards: Lighting Scenes, AC Scenes, Leaving Home
-
-### Room Icons
-- **Kid's Room**: `mdi:teddy-bear` (NOT `mdi:account`)
 
 ### Appliance Controls
 - **Show finish time only** (not separate progress row)

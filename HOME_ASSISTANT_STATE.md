@@ -64,17 +64,18 @@ source ~/.zshrc && curl -s -H "Authorization: Bearer $HA_TOKEN" \
 
 ## 🏠 Home Layout & Rooms
 
-1. **Living Room** (includes dining area)
+1. **Living Room**
 2. **Kitchen**
 3. **Bedroom**
-4. **Kid's Room** (also called "Iacopewee" in entity IDs)
+4. **Kid's Room**
 5. **Office**
 6. **Hallway**
 7. **Staircase**
-8. **Bathroom - Shower** (accessed via bedroom)
-9. **Bathroom - Tub** (between living room and kid's room)
-10. **Washer Room** (has dog shower, mops, vacuums, washing machine, dryer)
+8. **Bathroom - Shower**
+9. **Bathroom - Tub**
+10. **Washer Room**
 11. **Terrace**
+12. **Garage**
 
 ---
 
@@ -204,15 +205,15 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
   2. **Living Room** - AC + Lights + Entertainment (TV + Soundbar with source selector)
   3. **Kitchen** - Lights + Appliances (Dishwasher, Oven, Cooktop)
   4. **Bedroom** - AC + Lights + LG TV
-  5. **Kid's Room** (icon: `mdi:teddy-bear`) - AC + Lights
+  5. **Kid's Room** - AC + Lights
   6. **Office** - AC + Lights
-  7. **Hallway** - Lights + Appliances (Washing Machine, Dryer)
+  7. **Hallway** - Lights
   8. **Staircase** - Lights
-  9. **Bathroom - Shower** - Lights
-  10. **Bathroom - Tub** - Lights
-  11. **Washer Room** - Lights
+  9. **Bathroom - Shower** - Lights + Ventilation
+  10. **Bathroom - Tub** - Lights + Ventilation
+  11. **Washer Room** - Washing Machine + Dryer
   12. **Terrace** - Lights
-  13. **Car** - Hyundai Tucson monitoring (Vehicle Status, Fuel & Battery, Doors & Windows, Warnings & Alerts)
+  13. **Car** (Garage) - Hyundai Tucson monitoring
 
 ### Card Types Used
 
@@ -300,22 +301,6 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 
 ---
 
-## 📺 Entertainment Devices
-
-### Living Room - 77" OLED TV
-- **Entity:** `media_player.77_oled`
-- **Card Type:** `media-control`
-- **Features:** Volume slider, mute button, power control
-- **Soundbar:** Q990B controlled via ARC - NO separate controls needed
-
-### Bedroom - LG TV
-- **Entity:** `media_player.lg_webos_tv_oled48c22lb`
-- **Card Type:** `media-control`
-- **Features:** Volume slider, mute button
-- **⚠️ Limitation:** Cannot turn on remotely from HA - must use ThinQ app first, then HA works
-
----
-
 ## 🎬 Lighting Scenes
 
 ### Cinema (10%)
@@ -349,9 +334,11 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 
 ## 📁 Valid Files to Keep
 
-1. **`HOME_ASSISTANT_STATE.md`** - This document (complete technical documentation)
-2. **`START_HERE.md`** - Quick start guide with user preferences
+1. **`README.md`** - Quick start guide optimized for AI agents
+2. **`HOME_ASSISTANT_STATE.md`** - This document (complete technical documentation)
 3. **`generate_dashboard.py`** - Dashboard generation script ✅ WORKING
+4. **`configs/automations.yaml`** - All Home Assistant automations ✅ WORKING
+5. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
 
 **All other files are obsolete and can be deleted.**
 
@@ -497,7 +484,6 @@ python3 /Users/ciobanu/personal/home-automation/scripts/HyundaiFetchApiTokensSel
 - **Quiet hours:** 11pm - 9am
 - **Active hours:** 9am - 11pm
 - **Service:** `notify.notify` (sends to all registered mobile devices)
-- **Currently registered:** `notify.mobile_app_cosmin_s_s25`
 
 ### Updating Automations
 1. Edit `automations.yaml` in this directory
