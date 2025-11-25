@@ -1,6 +1,5 @@
 # Home Assistant Dashboard - Current State & Context
 
-**Date:** 2025-11-23
 **HA Instance:** http://tower.local:8123
 **Dashboard URL:** http://tower.local:8123/clean-home
 **Dashboard Title:** Home
@@ -14,7 +13,6 @@
 **Automations:**
 - File: `/config/automations.yaml` (23 automations total)
 - Local copy: `configs/automations.yaml` in this directory
-- Includes: Soundbar source selector + notification automations
 - Quiet hours: 11pm - 9am (Critical notifications bypass this)
 
 ---
@@ -58,8 +56,6 @@ source ~/.zshrc && curl -s -H "Authorization: Bearer $HA_TOKEN" \
   http://tower.local:8123/api/states | jq '...'
 ```
 
-**⚠️ IMPORTANT:** These methods WORK. Do NOT try alternative methods. If you get errors, debug the code, don't switch protocols.
-
 ---
 
 ## 🏠 Home Layout & Rooms
@@ -92,9 +88,7 @@ source ~/.zshrc && curl -s -H "Authorization: Bearer $HA_TOKEN" \
 | `light.led_strip_window_4` | LED Strip Window | Kid's Room |
 | `light.led_strip_bed` | LED Strip Bed | Kid's Room |
 
-All 6 dimmable lights have brightness sliders and are correctly assigned to their rooms.
-
-### On/Off Switches (19 total - ALL use `entities` card type - NO sliders)
+### On/Off Switches (19 total - ALL use `entities` card type)
 
 | Entity ID | Friendly Name | Room |
 |-----------|---------------|------|
@@ -120,8 +114,6 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 | `switch.terrace_lights` | Terrace Lights | Terrace |
 | `light.ceiling_spots` | Ceiling Spots | Living Room |
 
-**Note:** `light.ceiling_spots` (Living Room) has `supported_color_modes: ["onoff"]` - it is NOT dimmable despite being a `light` entity. It is treated as a regular switch in the dashboard.
-
 ---
 
 ## 📺 Entertainment Devices
@@ -137,12 +129,10 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 - **Model:** Samsung Q990B
 - **Integration:** SmartThings (built-in)
 - **Supported Features:**
-  - ✅ Power control
-  - ✅ Volume control
-  - ✅ Source selection (HDMI, Bluetooth, Optical, WiFi, AUX)
-  - ❌ Sound mode control (NOT exposed in SmartThings public API - use SmartThings app)
+  - Power control
+  - Volume control
+  - Source selection (HDMI, Bluetooth, Optical, WiFi, AUX)
 - **Source Selection:** Uses `input_select.soundbar_source` helper with automation
-  - Automation: `automation.soundbar_change_source` triggers `media_player.select_source` service
 - **Dashboard:** Combined entertainment card with TV and soundbar controls
 
 ---
@@ -173,7 +163,7 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 - Custom Integration: `oyvindwe/connectlife-ha` (installed via HACS)
 - Installed to: `/config/custom_components/connectlife/`
 - Persists across Watchtower container updates
-- Account: ConnectLife username/password (SSO not supported - use password reset if needed)
+- Account: ConnectLife username/password
 
 ---
 
@@ -188,8 +178,6 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 - **Washing Machine:** `select.washing_machine_active_program`, `sensor.washing_machine_program_finish_time`, `sensor.washing_machine_program_progress`, `select.washing_machine_selected_program`, `button.washing_machine_stop_program`
 - **Dryer:** `sensor.dryer_operation_state`, `sensor.dryer_program_finish_time`, `sensor.dryer_program_progress`, `button.dryer_stop_program`
 
-**User Preference:** Controls should be in conditional cards that only appear when appliance is running.
-
 ---
 
 ## 🎨 Dashboard Structure
@@ -198,12 +186,9 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 - **Title:** Home
 - **Path:** `/clean-home`
 - **Views (Tabs):** 13 total
-  1. **Scenes** - 8 scenes total:
-     - **Lighting:** Cinema 10%, Ambient 80%, All Off
-     - **AC:** Living & Office (24°C), All On (24°C), All Off
-     - **Leaving Home:** Everything Off (lights, ACs, TVs, cooktop, oven - excludes washing machine, dryer, dishwasher)
-  2. **Living Room** - AC + Lights + Entertainment (TV + Soundbar with source selector)
-  3. **Kitchen** - Lights + Appliances (Dishwasher, Oven, Cooktop)
+  1. **Scenes** - 8 scenes total
+  2. **Living Room** - AC + Lights + Entertainment
+  3. **Kitchen** - Lights + Appliances
   4. **Bedroom** - AC + Lights + LG TV
   5. **Kid's Room** - AC + Lights
   6. **Office** - AC + Lights
@@ -213,7 +198,7 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
   10. **Bathroom - Tub** - Lights + Ventilation
   11. **Washer Room** - Washing Machine + Dryer
   12. **Terrace** - Lights
-  13. **Car** (Garage) - Hyundai Tucson monitoring
+  13. **Car** - Hyundai Tucson monitoring
 
 ### Card Types Used
 
@@ -288,7 +273,7 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 {
     "type": "entities",
     "title": "🍽️ Dishwasher",
-    "show_header_toggle": false,  // CRITICAL: Prevents dangerous global toggle
+    "show_header_toggle": false,
     "entities": [
         {
             "type": "conditional",
@@ -303,44 +288,11 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 
 ## 🎬 Lighting Scenes
 
-### Cinema (10%)
-- **Service:** `light.turn_on`
-- **Entities:** `light.led_strip_window_2`, `light.led_strip_window_3` (Living + Kitchen)
-- **Brightness:** 25 (10% of 255)
-
-### Ambient (80%)
-- **Service:** `light.turn_on`
-- **Entities:** `light.led_strip_window_2`, `light.led_strip_window_3` (Living + Kitchen)
-- **Brightness:** 204 (80% of 255)
-
-### All Switches Off
-- **Service:** `homeassistant.turn_off` (works with both light.* and switch.* entities)
-- **Entities:** 6 dimmable LED strips + 20 switches + 2 ventilators = 28 total
-  - **Dimmable LED strips (6 total - light.*):**
-    - `light.led_strip_window` (Office - LED Strip Window)
-    - `light.led_strip_window_2` (Living Room - LED Strip Window)
-    - `light.led_strip_window_3` (Kitchen - LED Strip Window)
-    - `light.led_strip_window_4` (Kid's Room - LED Strip Window)
-    - `light.led_strip` (Bedroom - LED Strip Window)
-    - `light.led_strip_bed` (Kid's Room - LED Strip Bed)
-  - **Light switches (20 total - switch.*):**
-    - Ceiling/Rail/Wall lights (15): `switch.dining_light`, `switch.rail_spots`, `switch.ceiling_spots`, `switch.rail_spots_2`, `switch.rail_spots_3`, `switch.ceiling_light`, `switch.ceiling_light_2`, `switch.ceiling_light_3`, `switch.ceiling_light_4`, `switch.light_2`, `switch.terrace_lights`, `switch.staircase_lights`, `switch.ceiling_spots_2`, `switch.ceiling_spots_3`, `switch.ceiling_spots_4`
-    - LED strip switches (3): `switch.led_strip_countertop`, `switch.led_strip`, `switch.led_strip_2`
-    - Ventilators (2): `switch.ventilator`, `switch.ventilator_2`
-  - **Note:** `light.ceiling_spots` (Living Room) is NOT dimmable - same model as hallway spots, but exposed as light.* entity by Netatmo
-  - **Note:** Netatmo integration has no "turn off all" command - must list all entities explicitly
+All scenes are defined in `configs/scenes.yaml`. See that file for complete entity lists.
 
 ---
 
-## 📁 Valid Files to Keep
 
-1. **`README.md`** - Quick start guide optimized for AI agents
-2. **`HOME_ASSISTANT_STATE.md`** - This document (complete technical documentation)
-3. **`generate_dashboard.py`** - Dashboard generation script ✅ WORKING
-4. **`configs/automations.yaml`** - All Home Assistant automations ✅ WORKING
-5. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
-
-**All other files are obsolete and can be deleted.**
 
 ---
 
@@ -381,8 +333,6 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 - **Location:** `/config/custom_components/connectlife/`
 - **Persistence:** Survives Watchtower container updates
 - **Account:** ConnectLife username/password
-  - **Note:** SSO (Google/Apple) not supported by integration
-  - **Workaround:** Use "Forgot Password?" feature to set password on SSO account
 
 ### Hyundai / Kia Connect Integration
 - **Repository:** `Hyundai-Kia-Connect/kia_uvo`
@@ -398,10 +348,9 @@ All 6 dimmable lights have brightness sliders and are correctly assigned to thei
 - **Tab:** Car (13th tab)
 - **Cards:**
   1. **Vehicle Status** - Engine, door lock, location, last updated
-  2. **Fuel & Battery** - Fuel level (%), range (km), 12V battery (%), odometer (km)
+  2. **Fuel & Battery** - Fuel level, range, 12V battery, odometer
   3. **Doors & Windows** - Conditional visibility (only shows when open)
   4. **Warnings & Alerts** - Tire pressure warnings, fluid warnings (conditional)
-- **User Preference:** Climate controls removed (not useful without remote start capability)
 
 **Obtaining Refresh Token:**
 ```bash
@@ -411,29 +360,18 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install selenium requests webdriver-manager
 
-# Run the script (will auto-install Chrome via Homebrew if needed)
+# Run the script
 python3 /Users/ciobanu/personal/home-automation/scripts/HyundaiFetchApiTokensSelenium.py
 ```
 
-**Script Process:**
-1. Opens Chrome browser with Hyundai login page (uses CTB endpoint - no WAF blocking)
-2. User logs in with Hyundai BlueLink credentials
-3. User solves reCAPTCHA if prompted
-4. User presses ENTER after successful login
-5. Script automatically extracts and displays refresh token
-
 **Integration Setup:**
 1. Settings → Devices & Services → Add Integration
-2. Search for "Hyundai / Kia Connect" (or "Kia UVO")
+2. Search for "Hyundai / Kia Connect"
 3. Select Region: EU, Brand: Hyundai
 4. Enter:
    - Username: Hyundai BlueLink email
    - Token/Password: Refresh token from script
    - Pin: Vehicle PIN
-
-**Security Note:**
-- The CLIENT_ID and CLIENT_SECRET in the script are Hyundai's public OAuth2 credentials (not personal)
-- Never share the refresh token - it provides full access to the vehicle account
 
 ### Installing New Custom Integrations
 1. Access Unraid terminal: `docker exec -it homeassistant bash`
@@ -500,8 +438,7 @@ python3 /Users/ciobanu/personal/home-automation/scripts/HyundaiFetchApiTokensSel
 - **DO NOT** create YAML script files - they cannot be installed via API
 - **DO NOT** use REST API for dashboard updates - use WebSocket API
 - **DO NOT** manually edit automations in HA UI - edit `automations.yaml` and replace entire file
-- **DO NOT** try alternative connection methods - the documented methods WORK
-- **ALWAYS** use `light` card type for dimmable lights (shows brightness slider)
-- **ALWAYS** use `entities` card type for on/off switches (no slider)
+- **ALWAYS** use `light` card type for dimmable lights
+- **ALWAYS** use `entities` card type for on/off switches
 - **NEVER** assume `light.*` entities are dimmable - check `supported_color_modes`
 

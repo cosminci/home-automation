@@ -15,15 +15,12 @@
 
 ## 📁 Files in This Directory
 
-### ✅ Keep These Files
 1. **`README.md`** - This file (quick start guide for AI agents)
 2. **`HOME_ASSISTANT_STATE.md`** - Complete technical documentation (READ THIS FIRST)
-3. **`generate_dashboard.py`** - Dashboard generation script ✅ WORKING
-4. **`configs/automations.yaml`** - All Home Assistant automations ✅ WORKING
-5. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
-
-### ❌ All Other Files Are Obsolete
-If you see any other `.py`, `.yaml`, or `.md` files, they are junk from previous attempts.
+3. **`generate_dashboard.py`** - Dashboard generation script
+4. **`configs/automations.yaml`** - All Home Assistant automations
+5. **`configs/scenes.yaml`** - All Home Assistant scenes
+6. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
 
 ---
 
@@ -31,8 +28,8 @@ If you see any other `.py`, `.yaml`, or `.md` files, they are junk from previous
 
 ### Step 1: Read the Documentation
 Open and read **`HOME_ASSISTANT_STATE.md`** completely. It contains:
-- How to connect to HA (WebSocket API - the ONLY method that works)
-- Complete lighting inventory with all 6 dimmable lights
+- How to connect to HA (WebSocket API)
+- Complete lighting inventory
 - Current dashboard structure
 - Entertainment devices and appliances
 
@@ -57,20 +54,22 @@ source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_dashboar
 
 ---
 
-## 🔔 Working with Automations
+## 🔔 Working with Automations & Scenes
 
-All automations are in `automations.yaml` (23 total).
+All automations are in `configs/automations.yaml` (23 total).
+All scenes are in `configs/scenes.yaml` (8 total).
 
-**To update automations:**
-1. Edit `configs/automations.yaml` directly
+**To update automations or scenes:**
+1. Edit `configs/automations.yaml` or `configs/scenes.yaml` directly in this repo
 2. Copy the entire file contents
 3. On Unraid server:
    - Docker tab → homeassistant container → Console
-   - Run: `vi /config/automations.yaml`
+   - Run: `vi /config/automations.yaml` (or `vi /config/scenes.yaml`)
    - Delete all content (in vi: `gg` then `dG`)
    - Paste new content
    - Save and exit (`:wq`)
-4. Restart Home Assistant container
+4. **For scenes:** Use Developer Tools → YAML → Click "Scenes" reload button
+5. **For automations:** Restart Home Assistant container
 
 **Automations included:**
 - 1 Entertainment: Soundbar source selector
@@ -91,7 +90,7 @@ Automations are organized into categories in the Home Assistant UI:
 - **Daily Summaries** (icon: `mdi:calendar-today`) - 3 automations
 - **Helpers** (icon: `mdi:cog`) - 1 automation
 
-**Setting Up Categories (After Fresh Install):**
+**Setting Up Categories:**
 
 1. **Import category definitions:**
    - Copy contents of `configs/core.category_registry` from this repo
@@ -100,7 +99,6 @@ Automations are organized into categories in the Home Assistant UI:
    - Restart Home Assistant
 
 2. **Assign automations to categories:**
-   - Category assignments are stored in `core.entity_registry` (NOT in git - auto-managed by HA)
    - After importing automations, manually assign them to categories in the HA UI:
      - Go to Settings → Automations & Scenes
      - Click on an automation → Click the gear icon → Select category
@@ -108,8 +106,6 @@ Automations are organized into categories in the Home Assistant UI:
      - `Critical - ...` → Critical Alerts category
      - `Important - ...` → Important Notifications category
      - `Informational - ...` → Daily Summaries category
-
-**Note:** Category-to-automation mappings cannot be automated because they're stored in `core.entity_registry`, which contains ALL entities in your HA instance and is auto-managed by Home Assistant.
 
 ---
 
@@ -120,17 +116,15 @@ Automations are organized into categories in the Home Assistant UI:
 - ✅ Use REST API for queries only
 - ✅ Use `light` card type for dimmable lights (shows brightness slider)
 - ✅ Use `entities` card type for on/off switches
-- ✅ Use `media-control` card type for TVs and media players (shows volume slider + mute)
-- ✅ Use `thermostat` card type for air conditioners (shows temp dial + mode controls)
-- ✅ Use button cards with `tap_action` for scenes (NO script files)
+- ✅ Use `media-control` card type for TVs and media players
+- ✅ Use `thermostat` card type for air conditioners
+- ✅ Use button cards with `tap_action` for scenes
 - ✅ Check HOME_ASSISTANT_STATE.md for complete entity-to-room mappings
-- ✅ Always add `"show_header_toggle": False` to ALL entities panels (prevents dangerous global toggles)
+- ✅ Always add `"show_header_toggle": False` to ALL entities panels
 
 ### DON'T:
 - ❌ Create YAML script files (cannot be installed via API)
-- ❌ Try alternative connection methods (the documented method WORKS)
 - ❌ Assume `light.*` entities are dimmable (check `supported_color_modes`)
-- ❌ Use `light` card for `light.ceiling_spots` in Living Room (it's NOT dimmable)
 
 ---
 
@@ -157,30 +151,20 @@ curl -H "Authorization: Bearer $HA_TOKEN" http://tower.local:8123/api/states
 ## 📊 Dashboard Configuration
 
 The dashboard includes:
-- **4 air conditioners** with thermostat controls:
-  - Living Room: AC - Living (`climate.ac_living`)
-  - Bedroom: AC - Bedroom (`climate.ac_bedroom`)
-  - Office: AC - Office (`climate.ac_office`)
-  - Kid's Room: AC - Iacopewee (`climate.ac_iacopewee`)
-- **6 dimmable lights** with brightness sliders:
-  - Office: LED Strip Window (`light.led_strip_window`)
-  - Living Room: LED Strip Window (`light.led_strip_window_2`)
-  - Kitchen: LED Strip Window (`light.led_strip_window_3`)
-  - Bedroom: LED Strip Window (`light.led_strip`)
-  - Kid's Room: LED Strip Window (`light.led_strip_window_4`)
-  - Kid's Room: LED Strip Bed (`light.led_strip_bed`)
+- **4 air conditioners** with thermostat controls
+- **6 dimmable lights** with brightness sliders
 - **19 on/off switches** for ceiling lights, rail spots, and other fixtures
-- **8 scenes** organized in 3 categories:
-  - **Lighting Scenes:** Cinema 10%, Ambient 80%, All Off
+- **8 scenes** organized in 3 categories (defined in `configs/scenes.yaml`):
+  - **Lighting Scenes:** Ambient 10%, Ambient 70%, Ambient 100%, All Off
   - **AC Scenes:** Living & Office (24°C), All On (24°C), All Off
   - **Leaving Home:** Everything Off (lights, ACs, TVs, cooktop, oven)
 - **Entertainment devices:**
-  - Living Room: 77" OLED TV (`media_player.77_oled`) - controls Soundbar Q990B via ARC
-  - Bedroom: LG TV (`media_player.lg_webos_tv_oled48c22lb`) - ⚠️ Cannot turn on remotely (use ThinQ app first)
+  - Living Room: 77" OLED TV with Soundbar Q990B
+  - Bedroom: LG TV
 - **Smart appliances** with conditional visibility:
   - Dishwasher, Oven, Cooktop, Washing Machine, Dryer
-  - Controls appear only when relevant (e.g., finish time only when running)
-  - NO global toggles on appliance panels (safety feature)
+  - Controls appear only when relevant
+  - NO global toggles on appliance panels
 - **13 tabs total** (Scenes + 11 rooms + Car)
 
 ---
@@ -190,63 +174,43 @@ The dashboard includes:
 ### Scenes
 
 **Lighting Scenes:**
-- **Cinema (10%)**: Living Room + Kitchen window LED strips at 10% brightness
-- **Ambient (80%)**: Living Room + Kitchen window LED strips at 80% brightness
-- **All Off**: Turn off ALL lights and ventilators (6 dimmable LED strips + 20 light switches + 2 ventilators = 28 total)
-  - Uses `homeassistant.turn_off` service (works with both light.* and switch.* entities)
-  - Includes: 6 dimmable LED strips, 15 ceiling/rail/wall lights, 3 LED strip switches, 2 ventilators
-  - Note: `light.ceiling_spots` (Living Room) is NOT dimmable - same model as hallway spots
-  - Netatmo integration has no "turn off all" command - must list all entities explicitly
+- **Ambient 10%**: Living Room + Kitchen window LED strips at 10% brightness (25/255)
+- **Ambient 70%**: Living Room + Kitchen window LED strips at 70% brightness (178/255)
+- **Ambient 100%**: Living Room + Kitchen window LED strips at 100% brightness (255/255)
+- **All Off**: Turn off ALL lights and ventilators
 
 **AC Scenes:**
 - **Living & Office (24°C)**: Turn on ACs in Living Room + Office at 24°C in cool mode
-  - Living Room and Office are connected (open space)
-  - Excludes bedroom ACs (separate climate zones)
-- **All On (24°C)**: Turn on all 4 ACs at 24°C in cool mode (Living, Bedroom, Office, Kid's Room)
-- **All Off**: Turn off all 4 ACs (Living, Bedroom, Office, Kid's Room)
+- **All On (24°C)**: Turn on all 4 ACs at 24°C in cool mode
+- **All Off**: Turn off all 4 ACs
 
 **Leaving Home:**
 - **Everything Off**: Turn off lights, ACs, TVs, cooktop power, oven power
-  - **Includes:** 4 ACs, 6 dimmable LED strips, 19 light switches, 2 ventilators, 2 TVs, cooktop power, oven power
   - **Excludes:** Washing machine, dryer, dishwasher (may want to leave running when away)
-  - Uses `homeassistant.turn_off` service (works with climate.*, light.*, switch.*, media_player.* entities)
 
 **Scene Implementation:**
-- ✅ Use button cards with direct service calls (NO script files)
-- ✅ Compact format (NOT giant buttons filling the screen)
-- ✅ Organized in 3 separate cards: Lighting Scenes, AC Scenes, Leaving Home
+- All scenes defined in `configs/scenes.yaml` (8 total scenes)
+- Dashboard buttons call scene entities via `scene.turn_on` service
+- Organized in 3 separate cards: Lighting Scenes, AC Scenes, Leaving Home
+- After editing scenes.yaml, use scene reload (NOT container restart)
 
 ### Appliance Controls
-- **Show finish time only** (not separate progress row)
 - **Conditional visibility**: Show controls only when relevant
   - Finish time: Only when running
   - Pause/Resume: Only when running/paused
   - Door sensors: Only when open
-- **NO global toggles** on ANY panels - lights or appliances (`show_header_toggle: False`)
-- **Dishwasher naming**:
-  - "Salt Warning" (not "Salt Level") - makes on/off sensible
-  - "Rinse Aid Warning" (not "Rinse Aid") - makes on/off sensible
-- **Removed entities**:
-  - Oven pause/resume buttons (don't work - throw errors)
-  - Washing machine child lock (shows unavailable)
-  - Oven pre-heat sensor (not useful)
+- **NO global toggles** on ANY panels (`show_header_toggle: False`)
 
 ### Entertainment
 - **Living Room**: Single entertainment card with TV and soundbar controls
-  - **TV**: `media_player.77_oled` (LG OLED)
-  - **Soundbar**: `media_player.soundbar_q990b` (Samsung Q990B)
-    - Power & Volume control
-    - Source selector: `input_select.soundbar_source` (HDMI/Bluetooth/Optical/WiFi/AUX)
-    - **Note**: Sound mode control NOT supported by SmartThings integration (use SmartThings app)
-- **Bedroom TV**: Use `media-control` card for `media_player.lg_webos_tv_oled48c22lb`
-  - ⚠️ Cannot turn on remotely - must use ThinQ app first, then HA works
-- **Volume & Mute**: Both TVs have volume sliders and mute buttons
+  - Source selector: `input_select.soundbar_source` (HDMI/Bluetooth/Optical/WiFi/AUX)
+- **Bedroom TV**: LG TV with media-control card
 
 ### Dashboard Structure
-- **Title**: "Home" (not "Clean Home")
-- **Path**: `/clean-home` (URL path stays the same)
+- **Title**: "Home"
+- **Path**: `/clean-home`
 - **Card Types**:
-  - `light` card: For dimmable lights (shows brightness slider)
+  - `light` card: For dimmable lights
   - `entities` card: For on/off switches and grouped controls
   - `media-control` card: For TVs and media players
   - Button cards with `tap_action`: For scenes
@@ -255,15 +219,9 @@ The dashboard includes:
 
 ## 🆘 If You Get Stuck
 
-1. Re-read `HOME_ASSISTANT_STATE.md` - the answer is probably there (includes complete entity-to-room mappings)
+1. Re-read `HOME_ASSISTANT_STATE.md` for complete technical documentation
 2. Verify your WebSocket connection code matches the documented pattern
 3. Check that `HA_TOKEN` is loaded: `echo $HA_TOKEN`
 4. Test REST API queries work before trying WebSocket updates
 5. Ask the user for clarification on specific issues
-
-**Remember:** The connection methods documented in `HOME_ASSISTANT_STATE.md` WORK. If you get errors, debug your code, don't try alternative methods.
-
----
-
-Good luck! 🚀
 

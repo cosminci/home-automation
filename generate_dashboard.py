@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate dashboard with CORRECT entity assignments based on test results
+Generate Home Assistant dashboard
 """
 
 import asyncio
@@ -12,15 +12,15 @@ HA_URL = "ws://tower.local:8123/api/websocket"
 HA_TOKEN = os.environ.get("HA_TOKEN")
 
 async def create_corrected_dashboard():
-    """Create the dashboard with correct entity assignments"""
+    """Create the dashboard"""
     
     async with websockets.connect(HA_URL) as websocket:
         # Auth
         await websocket.recv()
         await websocket.send(json.dumps({"type": "auth", "access_token": HA_TOKEN}))
         await websocket.recv()
-        
-        # Dashboard configuration with CORRECT entity IDs
+
+        # Dashboard configuration
         dashboard_config = {
             "title": "Home",
             "views": [
@@ -35,75 +35,20 @@ async def create_corrected_dashboard():
                             "title": "🎬 Lighting Scenes",
                             "show_header_toggle": False,
                             "entities": [
-                                {
-                                    "type": "button",
-                                    "name": "Cinema (10%)",
-                                    "icon": "mdi:movie-open",
-                                    "tap_action": {
-                                        "action": "call-service",
-                                        "service": "light.turn_on",
-                                        "service_data": {
-                                            "entity_id": ["light.led_strip_window_2", "light.led_strip_window_3"],
-                                            "brightness": 25
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "button",
-                                    "name": "Ambient (80%)",
-                                    "icon": "mdi:brightness-5",
-                                    "tap_action": {
-                                        "action": "call-service",
-                                        "service": "light.turn_on",
-                                        "service_data": {
-                                            "entity_id": ["light.led_strip_window_2", "light.led_strip_window_3"],
-                                            "brightness": 204
-                                        }
-                                    }
-                                },
+                                {"type": "button", "name": "Ambient 10%", "icon": "mdi:movie-open", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_10"}}},
+                                {"type": "button", "name": "Ambient 70%", "icon": "mdi:brightness-6", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_70"}}},
+                                {"type": "button", "name": "Ambient 100%", "icon": "mdi:lightbulb-on", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_100"}}},
                                 {
                                     "type": "button",
                                     "name": "All Off",
                                     "icon": "mdi:lightbulb-off",
                                     "tap_action": {
                                         "action": "call-service",
-                                        "service": "homeassistant.turn_off",
+                                        "service": "scene.turn_on",
                                         "service_data": {
-                                            "entity_id": [
-                                                # Dimmable LED strips (6 total - light.*)
-                                                "light.led_strip_window",
-                                                "light.led_strip_window_2",
-                                                "light.led_strip_window_3",
-                                                "light.led_strip_window_4",
-                                                "light.led_strip",
-                                                "light.led_strip_bed",
-                                                # All light switches (switch.*)
-                                                "switch.dining_light",
-                                                "switch.rail_spots",
-                                                "switch.ceiling_spots",
-                                                "switch.rail_spots_2",
-                                                "switch.rail_spots_3",
-                                                "switch.ceiling_light",
-                                                "switch.ceiling_light_2",
-                                                "switch.ceiling_light_3",
-                                                "switch.ceiling_light_4",
-                                                "switch.light_2",
-                                                "switch.terrace_lights",
-                                                "switch.staircase_lights",
-                                                "switch.ceiling_spots_2",
-                                                "switch.ceiling_spots_3",
-                                                "switch.ceiling_spots_4",
-                                                # LED strip switches
-                                                "switch.led_strip_countertop",
-                                                "switch.led_strip",
-                                                "switch.led_strip_2",
-                                                # Ventilators
-                                                "switch.ventilator",
-                                                "switch.ventilator_2"
-                                            ]
+                                            "entity_id": "scene.lights_all_off"
                                         }
-                                    },
-                                    "action_name": "Turn Off All"
+                                    }
                                 }
                             ]
                         },
@@ -112,56 +57,9 @@ async def create_corrected_dashboard():
                             "title": "❄️ AC Scenes",
                             "show_header_toggle": False,
                             "entities": [
-                                {
-                                    "type": "button",
-                                    "name": "Living & Office (24°C)",
-                                    "icon": "mdi:air-conditioner",
-                                    "tap_action": {
-                                        "action": "call-service",
-                                        "service": "climate.set_temperature",
-                                        "service_data": {
-                                            "entity_id": ["climate.ac_living", "climate.ac_office"],
-                                            "temperature": 24,
-                                            "hvac_mode": "cool"
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "button",
-                                    "name": "All On (24°C)",
-                                    "icon": "mdi:air-conditioner",
-                                    "tap_action": {
-                                        "action": "call-service",
-                                        "service": "climate.set_temperature",
-                                        "service_data": {
-                                            "entity_id": [
-                                                "climate.ac_living",
-                                                "climate.ac_bedroom",
-                                                "climate.ac_office",
-                                                "climate.ac_iacopewee"
-                                            ],
-                                            "temperature": 24,
-                                            "hvac_mode": "cool"
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "button",
-                                    "name": "All Off",
-                                    "icon": "mdi:snowflake-off",
-                                    "tap_action": {
-                                        "action": "call-service",
-                                        "service": "climate.turn_off",
-                                        "service_data": {
-                                            "entity_id": [
-                                                "climate.ac_living",
-                                                "climate.ac_bedroom",
-                                                "climate.ac_office",
-                                                "climate.ac_iacopewee"
-                                            ]
-                                        }
-                                    }
-                                }
+                                {"type": "button", "name": "Living & Office (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_living_office"}}},
+                                {"type": "button", "name": "All On (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_on"}}},
+                                {"type": "button", "name": "All Off", "icon": "mdi:snowflake-off", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_off"}}}
                             ]
                         },
                         {
@@ -169,67 +67,13 @@ async def create_corrected_dashboard():
                             "title": "🏠 Leaving Home",
                             "show_header_toggle": False,
                             "entities": [
-                                {
-                                    "type": "button",
-                                    "name": "Everything Off",
-                                    "icon": "mdi:home-export-outline",
-                                    "tap_action": {
-                                        "action": "call-service",
-                                        "service": "homeassistant.turn_off",
-                                        "service_data": {
-                                            "entity_id": [
-                                                # All ACs (4 total)
-                                                "climate.ac_living",
-                                                "climate.ac_bedroom",
-                                                "climate.ac_office",
-                                                "climate.ac_iacopewee",
-                                                # All dimmable LED strips (6 total)
-                                                "light.led_strip_window",
-                                                "light.led_strip_window_2",
-                                                "light.led_strip_window_3",
-                                                "light.led_strip_window_4",
-                                                "light.led_strip",
-                                                "light.led_strip_bed",
-                                                # All light switches (19 total)
-                                                "switch.dining_light",
-                                                "switch.rail_spots",
-                                                "switch.ceiling_spots",
-                                                "switch.rail_spots_2",
-                                                "switch.rail_spots_3",
-                                                "switch.ceiling_light",
-                                                "switch.ceiling_light_2",
-                                                "switch.ceiling_light_3",
-                                                "switch.ceiling_light_4",
-                                                "switch.light_2",
-                                                "switch.terrace_lights",
-                                                "switch.staircase_lights",
-                                                "switch.ceiling_spots_2",
-                                                "switch.ceiling_spots_3",
-                                                "switch.ceiling_spots_4",
-                                                "switch.led_strip_countertop",
-                                                "switch.led_strip",
-                                                "switch.led_strip_2",
-                                                "switch.ventilator",
-                                                "switch.ventilator_2",
-                                                "light.ceiling_spots",
-                                                # TVs (2 total)
-                                                "media_player.77_oled",
-                                                "media_player.lg_webos_tv_oled48c22lb",
-                                                # Kitchen appliances (cooktop & oven power)
-                                                "switch.cooktop_power",
-                                                "switch.oven_power"
-                                                # NOTE: Washing machine, dryer, and dishwasher are intentionally excluded
-                                            ]
-                                        }
-                                    },
-                                    "action_name": "Turn Off Everything"
-                                }
+                                {"type": "button", "name": "Everything Off", "icon": "mdi:home-export-outline", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.everything_off"}}}
                             ]
                         }
                     ]
                 },
 
-                # Living Room - CORRECTED
+                # Living Room
                 {
                     "title": "Living Room",
                     "path": "living_room",
@@ -288,7 +132,7 @@ async def create_corrected_dashboard():
                     ]
                 },
 
-                # Kitchen - CORRECTED
+                # Kitchen
                 {
                     "title": "Kitchen",
                     "path": "kitchen",
@@ -389,7 +233,7 @@ async def create_corrected_dashboard():
                     ]
                 },
 
-                # Bedroom - CORRECTED
+                # Bedroom
                 {
                     "title": "Bedroom",
                     "path": "bedroom",
@@ -433,7 +277,7 @@ async def create_corrected_dashboard():
                     ]
                 },
 
-                # Kid's Room - CORRECTED
+                # Kid's Room
                 {
                     "title": "Kid's Room",
                     "path": "kid_room",
@@ -480,7 +324,7 @@ async def create_corrected_dashboard():
                     ]
                 },
 
-                # Office - CORRECTED
+                # Office
                 {
                     "title": "Office",
                     "path": "office",
@@ -519,7 +363,7 @@ async def create_corrected_dashboard():
                     ]
                 },
 
-                # Hallway - CORRECTED
+                # Hallway
                 {
                     "title": "Hallway",
                     "path": "hallway",
@@ -553,7 +397,7 @@ async def create_corrected_dashboard():
                     ]
                 },
 
-                # Bathroom - Shower - CORRECTED
+                # Bathroom - Shower
                 {
                     "title": "Bathroom - Shower",
                     "path": "bathroom_shower",
@@ -572,7 +416,7 @@ async def create_corrected_dashboard():
                     ]
                 },
 
-                # Bathroom - Tub - CORRECTED
+                # Bathroom - Tub
                 {
                     "title": "Bathroom - Tub",
                     "path": "bathroom_tub",
@@ -612,11 +456,6 @@ async def create_corrected_dashboard():
                                     "type": "conditional",
                                     "conditions": [{"entity": "sensor.washing_machine_operation_state", "state_not": "inactive"}],
                                     "row": {"entity": "sensor.washing_machine_program_finish_time", "name": "Finish Time", "icon": "mdi:clock-outline"}
-                                },
-                                {
-                                    "type": "conditional",
-                                    "conditions": [{"entity": "sensor.washing_machine_operation_state", "state_not": "inactive"}],
-                                    "row": {"entity": "button.washing_machine_pause_program", "name": "Pause", "icon": "mdi:pause"}
                                 },
                                 {
                                     "type": "conditional",
@@ -785,7 +624,11 @@ async def create_corrected_dashboard():
                             "title": "⚠️ Warnings & Alerts",
                             "show_header_toggle": False,
                             "entities": [
-                                {"entity": "binary_sensor.tucson_tire_pressure_all", "name": "Tire Pressure - All", "icon": "mdi:car-tire-alert"},
+                                {
+                                    "type": "conditional",
+                                    "conditions": [{"entity": "binary_sensor.tucson_tire_pressure_all", "state": "on"}],
+                                    "row": {"entity": "binary_sensor.tucson_tire_pressure_all", "name": "Tire Pressure - All", "icon": "mdi:car-tire-alert"}
+                                },
                                 {
                                     "type": "conditional",
                                     "conditions": [{"entity": "binary_sensor.tucson_tire_pressure_front_left", "state": "on"}],
@@ -847,20 +690,6 @@ async def create_corrected_dashboard():
         if result.get("success"):
             print("✅ Dashboard updated successfully!")
             print(f"📱 Access at: http://tower.local:8123/clean-home")
-            print("\n🚗 NEW: Car Tab Added!")
-            print("  ✅ Vehicle Status (engine, lock, location)")
-            print("  ✅ Fuel & Battery monitoring")
-            print("  ✅ Doors & Windows (conditional - only show when open)")
-            print("  ✅ Climate & Comfort controls")
-            print("  ✅ Warnings & Alerts (tire pressure, fluids, etc.)")
-            print("\n⚠️  Current Alerts:")
-            print("  • Tire pressure warning on rear left tire")
-            print("  • Overall tire pressure alert active")
-            print("\n💡 Dashboard now has:")
-            print("  • 13 tabs total (Scenes + 11 rooms + Car)")
-            print("  • 6 dimmable lights correctly assigned to rooms")
-            print("  • Smart appliance controls with contextual visibility")
-            print("  • Complete car monitoring with Hyundai Tucson")
         else:
             print(f"❌ Error: {result}")
 

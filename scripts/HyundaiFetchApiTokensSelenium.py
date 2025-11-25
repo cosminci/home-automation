@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """
 Hyundai EU Refresh Token Extractor
-Uses the Hyundai CTB (Connected to Bluelink) endpoint which doesn't have WAF blocking
-Based on: https://gist.github.com/chrisf4lc0n/d5506bd69e0d07b53574442c972090fe
 
 Requirements:
 - Google Chrome browser (will auto-install via Homebrew if not found)
-- Python packages: selenium, requests
+- Python packages: selenium, requests, webdriver-manager
 """
 
 import re
@@ -19,19 +17,10 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import requests
 
-# Hyundai EU OAuth2 Configuration (CTB endpoint - no WAF!)
-#
-# REQUIRED: You must obtain Hyundai's OAuth2 client credentials before running this script.
-# These are Hyundai's official OAuth2 client credentials from their mobile app (not personal credentials).
-#
-# To obtain these credentials:
-# 1. Search online for "Hyundai Bluelink OAuth2 client credentials" or check the Hyundai/Kia Connect integration documentation
-# 2. Look for CLIENT_ID and CLIENT_SECRET values used by the mobile app
-# 3. Fill them in below before running the script
-#
-# Your personal authentication happens via browser login, and the refresh token generated is YOUR secret.
-# Never share your refresh token - it provides full access to your vehicle account.
-#
+# Hyundai EU OAuth2 Configuration
+# REQUIRED: Fill in Hyundai's OAuth2 client credentials before running this script.
+# These are Hyundai's official OAuth2 client credentials from their mobile app.
+# Search online for "Hyundai Bluelink OAuth2 client credentials" to find them.
 CLIENT_ID = ""  # TODO: Fill in Hyundai OAuth2 CLIENT_ID here
 CLIENT_SECRET = ""  # TODO: Fill in Hyundai OAuth2 CLIENT_SECRET here
 BASE_URL = "https://idpconnect-eu.hyundai.com/auth/api/v2/user/oauth2/"
@@ -93,7 +82,6 @@ def setup_driver():
     options.binary_location = chrome_path
     options.add_argument("--window-size=800,600")
     options.add_argument("--window-position=0,0")
-    # Use a separate user data directory to avoid conflicts
     options.add_argument("--user-data-dir=/tmp/selenium-chrome-hyundai")
     options.add_argument("--no-first-run")
     options.add_argument("--no-default-browser-check")
@@ -101,7 +89,7 @@ def setup_driver():
     try:
         driver = webdriver.Chrome(options=options)
         return driver
-    except Exception as e:
+    except Exception:
         print(f"⚠️  ChromeDriver not found, installing automatically...")
         try:
             from webdriver_manager.chrome import ChromeDriverManager
@@ -110,8 +98,8 @@ def setup_driver():
                 options=options
             )
             return driver
-        except Exception as e2:
-            print(f"❌ Error setting up ChromeDriver: {e2}")
+        except Exception as e:
+            print(f"❌ Error setting up ChromeDriver: {e}")
             print("   Try: pip install webdriver-manager")
             return None
 
@@ -135,7 +123,7 @@ def main():
         return
 
     try:
-        # Step 1: Open login page (CTB endpoint - no WAF!)
+        # Step 1: Open login page
         login_url = (
             f"{BASE_URL}authorize?"
             f"client_id=peuhyundaiidm-ctb&"
