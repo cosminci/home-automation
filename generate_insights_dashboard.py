@@ -57,8 +57,7 @@ async def create_insights_dashboard():
                                             ]
                                         },
                                         {
-                                            "entity": "climate.ac_living",
-                                            "attribute": "temperature",
+                                            "entity": "sensor.ac_living_setpoint_when_on",
                                             "name": "Living Set Point",
                                             "yaxis": "y1",
                                             "line": {
@@ -82,8 +81,7 @@ async def create_insights_dashboard():
                                             ]
                                         },
                                         {
-                                            "entity": "climate.ac_bedroom",
-                                            "attribute": "temperature",
+                                            "entity": "sensor.ac_bedroom_setpoint_when_on",
                                             "name": "Bedroom Set Point",
                                             "yaxis": "y1",
                                             "line": {
@@ -107,8 +105,7 @@ async def create_insights_dashboard():
                                             ]
                                         },
                                         {
-                                            "entity": "climate.ac_office",
-                                            "attribute": "temperature",
+                                            "entity": "sensor.ac_office_setpoint_when_on",
                                             "name": "Office Set Point",
                                             "yaxis": "y1",
                                             "line": {
@@ -132,8 +129,7 @@ async def create_insights_dashboard():
                                             ]
                                         },
                                         {
-                                            "entity": "climate.ac_iacopewee",
-                                            "attribute": "temperature",
+                                            "entity": "sensor.ac_kid_setpoint_when_on",
                                             "name": "Iacob Set Point",
                                             "yaxis": "y1",
                                             "line": {
@@ -205,18 +201,19 @@ async def create_insights_dashboard():
                                 },
                                 {
                                     "type": "markdown",
-                                    "title": "📊 AC Runtime",
+                                    "title": "❄️ AC Runtime",
                                     "content": "| Room | &nbsp; &nbsp; Last 24h &nbsp; &nbsp; | &nbsp; &nbsp; Last 7 Days &nbsp; &nbsp; |\n|------|:----------:|:-------------:|\n| 🛋️ &nbsp; &nbsp; Living | {% set h = states('sensor.ac_living_runtime_yesterday') | float(0) %}{{ h | int }}h{{((h - (h | int)) * 60) | int }}m | {% set h = states('sensor.ac_living_runtime_7days') | float(0) %}{{ h | int }}h{{((h - (h | int)) * 60) | int }}m |\n| 🛏️ &nbsp; &nbsp; Bedroom | {% set h = states('sensor.ac_bedroom_runtime_yesterday') | float(0) %}{{ h | int }}h{{((h - (h | int)) * 60) | int }}m | {% set h = states('sensor.ac_bedroom_runtime_7days') | float(0) %}{{ h | int }}h{{((h - (h | int)) * 60) | int }}m |\n| 🖥️ &nbsp; &nbsp; Office | {% set h = states('sensor.ac_office_runtime_yesterday') | float(0) %}{{ h | int }}h{{((h - (h | int)) * 60) | int }}m | {% set h = states('sensor.ac_office_runtime_7days') | float(0) %}{{ h | int }}h{{((h - (h | int)) * 60) | int }}m |\n| 🧸 &nbsp; &nbsp; Kid's Room | {% set h = states('sensor.ac_kid_runtime_yesterday') | float(0) %}{{ h | int }}h{{((h - (h | int)) * 60) | int }}m | {% set h = states('sensor.ac_kid_runtime_7days') | float(0) %}{{ h | int }}h{{((h - (h | int)) * 60) | int }}m |\n| **⏱️ &nbsp; &nbsp; Total** | {% set h = states('sensor.total_ac_runtime_yesterday') | float(0) %}**{{ h | int }}h{{((h - (h | int)) * 60) | int }}m** | {% set h = states('sensor.total_ac_runtime_7days') | float(0) %}**{{ h | int }}h{{((h - (h | int)) * 60) | int }}m** |",
                                     "grid_options": {
-                                        "columns": 9,
+                                        "columns": 12,
                                         "rows": "auto"
                                     }
                                 },
                                 {
                                     "type": "markdown",
-                                    "content": "# 🏠 Appliance Stats\n\n_Coming soon: Dishwasher, Oven, Washing Machine, Dryer run counts_",
+                                    "title": "🏠 Appliance Stats",
+                                    "content": "| Appliance | &nbsp; &nbsp; Last 24h &nbsp; &nbsp; | &nbsp; &nbsp; Last 7 Days &nbsp; &nbsp; |\n|------|:----------:|:-------------:|\n| 🍽️ &nbsp; &nbsp; Dishwasher | {% set c = states('sensor.dishwasher_count_yesterday') | int(0) %}{% set h = states('sensor.dishwasher_runtime_yesterday') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) | {% set c = states('sensor.dishwasher_count_7days') | int(0) %}{% set h = states('sensor.dishwasher_runtime_7days') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) |\n| 🔥 &nbsp; &nbsp; Oven | {% set c = states('sensor.oven_count_yesterday') | int(0) %}{% set h = states('sensor.oven_runtime_yesterday') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) | {% set c = states('sensor.oven_count_7days') | int(0) %}{% set h = states('sensor.oven_runtime_7days') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) |\n| 🍳 &nbsp; &nbsp; Cooktop | {% set c = states('sensor.cooktop_count_yesterday') | int(0) %}{% set h = states('sensor.cooktop_runtime_yesterday') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) | {% set c = states('sensor.cooktop_count_7days') | int(0) %}{% set h = states('sensor.cooktop_runtime_7days') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) |\n| 👕 &nbsp; &nbsp; Washing Machine | {% set c = states('sensor.washing_machine_count_yesterday') | int(0) %}{% set h = states('sensor.washing_machine_runtime_yesterday') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) | {% set c = states('sensor.washing_machine_count_7days') | int(0) %}{% set h = states('sensor.washing_machine_runtime_7days') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) |\n| 🧺 &nbsp; &nbsp; Dryer | {% set c = states('sensor.dryer_count_yesterday') | int(0) %}{% set h = states('sensor.dryer_runtime_yesterday') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) | {% set c = states('sensor.dryer_count_7days') | int(0) %}{% set h = states('sensor.dryer_runtime_7days') | float(0) %}{{ c }} ({{ h | int }}h{{((h - (h | int)) * 60) | int }}m) |",
                                     "grid_options": {
-                                        "columns": 9,
+                                        "columns": 12,
                                         "rows": "auto"
                                     }
                                 }

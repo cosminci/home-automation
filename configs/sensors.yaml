@@ -100,3 +100,231 @@
       unit_of_measurement: "°C"
       device_class: temperature
       value_template: "{{ state_attr('weather.weather_home', 'temperature') }}"
+
+    ac_living_setpoint_when_on:
+      unique_id: ac_living_setpoint_when_on
+      friendly_name: "AC Living Set Point (When On)"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      value_template: >
+        {% if states('climate.ac_living') in ['cool', 'heat'] %}
+          {{ state_attr('climate.ac_living', 'temperature') }}
+        {% else %}
+          {{ states('sensor.ac_living_setpoint_when_on') }}
+        {% endif %}
+
+    ac_bedroom_setpoint_when_on:
+      unique_id: ac_bedroom_setpoint_when_on
+      friendly_name: "AC Bedroom Set Point (When On)"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      value_template: >
+        {% if states('climate.ac_bedroom') in ['cool', 'heat'] %}
+          {{ state_attr('climate.ac_bedroom', 'temperature') }}
+        {% else %}
+          {{ states('sensor.ac_bedroom_setpoint_when_on') }}
+        {% endif %}
+
+    ac_office_setpoint_when_on:
+      unique_id: ac_office_setpoint_when_on
+      friendly_name: "AC Office Set Point (When On)"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      value_template: >
+        {% if states('climate.ac_office') in ['cool', 'heat'] %}
+          {{ state_attr('climate.ac_office', 'temperature') }}
+        {% else %}
+          {{ states('sensor.ac_office_setpoint_when_on') }}
+        {% endif %}
+
+    ac_kid_setpoint_when_on:
+      unique_id: ac_kid_setpoint_when_on
+      friendly_name: "AC Kid Set Point (When On)"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      value_template: >
+        {% if states('climate.ac_iacopewee') in ['cool', 'heat'] %}
+          {{ state_attr('climate.ac_iacopewee', 'temperature') }}
+        {% else %}
+          {{ states('sensor.ac_kid_setpoint_when_on') }}
+        {% endif %}
+
+- platform: history_stats
+  unique_id: dishwasher_runtime_yesterday
+  name: Dishwasher Runtime Yesterday
+  entity_id: sensor.dishwasher_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: dishwasher_runtime_7days
+  name: Dishwasher Runtime 7 Days
+  entity_id: sensor.dishwasher_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: dishwasher_count_yesterday
+  name: Dishwasher Count Yesterday
+  entity_id: sensor.dishwasher_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: dishwasher_count_7days
+  name: Dishwasher Count 7 Days
+  entity_id: sensor.dishwasher_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: washing_machine_runtime_yesterday
+  name: Washing Machine Runtime Yesterday
+  entity_id: sensor.washing_machine_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: washing_machine_runtime_7days
+  name: Washing Machine Runtime 7 Days
+  entity_id: sensor.washing_machine_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: washing_machine_count_yesterday
+  name: Washing Machine Count Yesterday
+  entity_id: sensor.washing_machine_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: washing_machine_count_7days
+  name: Washing Machine Count 7 Days
+  entity_id: sensor.washing_machine_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: dryer_runtime_yesterday
+  name: Dryer Runtime Yesterday
+  entity_id: sensor.dryer_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: dryer_runtime_7days
+  name: Dryer Runtime 7 Days
+  entity_id: sensor.dryer_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: dryer_count_yesterday
+  name: Dryer Count Yesterday
+  entity_id: sensor.dryer_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: dryer_count_7days
+  name: Dryer Count 7 Days
+  entity_id: sensor.dryer_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: oven_runtime_yesterday
+  name: Oven Runtime Yesterday
+  entity_id: sensor.oven_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: oven_runtime_7days
+  name: Oven Runtime 7 Days
+  entity_id: sensor.oven_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: oven_count_yesterday
+  name: Oven Count Yesterday
+  entity_id: sensor.oven_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: oven_count_7days
+  name: Oven Count 7 Days
+  entity_id: sensor.oven_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: cooktop_runtime_yesterday
+  name: Cooktop Runtime Yesterday
+  entity_id: sensor.cooktop_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: cooktop_runtime_7days
+  name: Cooktop Runtime 7 Days
+  entity_id: sensor.cooktop_operation_state
+  state: 'run'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: cooktop_count_yesterday
+  name: Cooktop Count Yesterday
+  entity_id: sensor.cooktop_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: cooktop_count_7days
+  name: Cooktop Count 7 Days
+  entity_id: sensor.cooktop_operation_state
+  state: 'finished'
+  type: count
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'

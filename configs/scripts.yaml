@@ -7,7 +7,25 @@ lights_all_off:
         entity_id: "{{ states.light | map(attribute='entity_id') | list }}"
     - service: switch.turn_off
       target:
-        entity_id: "{{ states.switch | map(attribute='entity_id') | list }}"
+        entity_id:
+          - switch.ceiling_light
+          - switch.ceiling_light_2
+          - switch.ceiling_light_3
+          - switch.ceiling_light_4
+          - switch.ceiling_spots
+          - switch.ceiling_spots_2
+          - switch.ceiling_spots_3
+          - switch.ceiling_spots_4
+          - switch.dining_light
+          - switch.led_strip
+          - switch.led_strip_2
+          - switch.led_strip_countertop
+          - switch.light_2
+          - switch.rail_spots
+          - switch.rail_spots_2
+          - switch.rail_spots_3
+          - switch.staircase_lights
+          - switch.terrace_lights
 
 everything_off:
   alias: "Everything Off"
