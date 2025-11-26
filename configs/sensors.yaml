@@ -1,0 +1,102 @@
+- platform: history_stats
+  unique_id: ac_living_runtime_yesterday
+  name: AC Living Runtime Yesterday
+  entity_id: climate.ac_living
+  state: 'cool'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: ac_bedroom_runtime_yesterday
+  name: AC Bedroom Runtime Yesterday
+  entity_id: climate.ac_bedroom
+  state: 'cool'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: ac_office_runtime_yesterday
+  name: AC Office Runtime Yesterday
+  entity_id: climate.ac_office
+  state: 'cool'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: ac_kid_runtime_yesterday
+  name: AC Kid Runtime Yesterday
+  entity_id: climate.ac_iacopewee
+  state: 'cool'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
+  end: '{{ now().replace(hour=0, minute=0, second=0) }}'
+
+- platform: history_stats
+  unique_id: ac_living_runtime_7days
+  name: AC Living Runtime 7 Days
+  entity_id: climate.ac_living
+  state: 'cool'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: ac_bedroom_runtime_7days
+  name: AC Bedroom Runtime 7 Days
+  entity_id: climate.ac_bedroom
+  state: 'cool'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: ac_office_runtime_7days
+  name: AC Office Runtime 7 Days
+  entity_id: climate.ac_office
+  state: 'cool'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: history_stats
+  unique_id: ac_kid_runtime_7days
+  name: AC Kid Runtime 7 Days
+  entity_id: climate.ac_iacopewee
+  state: 'cool'
+  type: time
+  start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
+  end: '{{ now() }}'
+
+- platform: template
+  sensors:
+    total_ac_runtime_yesterday:
+      unique_id: total_ac_runtime_yesterday
+      friendly_name: "Total AC Runtime Yesterday"
+      unit_of_measurement: "h"
+      value_template: >
+        {% set living = states('sensor.ac_living_runtime_yesterday') | float(0) %}
+        {% set bedroom = states('sensor.ac_bedroom_runtime_yesterday') | float(0) %}
+        {% set office = states('sensor.ac_office_runtime_yesterday') | float(0) %}
+        {% set kid = states('sensor.ac_kid_runtime_yesterday') | float(0) %}
+        {{ (living + bedroom + office + kid) | round(1) }}
+
+    total_ac_runtime_7days:
+      unique_id: total_ac_runtime_7days
+      friendly_name: "Total AC Runtime 7 Days"
+      unit_of_measurement: "h"
+      value_template: >
+        {% set living = states('sensor.ac_living_runtime_7days') | float(0) %}
+        {% set bedroom = states('sensor.ac_bedroom_runtime_7days') | float(0) %}
+        {% set office = states('sensor.ac_office_runtime_7days') | float(0) %}
+        {% set kid = states('sensor.ac_kid_runtime_7days') | float(0) %}
+        {{ (living + bedroom + office + kid) | round(1) }}
+
+    outdoor_temperature:
+      unique_id: outdoor_temperature
+      friendly_name: "Outdoor Temperature"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      value_template: "{{ state_attr('weather.weather_home', 'temperature') }}"
