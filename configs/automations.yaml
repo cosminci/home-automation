@@ -393,69 +393,6 @@
       message: Your dryer cycle has finished. Time to fold!
   mode: single
 
-- id: '1763893218_ac_extreme_temp'
-  alias: Important - Climate AC Extreme Temperature
-  description: Notify if AC set to extreme temperature
-  triggers:
-  - platform: numeric_state
-    entity_id:
-    - climate.ac_living
-    - climate.ac_bedroom
-    - climate.ac_office
-    - climate.ac_iacopewee
-    attribute: temperature
-    above: 28
-  - platform: numeric_state
-    entity_id:
-    - climate.ac_living
-    - climate.ac_bedroom
-    - climate.ac_office
-    - climate.ac_iacopewee
-    attribute: temperature
-    below: 18
-  conditions:
-  - condition: time
-    after: '09:00:00'
-    before: '23:00:00'
-  actions:
-  - service: notify.notify
-    data:
-      title: AC Extreme Temperature
-      message: '{{ trigger.to_state.attributes.friendly_name | default("An AC") }}
-        is set to {{ trigger.to_state.attributes.temperature }}C. This may waste energy.'
-  mode: queued
-  max: 4
-
-- id: '1763893219_ac_running_long'
-  alias: Important - Climate AC Running >8 Hours
-  description: Notify if AC has been running for more than 8 hours
-  triggers:
-  - platform: state
-    entity_id:
-    - climate.ac_living
-    - climate.ac_bedroom
-    - climate.ac_office
-    - climate.ac_iacopewee
-    to:
-    - cool
-    - heat
-    - dry
-    - fan_only
-    for:
-      hours: 8
-  conditions:
-  - condition: time
-    after: '09:00:00'
-    before: '23:00:00'
-  actions:
-  - service: notify.notify
-    data:
-      title: AC Running Long Time
-      message: '{{ trigger.to_state.attributes.friendly_name | default("An AC") }}
-        has been running for 8 hours. Consider turning it off to save energy.'
-  mode: queued
-  max: 4
-
 # ============================================
 # INFORMATIONAL NOTIFICATIONS (daily summaries at 9am)
 # ============================================
@@ -480,14 +417,12 @@
         {% set messages = [] %}
 
         {# Today's weather forecast - always show #}
-        {% if daily_forecast is defined and daily_forecast['weather.weather_home'].forecast is defined %}
-          {% set today = daily_forecast['weather.weather_home'].forecast[0] %}
-          {% set temp_high = today.temperature | round(0) %}
-          {% set temp_low = today.templow | round(0) %}
-          {% set rain_prob = today.precipitation_probability | default(0) %}
-          {% set weather_msg = 'Today: ' ~ temp_low ~ '-' ~ temp_high ~ '°C, ' ~ rain_prob ~ '% rain' %}
-          {% set messages = messages + [weather_msg] %}
-        {% endif %}
+        {% set today = daily_forecast['weather.weather_home'].forecast[0] %}
+        {% set temp_high = today.temperature | round(0) %}
+        {% set temp_low = today.templow | round(0) %}
+        {% set precipitation = today.precipitation | round(1) %}
+        {% set weather_msg = 'Today: ' ~ temp_low ~ '-' ~ temp_high ~ '°C, ' ~ precipitation ~ 'mm rain' %}
+        {% set messages = messages + [weather_msg] %}
 
         {# AC runtime yesterday - only if > 1h #}
         {% set ac_runtime = states('sensor.total_ac_runtime_yesterday') | float(0) %}
@@ -495,27 +430,7 @@
           {% set messages = messages + ['AC ran ' ~ ac_runtime ~ 'h yesterday'] %}
         {% endif %}
 
-        {# Lights left on overnight - only if any, exclude ventilators #}
-        {% set lights_on = states.light | selectattr('state', 'eq', 'on') | list %}
-        {% set switches_on = states.switch | selectattr('entity_id', 'search', 'light|led_strip|ceiling|rail_spots|dining|staircase|terrace') | rejectattr('entity_id', 'search', 'ventilator') | selectattr('state', 'eq', 'on') | list %}
-        {% set total_lights = (lights_on | count) + (switches_on | count) %}
-        {% if total_lights > 0 %}
-          {% set messages = messages + [total_lights ~ ' light' ~ ('s' if total_lights > 1 else '') ~ ' left on overnight'] %}
-        {% endif %}
-
-        {# TVs left on overnight - only if any #}
-        {% set tvs_on = [] %}
-        {% if is_state('media_player.lg_webos_tv_oled48c22lb', 'on') %}
-          {% set tvs_on = tvs_on + ['Bedroom TV'] %}
-        {% endif %}
-        {% if is_state('media_player.77_oled', 'on') %}
-          {% set tvs_on = tvs_on + ['Living Room TV'] %}
-        {% endif %}
-        {% if tvs_on | count > 0 %}
-          {% set messages = messages + [tvs_on | join(', ') ~ ' left on overnight'] %}
-        {% endif %}
-
-        {# Build final message - always show weather, only add other items if present #}
+        {# Build final message #}
         {{ messages | join('\n') }}
 
         Tap to view insights →
