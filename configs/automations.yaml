@@ -479,21 +479,13 @@
       message: >
         {% set messages = [] %}
 
-        {# Today's weather forecast #}
+        {# Today's weather forecast - always show #}
         {% if daily_forecast is defined and daily_forecast['weather.weather_home'].forecast is defined %}
           {% set today = daily_forecast['weather.weather_home'].forecast[0] %}
           {% set temp_high = today.temperature | round(0) %}
           {% set temp_low = today.templow | round(0) %}
-          {% set condition = today.condition %}
           {% set rain_prob = today.precipitation_probability | default(0) %}
-
-          {# Build weather message #}
-          {% set weather_msg = 'Today: ' ~ temp_low ~ '-' ~ temp_high ~ '°C' %}
-          {% if rain_prob > 30 %}
-            {% set weather_msg = weather_msg ~ ', ' ~ rain_prob ~ '% chance of rain' %}
-          {% elif condition in ['rainy', 'pouring', 'lightning-rainy'] %}
-            {% set weather_msg = weather_msg ~ ', rain expected' %}
-          {% endif %}
+          {% set weather_msg = 'Today: ' ~ temp_low ~ '-' ~ temp_high ~ '°C, ' ~ rain_prob ~ '% rain' %}
           {% set messages = messages + [weather_msg] %}
         {% endif %}
 
@@ -503,9 +495,9 @@
           {% set messages = messages + ['AC ran ' ~ ac_runtime ~ 'h yesterday'] %}
         {% endif %}
 
-        {# Lights left on overnight - only if any #}
+        {# Lights left on overnight - only if any, exclude ventilators #}
         {% set lights_on = states.light | selectattr('state', 'eq', 'on') | list %}
-        {% set switches_on = states.switch | selectattr('entity_id', 'search', 'light|led_strip|ceiling|rail_spots|dining') | selectattr('state', 'eq', 'on') | list %}
+        {% set switches_on = states.switch | selectattr('entity_id', 'search', 'light|led_strip|ceiling|rail_spots|dining|staircase|terrace') | rejectattr('entity_id', 'search', 'ventilator') | selectattr('state', 'eq', 'on') | list %}
         {% set total_lights = (lights_on | count) + (switches_on | count) %}
         {% if total_lights > 0 %}
           {% set messages = messages + [total_lights ~ ' light' ~ ('s' if total_lights > 1 else '') ~ ' left on overnight'] %}
@@ -523,16 +515,10 @@
           {% set messages = messages + [tvs_on | join(', ') ~ ' left on overnight'] %}
         {% endif %}
 
-        {# Build final message #}
-        {% if messages | count > 0 %}
-          {{ messages | join('\n') }}
+        {# Build final message - always show weather, only add other items if present #}
+        {{ messages | join('\n') }}
 
-          Tap to view insights →
-        {% else %}
-          All good! No issues overnight.
-
-          Tap to view insights →
-        {% endif %}
+        Tap to view insights →
       data:
         # iOS - opens insights dashboard in HA app
         url: /home-insights
