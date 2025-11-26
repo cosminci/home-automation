@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-"""
-Generate Home Assistant dashboard
-"""
 
 import asyncio
 import websockets
@@ -12,33 +9,69 @@ HA_URL = "ws://tower.local:8123/api/websocket"
 HA_TOKEN = os.environ.get("HA_TOKEN")
 
 async def create_corrected_dashboard():
-    """Create the dashboard"""
-    
     async with websockets.connect(HA_URL) as websocket:
-        # Auth
         await websocket.recv()
         await websocket.send(json.dumps({"type": "auth", "access_token": HA_TOKEN}))
         await websocket.recv()
 
-        # Dashboard configuration
         dashboard_config = {
             "title": "Home",
             "views": [
-                # Main Home Overview
                 {
                     "title": "Overview",
                     "path": "overview",
                     "icon": "mdi:home",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "🌡️ Climate",
                             "show_header_toggle": False,
                             "entities": [
                                 {
+                                    "type": "section",
+                                    "label": "Outside Weather"
+                                },
+                                {
                                     "entity": "weather.weather_home",
-                                    "name": "Outside",
+                                    "name": "Conditions",
                                     "icon": "mdi:weather-partly-cloudy"
+                                },
+                                {
+                                    "type": "attribute",
+                                    "entity": "weather.weather_home",
+                                    "attribute": "temperature",
+                                    "name": "Temperature",
+                                    "icon": "mdi:thermometer",
+                                    "suffix": "°C"
+                                },
+                                {
+                                    "type": "attribute",
+                                    "entity": "weather.weather_home",
+                                    "attribute": "humidity",
+                                    "name": "Humidity",
+                                    "icon": "mdi:water-percent",
+                                    "suffix": "%"
+                                },
+                                {
+                                    "type": "attribute",
+                                    "entity": "weather.weather_home",
+                                    "attribute": "wind_speed",
+                                    "name": "Wind Speed",
+                                    "icon": "mdi:weather-windy",
+                                    "suffix": " km/h"
+                                },
+                                {
+                                    "type": "attribute",
+                                    "entity": "weather.weather_home",
+                                    "attribute": "pressure",
+                                    "name": "Pressure",
+                                    "icon": "mdi:gauge",
+                                    "suffix": " hPa"
                                 },
                                 {
                                     "type": "section",
@@ -63,44 +96,57 @@ async def create_corrected_dashboard():
                                     "entity": "climate.ac_iacopewee",
                                     "name": "Kid's Room",
                                     "icon": "mdi:teddy-bear"
-                                },
-                                {
-                                    "type": "section",
-                                    "label": "AC Scenes"
-                                },
-                                {"type": "button", "name": "Living & Office (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_living_office"}}},
-                                {"type": "button", "name": "All On (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_on"}}},
-                                {"type": "button", "name": "All Off", "icon": "mdi:snowflake-off", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_off"}}}
-                            ]
+                                }
+                            ],
+                            "grid_options": {
+                                "columns": 12
+                            }
                         },
                         {
                             "type": "entities",
-                            "title": "🎬 Lighting Scenes",
+                            "title": "🎬 Scenes",
                             "show_header_toggle": False,
                             "entities": [
+                                {
+                                    "type": "section",
+                                    "label": "Lighting"
+                                },
                                 {"type": "button", "name": "Ambient 10%", "icon": "mdi:movie-open", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_10"}}},
                                 {"type": "button", "name": "Ambient 70%", "icon": "mdi:brightness-6", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_70"}}},
                                 {"type": "button", "name": "Ambient 100%", "icon": "mdi:lightbulb-on", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_100"}}},
-                                {"type": "button", "name": "All Off", "icon": "mdi:lightbulb-off", "tap_action": {"action": "call-service", "service": "script.turn_on", "service_data": {"entity_id": "script.lights_all_off"}}}
-                            ]
-                        },
-                        {
-                            "type": "entities",
-                            "title": "🏠 Leaving Home",
-                            "show_header_toggle": False,
-                            "entities": [
+                                {"type": "button", "name": "All Off", "icon": "mdi:lightbulb-off", "tap_action": {"action": "call-service", "service": "script.turn_on", "service_data": {"entity_id": "script.lights_all_off"}}},
+                                {
+                                    "type": "section",
+                                    "label": "Air Conditioning"
+                                },
+                                {"type": "button", "name": "Living & Office (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_living_office"}}},
+                                {"type": "button", "name": "All On (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_on"}}},
+                                {"type": "button", "name": "All Off", "icon": "mdi:snowflake-off", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_off"}}},
+                                {
+                                    "type": "section",
+                                    "label": "Leaving Home"
+                                },
                                 {"type": "button", "name": "Everything Off", "icon": "mdi:home-export-outline", "tap_action": {"action": "call-service", "service": "script.turn_on", "service_data": {"entity_id": "script.everything_off"}}}
+                            ],
+                            "grid_options": {
+                                "columns": 12
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Living Room
                 {
                     "title": "Living Room",
                     "path": "living_room",
                     "icon": "mdi:sofa",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "thermostat",
                             "entity": "climate.ac_living",
@@ -115,7 +161,10 @@ async def create_corrected_dashboard():
                                     "style": "dropdown",
                                     "preset_modes": ["none", "eco", "ai"]
                                 }
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 12
+                            }
                         },
                         {
                             "type": "entities",
@@ -125,13 +174,21 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.dining_light", "name": "Dining Light", "icon": "mdi:ceiling-light"},
                                 {"entity": "switch.ceiling_light_3", "name": "Ceiling Fan Light", "icon": "mdi:ceiling-fan-light"},
                                 {"entity": "light.ceiling_spots", "name": "Ceiling Spots", "icon": "mdi:lightbulb-group"}
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 6,
+                                "rows": 4
+                            }
                         },
                         {
                             "type": "light",
                             "entity": "light.led_strip_window_2",
                             "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant"
+                            "icon": "mdi:led-strip-variant",
+                            "grid_options": {
+                                "columns": 6,
+                                "rows": 4
+                            }
                         },
                         {
                             "type": "entities",
@@ -149,17 +206,27 @@ async def create_corrected_dashboard():
                                 },
                                 {"entity": "media_player.soundbar_q990b", "name": "Power & Volume"},
                                 {"entity": "input_select.soundbar_source", "name": "Source"}
+                            ],
+                            "grid_options": {
+                                "columns": 6,
+                                "rows": 4
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Kitchen
                 {
                     "title": "Kitchen",
                     "path": "kitchen",
                     "icon": "mdi:silverware-fork-knife",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "💡 Lights",
@@ -168,13 +235,21 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.led_strip_countertop", "name": "Countertop LED", "icon": "mdi:led-strip"},
                                 {"entity": "switch.rail_spots_2", "name": "Rail Spots", "icon": "mdi:track-light"},
                                 {"entity": "switch.ceiling_spots", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"}
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 6,
+                                "rows": 4
+                            }
                         },
                         {
                             "type": "light",
                             "entity": "light.led_strip_window_3",
                             "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant"
+                            "icon": "mdi:led-strip-variant",
+                            "grid_options": {
+                                "columns": 6,
+                                "rows": 4
+                            }
                         },
                         {
                             "type": "entities",
@@ -205,7 +280,11 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.dishwasher_power", "name": "Power", "icon": "mdi:power"},
                                 {"entity": "sensor.dishwasher_salt_nearly_empty", "name": "Salt Warning", "icon": "mdi:shaker"},
                                 {"entity": "sensor.dishwasher_rinse_aid_nearly_empty", "name": "Rinse Aid Warning", "icon": "mdi:spray-bottle"}
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 6,
+                                "rows": 7
+                            }
                         },
                         {
                             "type": "entities",
@@ -240,7 +319,11 @@ async def create_corrected_dashboard():
                                 },
                                 {"entity": "switch.oven_power", "name": "Power", "icon": "mdi:power"},
                                 {"entity": "switch.oven_child_lock", "name": "Child Lock", "icon": "mdi:lock"}
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 6,
+                                "rows": 7
+                            }
                         },
                         {
                             "type": "entities",
@@ -250,17 +333,27 @@ async def create_corrected_dashboard():
                                 {"entity": "sensor.cooktop_operation_state", "name": "Status", "icon": "mdi:stove"},
                                 {"entity": "switch.cooktop_power", "name": "Power", "icon": "mdi:power"},
                                 {"entity": "switch.cooktop_child_lock", "name": "Child Lock", "icon": "mdi:lock"}
+                            ],
+                            "grid_options": {
+                                "columns": 6,
+                                "rows": 4
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Bedroom
                 {
                     "title": "Bedroom",
                     "path": "bedroom",
                     "icon": "mdi:bed",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "thermostat",
                             "entity": "climate.ac_bedroom",
@@ -275,7 +368,10 @@ async def create_corrected_dashboard():
                                     "style": "dropdown",
                                     "preset_modes": ["none", "eco", "ai"]
                                 }
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 12
+                            }
                         },
                         {
                             "type": "entities",
@@ -284,27 +380,42 @@ async def create_corrected_dashboard():
                             "entities": [
                                 {"entity": "switch.rail_spots", "name": "Rail Spots", "icon": "mdi:track-light"},
                                 {"entity": "switch.ceiling_light", "name": "Ceiling Light", "icon": "mdi:ceiling-light"}
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
                         },
                         {
                             "type": "light",
                             "entity": "light.led_strip",
                             "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant"
+                            "icon": "mdi:led-strip-variant",
+                            "grid_options": {
+                                "columns": 6
+                            }
                         },
                         {
                             "type": "media-control",
-                            "entity": "media_player.lg_webos_tv_oled48c22lb"
+                            "entity": "media_player.lg_webos_tv_oled48c22lb",
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
+                            ]
                         }
                     ]
                 },
 
-                # Kid's Room
                 {
                     "title": "Kid's Room",
                     "path": "kid_room",
                     "icon": "mdi:teddy-bear",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "thermostat",
                             "entity": "climate.ac_iacopewee",
@@ -319,7 +430,10 @@ async def create_corrected_dashboard():
                                     "style": "dropdown",
                                     "preset_modes": ["none", "eco", "ai"]
                                 }
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 12
+                            }
                         },
                         {
                             "type": "entities",
@@ -329,29 +443,44 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.rail_spots_3", "name": "Rail Spots", "icon": "mdi:track-light"},
                                 {"entity": "switch.ceiling_light_2", "name": "Ceiling Light", "icon": "mdi:ceiling-light"},
                                 {"entity": "switch.light_2", "name": "Wall Light", "icon": "mdi:wall-sconce"}
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
                         },
                         {
                             "type": "light",
                             "entity": "light.led_strip_window_4",
                             "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant"
+                            "icon": "mdi:led-strip-variant",
+                            "grid_options": {
+                                "columns": 6
+                            }
                         },
                         {
                             "type": "light",
                             "entity": "light.led_strip_bed",
                             "name": "LED Strip Bed",
-                            "icon": "mdi:led-strip-variant"
+                            "icon": "mdi:led-strip-variant",
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
+                            ]
                         }
                     ]
                 },
 
-                # Office
                 {
                     "title": "Office",
                     "path": "office",
                     "icon": "mdi:desk",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "thermostat",
                             "entity": "climate.ac_office",
@@ -366,7 +495,10 @@ async def create_corrected_dashboard():
                                     "style": "dropdown",
                                     "preset_modes": ["none", "eco", "ai"]
                                 }
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 12
+                            }
                         },
                         {
                             "type": "entities",
@@ -374,57 +506,87 @@ async def create_corrected_dashboard():
                             "show_header_toggle": False,
                             "entities": [
                                 {"entity": "switch.ceiling_light_4", "name": "Ceiling Light", "icon": "mdi:ceiling-light"}
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
                         },
                         {
                             "type": "light",
                             "entity": "light.led_strip_window",
                             "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant"
+                            "icon": "mdi:led-strip-variant",
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
+                            ]
                         }
                     ]
                 },
 
-                # Hallway
                 {
                     "title": "Hallway",
                     "path": "hallway",
                     "icon": "mdi:door-open",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "💡 Lights",
                             "show_header_toggle": False,
                             "entities": [
                                 {"entity": "switch.ceiling_spots_4", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"}
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Staircase
                 {
                     "title": "Staircase",
                     "path": "staircase",
                     "icon": "mdi:stairs",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "💡 Lights",
                             "show_header_toggle": False,
                             "entities": [
                                 {"entity": "switch.staircase_lights", "name": "Hanging Lights (4)", "icon": "mdi:ceiling-light-multiple"}
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Bathroom - Shower
                 {
                     "title": "Bathroom - Shower",
                     "path": "bathroom_shower",
                     "icon": "mdi:shower-head",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "💡 Lights & Ventilation",
@@ -433,17 +595,26 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.ceiling_spots_3", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"},
                                 {"entity": "switch.led_strip_2", "name": "LED Strip", "icon": "mdi:led-strip"},
                                 {"entity": "switch.ventilator", "name": "Ventilator", "icon": "mdi:fan"}
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Bathroom - Tub
                 {
                     "title": "Bathroom - Tub",
                     "path": "bathroom_tub",
                     "icon": "mdi:bathtub",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "💡 Lights & Ventilation",
@@ -452,17 +623,26 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.ceiling_spots_2", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"},
                                 {"entity": "switch.led_strip", "name": "LED Strip", "icon": "mdi:led-strip"},
                                 {"entity": "switch.ventilator_2", "name": "Ventilator", "icon": "mdi:fan"}
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Washer Room
                 {
                     "title": "Washer Room",
                     "path": "washer_room",
                     "icon": "mdi:washing-machine",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "👕 Washing Machine",
@@ -495,7 +675,10 @@ async def create_corrected_dashboard():
                                     "row": {"entity": "select.washing_machine_selected_program", "name": "Select Program", "icon": "mdi:playlist-play"}
                                 },
                                 {"entity": "switch.washing_machine_power", "name": "Power", "icon": "mdi:power"}
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
                         },
                         {
                             "type": "entities",
@@ -530,34 +713,52 @@ async def create_corrected_dashboard():
                                 },
                                 {"entity": "switch.dryer_power", "name": "Power", "icon": "mdi:power"},
                                 {"entity": "switch.dryer_child_lock", "name": "Child Lock", "icon": "mdi:lock"}
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Terrace
                 {
                     "title": "Terrace",
                     "path": "terrace",
                     "icon": "mdi:balcony",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "💡 Lights",
                             "show_header_toggle": False,
                             "entities": [
                                 {"entity": "switch.terrace_lights", "name": "Terrace Lights", "icon": "mdi:outdoor-lamp"}
+                            ],
+                            "grid_options": {
+                                "columns": 6
+                            }
+                        }
                             ]
                         }
                     ]
                 },
 
-                # Car - Hyundai Tucson
                 {
                     "title": "Car",
                     "path": "car",
                     "icon": "mdi:car",
-                    "cards": [
+                    "type": "sections",
+                    "sections": [
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                         {
                             "type": "entities",
                             "title": "🚗 Vehicle Status",
@@ -693,12 +894,13 @@ async def create_corrected_dashboard():
                                 }
                             ]
                         }
+                            ]
+                        }
                     ]
                 }
             ]
         }
 
-        # Update dashboard
         await websocket.send(json.dumps({
             "id": 1,
             "type": "lovelace/config/save",
