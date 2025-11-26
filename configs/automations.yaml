@@ -460,58 +460,83 @@
 # INFORMATIONAL NOTIFICATIONS (daily summaries at 9am)
 # ============================================
 
-- id: '1763893220_lights_on_all_night'
-  alias: Informational - Home Lights Left On Overnight
-  description: Daily summary of lights left on overnight
+- id: '1763893220_daily_summary'
+  alias: Informational - Smart Daily Summary
+  description: Smart daily summary at 9am - only shows items needing attention
   triggers:
   - platform: time
     at: '09:00:00'
-  conditions:
-  - condition: template
-    value_template: '{{ states.light | selectattr(''state'', ''eq'', ''on'') | list
-      | count > 0 }}'
   actions:
+  - service: weather.get_forecasts
+    target:
+      entity_id: weather.weather_home
+    data:
+      type: daily
+    response_variable: daily_forecast
   - service: notify.notify
     data:
-      title: Lights Left On Overnight
-      message: '{{ states.light | selectattr(''state'', ''eq'', ''on'') | list | count
-        }} lights were left on overnight.'
-  mode: single
+      title: Good Morning
+      message: >
+        {% set messages = [] %}
 
-- id: '1763893221_tv_on_all_night'
-  alias: Informational - Entertainment TV Left On Overnight
-  description: Daily summary if TV was left on overnight
-  triggers:
-  - platform: time
-    at: '09:00:00'
-  conditions:
-  - condition: or
-    conditions:
-    - condition: state
-      entity_id: media_player.lg_webos_tv_oled48c22lb
-      state: 'on'
-    - condition: state
-      entity_id: media_player.samsung_the_frame
-      state: 'on'
-  actions:
-  - service: notify.notify
-    data:
-      title: TV Left On Overnight
-      message: A TV was left on overnight. Consider turning it off to save energy.
-  mode: single
+        {# Today's weather forecast #}
+        {% if daily_forecast is defined and daily_forecast['weather.weather_home'].forecast is defined %}
+          {% set today = daily_forecast['weather.weather_home'].forecast[0] %}
+          {% set temp_high = today.temperature | round(0) %}
+          {% set temp_low = today.templow | round(0) %}
+          {% set condition = today.condition %}
+          {% set rain_prob = today.precipitation_probability | default(0) %}
 
-- id: '1763893222_daily_summary'
-  alias: Informational - Daily Summary
-  description: Daily summary at 9am with overnight activity
-  triggers:
-  - platform: time
-    at: '09:00:00'
-  actions:
-  - service: notify.notify
-    data:
-      title: Good Morning - Daily Summary
-      message: 'Home status: {{ states.light | selectattr(''state'', ''eq'', ''on'')
-        | list | count }} lights on, {{ states.climate | selectattr(''state'', ''ne'',
-        ''off'') | list | count }} ACs running.'
+          {# Build weather message #}
+          {% set weather_msg = 'Today: ' ~ temp_low ~ '-' ~ temp_high ~ '°C' %}
+          {% if rain_prob > 30 %}
+            {% set weather_msg = weather_msg ~ ', ' ~ rain_prob ~ '% chance of rain' %}
+          {% elif condition in ['rainy', 'pouring', 'lightning-rainy'] %}
+            {% set weather_msg = weather_msg ~ ', rain expected' %}
+          {% endif %}
+          {% set messages = messages + [weather_msg] %}
+        {% endif %}
+
+        {# AC runtime yesterday - only if > 1h #}
+        {% set ac_runtime = states('sensor.total_ac_runtime_yesterday') | float(0) %}
+        {% if ac_runtime > 1 %}
+          {% set messages = messages + ['AC ran ' ~ ac_runtime ~ 'h yesterday'] %}
+        {% endif %}
+
+        {# Lights left on overnight - only if any #}
+        {% set lights_on = states.light | selectattr('state', 'eq', 'on') | list %}
+        {% set switches_on = states.switch | selectattr('entity_id', 'search', 'light|led_strip|ceiling|rail_spots|dining') | selectattr('state', 'eq', 'on') | list %}
+        {% set total_lights = (lights_on | count) + (switches_on | count) %}
+        {% if total_lights > 0 %}
+          {% set messages = messages + [total_lights ~ ' light' ~ ('s' if total_lights > 1 else '') ~ ' left on overnight'] %}
+        {% endif %}
+
+        {# TVs left on overnight - only if any #}
+        {% set tvs_on = [] %}
+        {% if is_state('media_player.lg_webos_tv_oled48c22lb', 'on') %}
+          {% set tvs_on = tvs_on + ['Bedroom TV'] %}
+        {% endif %}
+        {% if is_state('media_player.77_oled', 'on') %}
+          {% set tvs_on = tvs_on + ['Living Room TV'] %}
+        {% endif %}
+        {% if tvs_on | count > 0 %}
+          {% set messages = messages + [tvs_on | join(', ') ~ ' left on overnight'] %}
+        {% endif %}
+
+        {# Build final message #}
+        {% if messages | count > 0 %}
+          {{ messages | join('\n') }}
+
+          Tap to view insights →
+        {% else %}
+          All good! No issues overnight.
+
+          Tap to view insights →
+        {% endif %}
+      data:
+        # iOS - opens insights dashboard in HA app
+        url: /home-insights
+        # Android - opens insights dashboard in HA app
+        clickAction: /home-insights
   mode: single
 
