@@ -51,10 +51,15 @@ source ~/.zshrc && curl -s -H "Authorization: Bearer $HA_TOKEN" \
 ```
 
 ### Step 3: Update the Dashboard
-Modify `generate_dashboard.py` as needed and deploy:
+Modify `generate_dashboard.py` or `generate_insights_dashboard.py` as needed and **ALWAYS AUTOMATICALLY DEPLOY**:
 ```bash
+# Main dashboard
 source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_dashboard.py
+# Insights dashboard
+source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_insights_dashboard.py
 ```
+
+**⚠️ IMPORTANT FOR AI AGENT: Automatically deploy dashboard updates after making changes, DO NOT ask user to run these commands.**
 
 ---
 
@@ -243,7 +248,6 @@ Use `scripts/delete_entities.sh` to remove entities from Home Assistant's entity
 
 **Run on Unraid NAS shell:**
 ```bash
-cd /mnt/user/appdata/homeassistant
 ./delete_entities.sh sensor.old_sensor switch.unused_switch light.removed_device
 ```
 

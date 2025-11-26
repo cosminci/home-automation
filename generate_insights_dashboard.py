@@ -34,23 +34,14 @@ async def create_insights_dashboard():
                                     "refresh_interval": 10,
                                     "entities": [
                                         {
-                                            "entity": "sensor.outdoor_temperature",
-                                            "name": "Outdoor",
-                                            "yaxis": "y1",
-                                            "line": {
-                                                "width": 4
-                                            },
-                                            "filters": [
-                                                {"force_numeric": None}
-                                            ]
-                                        },
-                                        {
                                             "entity": "climate.ac_living",
                                             "attribute": "current_temperature",
                                             "name": "Living Measured",
                                             "yaxis": "y1",
                                             "line": {
-                                                "width": 2
+                                                "width": 2,
+                                                "color": "#4CAF50",
+                                                "shape": "spline"
                                             },
                                             "filters": [
                                                 {"force_numeric": None}
@@ -62,7 +53,9 @@ async def create_insights_dashboard():
                                             "yaxis": "y1",
                                             "line": {
                                                 "dash": "dot",
-                                                "width": 1
+                                                "width": 1,
+                                                "color": "#4CAF50",
+                                                "shape": "spline"
                                             },
                                             "filters": [
                                                 {"force_numeric": None}
@@ -74,7 +67,9 @@ async def create_insights_dashboard():
                                             "name": "Bedroom Measured",
                                             "yaxis": "y1",
                                             "line": {
-                                                "width": 2
+                                                "width": 2,
+                                                "color": "#FF9800",
+                                                "shape": "spline"
                                             },
                                             "filters": [
                                                 {"force_numeric": None}
@@ -86,7 +81,9 @@ async def create_insights_dashboard():
                                             "yaxis": "y1",
                                             "line": {
                                                 "dash": "dot",
-                                                "width": 1
+                                                "width": 1,
+                                                "color": "#FF9800",
+                                                "shape": "spline"
                                             },
                                             "filters": [
                                                 {"force_numeric": None}
@@ -98,7 +95,9 @@ async def create_insights_dashboard():
                                             "name": "Office Measured",
                                             "yaxis": "y1",
                                             "line": {
-                                                "width": 2
+                                                "width": 2,
+                                                "color": "#2196F3",
+                                                "shape": "spline"
                                             },
                                             "filters": [
                                                 {"force_numeric": None}
@@ -110,7 +109,9 @@ async def create_insights_dashboard():
                                             "yaxis": "y1",
                                             "line": {
                                                 "dash": "dot",
-                                                "width": 1
+                                                "width": 1,
+                                                "color": "#2196F3",
+                                                "shape": "spline"
                                             },
                                             "filters": [
                                                 {"force_numeric": None}
@@ -122,7 +123,9 @@ async def create_insights_dashboard():
                                             "name": "Iacob Measured",
                                             "yaxis": "y1",
                                             "line": {
-                                                "width": 2
+                                                "width": 2,
+                                                "color": "#9C27B0",
+                                                "shape": "spline"
                                             },
                                             "filters": [
                                                 {"force_numeric": None}
@@ -134,7 +137,22 @@ async def create_insights_dashboard():
                                             "yaxis": "y1",
                                             "line": {
                                                 "dash": "dot",
-                                                "width": 1
+                                                "width": 1,
+                                                "color": "#9C27B0",
+                                                "shape": "spline"
+                                            },
+                                            "filters": [
+                                                {"force_numeric": None}
+                                            ]
+                                        },
+                                        {
+                                            "entity": "sensor.outdoor_temperature",
+                                            "name": "Outdoor",
+                                            "yaxis": "y1",
+                                            "line": {
+                                                "width": 4,
+                                                "color": "#FFD700",
+                                                "shape": "spline"
                                             },
                                             "filters": [
                                                 {"force_numeric": None}
