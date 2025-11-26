@@ -18,11 +18,13 @@
 1. **`README.md`** - This file (quick start guide for AI agents)
 2. **`HOME_ASSISTANT_STATE.md`** - Complete technical documentation (READ THIS FIRST)
 3. **`generate_dashboard.py`** - Main dashboard generation script
-4. **`generate_daily_insights_dashboard.py`** - Daily Insights dashboard generation script
+4. **`generate_insights_dashboard.py`** - Insights dashboard generation script
 5. **`configs/automations.yaml`** - All Home Assistant automations
 6. **`configs/scenes.yaml`** - All Home Assistant scenes
 7. **`configs/sensors.yaml`** - Climate history stats sensors
-8. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
+8. **`configs/scripts.yaml`** - Home Assistant scripts (lights off, everything off)
+9. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
+10. **`scripts/delete_entities.sh`** - Delete entities from HA entity registry (run on NAS)
 
 ---
 
@@ -56,30 +58,36 @@ source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_dashboar
 
 ---
 
-## 🔔 Working with Automations, Scenes & Sensors
+## 🔔 Working with Automations, Scenes, Sensors & Scripts
 
 All automations are in `configs/automations.yaml` (23 total).
 All scenes are in `configs/scenes.yaml` (8 total).
 All sensors are in `configs/sensors.yaml`.
+All scripts are in `configs/scripts.yaml` (2 total: lights_all_off, everything_off).
 
-**⚠️ IMPORTANT: Config files CANNOT be copied automatically to HA. User must manually update them.**
+**⚠️ IMPORTANT: ALL config files in `configs/` directory CANNOT be copied automatically to HA. User must manually update them using vi.**
 
-**To update automations, scenes, or sensors:**
+**To update automations, scenes, sensors, or scripts:**
 1. Edit the respective file in `configs/` directory in this repo
 2. Notify user that the file needs to be manually copied to HA
 3. User will update via Unraid console:
    - Docker tab → homeassistant container → Console
-   - Run: `vi /config/automations.yaml` (or `vi /config/scenes.yaml` or `vi /config/sensors.yaml`)
+   - Run: `vi /config/automations.yaml` (or `vi /config/scenes.yaml`, `vi /config/sensors.yaml`, `vi /config/scripts.yaml`)
    - Delete all content (in vi: `gg` then `dG`)
    - Paste new content
    - Save and exit (`:wq`)
-4. **For scenes:** Use Developer Tools → YAML → Click "Scenes" reload button
+4. **For scenes or scripts:** Use Developer Tools → YAML → Click "Scenes" or "Scripts" reload button
 5. **For automations or sensors:** Restart Home Assistant container
 
 **First-time sensor setup:**
 1. Copy `configs/sensors.yaml` to `/config/sensors.yaml` on Unraid server (see above)
 2. Edit `/config/configuration.yaml` and add: `sensor: !include sensors.yaml`
 3. Restart Home Assistant container
+
+**First-time scripts setup:**
+1. Copy `configs/scripts.yaml` to `/config/scripts.yaml` on Unraid server (see above)
+2. Edit `/config/configuration.yaml` and add: `script: !include scripts.yaml`
+3. Use Developer Tools → YAML → Click "Scripts" reload button
 
 **Automations included:**
 - 1 Entertainment: Soundbar source selector
@@ -133,8 +141,8 @@ Automations are organized into categories in the Home Assistant UI:
 - ✅ Always add `"show_header_toggle": False` to ALL entities panels
 
 ### DON'T:
-- ❌ Create YAML script files (cannot be installed via API)
 - ❌ Assume `light.*` entities are dimmable (check `supported_color_modes`)
+- ❌ Automatically deploy config files (automations, scenes, sensors, scripts) - user applies them manually via vi
 
 ---
 
@@ -224,6 +232,31 @@ The dashboard includes:
   - `entities` card: For on/off switches and grouped controls
   - `media-control` card: For TVs and media players
   - Button cards with `tap_action`: For scenes
+
+---
+
+## 🗑️ Entity Management
+
+### Deleting Entities from Registry
+
+Use `scripts/delete_entities.sh` to remove entities from Home Assistant's entity registry.
+
+**Run on Unraid NAS shell:**
+```bash
+cd /mnt/user/appdata/homeassistant
+./delete_entities.sh sensor.old_sensor switch.unused_switch light.removed_device
+```
+
+**What it does:**
+1. Creates a timestamped backup of `core.entity_registry`
+2. Removes specified entities from the registry JSON
+3. Provides restore instructions if needed
+
+**After running:**
+- Restart Home Assistant container to apply changes
+- If something goes wrong, restore from the backup file shown in output
+
+**Note:** This script modifies `/mnt/cache/appdata/homeassistant/.storage/core.entity_registry` directly. Always verify entity IDs before deletion.
 
 ---
 
