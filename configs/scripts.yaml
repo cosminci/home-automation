@@ -1,0 +1,22 @@
+lights_all_off:
+  alias: "Lights All Off"
+  icon: mdi:lightbulb-off
+  sequence:
+    - service: light.turn_off
+      target:
+        entity_id: "{{ states.light | map(attribute='entity_id') | list }}"
+    - service: switch.turn_off
+      target:
+        entity_id: "{{ states.switch | map(attribute='entity_id') | list }}"
+
+everything_off:
+  alias: "Everything Off"
+  icon: mdi:home-export-outline
+  sequence:
+    - service: script.lights_all_off
+    - service: climate.turn_off
+      target:
+        entity_id: "{{ states.climate | map(attribute='entity_id') | list }}"
+    - service: media_player.turn_off
+      target:
+        entity_id: "{{ states.media_player | map(attribute='entity_id') | list }}"

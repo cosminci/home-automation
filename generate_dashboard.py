@@ -24,12 +24,55 @@ async def create_corrected_dashboard():
         dashboard_config = {
             "title": "Home",
             "views": [
-                # Scenes Tab
+                # Main Home Overview
                 {
-                    "title": "Scenes",
-                    "path": "scenes",
-                    "icon": "mdi:palette",
+                    "title": "Overview",
+                    "path": "overview",
+                    "icon": "mdi:home",
                     "cards": [
+                        {
+                            "type": "entities",
+                            "title": "🌡️ Climate",
+                            "show_header_toggle": False,
+                            "entities": [
+                                {
+                                    "entity": "weather.weather_home",
+                                    "name": "Outside",
+                                    "icon": "mdi:weather-partly-cloudy"
+                                },
+                                {
+                                    "type": "section",
+                                    "label": "Indoor Temperature & AC"
+                                },
+                                {
+                                    "entity": "climate.ac_living",
+                                    "name": "Living Room",
+                                    "icon": "mdi:sofa"
+                                },
+                                {
+                                    "entity": "climate.ac_bedroom",
+                                    "name": "Bedroom",
+                                    "icon": "mdi:bed"
+                                },
+                                {
+                                    "entity": "climate.ac_office",
+                                    "name": "Office",
+                                    "icon": "mdi:desk"
+                                },
+                                {
+                                    "entity": "climate.ac_iacopewee",
+                                    "name": "Kid's Room",
+                                    "icon": "mdi:teddy-bear"
+                                },
+                                {
+                                    "type": "section",
+                                    "label": "AC Scenes"
+                                },
+                                {"type": "button", "name": "Living & Office (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_living_office"}}},
+                                {"type": "button", "name": "All On (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_on"}}},
+                                {"type": "button", "name": "All Off", "icon": "mdi:snowflake-off", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_off"}}}
+                            ]
+                        },
                         {
                             "type": "entities",
                             "title": "🎬 Lighting Scenes",
@@ -38,28 +81,7 @@ async def create_corrected_dashboard():
                                 {"type": "button", "name": "Ambient 10%", "icon": "mdi:movie-open", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_10"}}},
                                 {"type": "button", "name": "Ambient 70%", "icon": "mdi:brightness-6", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_70"}}},
                                 {"type": "button", "name": "Ambient 100%", "icon": "mdi:lightbulb-on", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_100"}}},
-                                {
-                                    "type": "button",
-                                    "name": "All Off",
-                                    "icon": "mdi:lightbulb-off",
-                                    "tap_action": {
-                                        "action": "call-service",
-                                        "service": "scene.turn_on",
-                                        "service_data": {
-                                            "entity_id": "scene.lights_all_off"
-                                        }
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "entities",
-                            "title": "❄️ AC Scenes",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"type": "button", "name": "Living & Office (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_living_office"}}},
-                                {"type": "button", "name": "All On (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_on"}}},
-                                {"type": "button", "name": "All Off", "icon": "mdi:snowflake-off", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_off"}}}
+                                {"type": "button", "name": "All Off", "icon": "mdi:lightbulb-off", "tap_action": {"action": "call-service", "service": "script.turn_on", "service_data": {"entity_id": "script.lights_all_off"}}}
                             ]
                         },
                         {
@@ -67,7 +89,7 @@ async def create_corrected_dashboard():
                             "title": "🏠 Leaving Home",
                             "show_header_toggle": False,
                             "entities": [
-                                {"type": "button", "name": "Everything Off", "icon": "mdi:home-export-outline", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.everything_off"}}}
+                                {"type": "button", "name": "Everything Off", "icon": "mdi:home-export-outline", "tap_action": {"action": "call-service", "service": "script.turn_on", "service_data": {"entity_id": "script.everything_off"}}}
                             ]
                         }
                     ]

@@ -17,10 +17,12 @@
 
 1. **`README.md`** - This file (quick start guide for AI agents)
 2. **`HOME_ASSISTANT_STATE.md`** - Complete technical documentation (READ THIS FIRST)
-3. **`generate_dashboard.py`** - Dashboard generation script
-4. **`configs/automations.yaml`** - All Home Assistant automations
-5. **`configs/scenes.yaml`** - All Home Assistant scenes
-6. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
+3. **`generate_dashboard.py`** - Main dashboard generation script
+4. **`generate_daily_insights_dashboard.py`** - Daily Insights dashboard generation script
+5. **`configs/automations.yaml`** - All Home Assistant automations
+6. **`configs/scenes.yaml`** - All Home Assistant scenes
+7. **`configs/sensors.yaml`** - Climate history stats sensors
+8. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
 
 ---
 
@@ -54,22 +56,30 @@ source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_dashboar
 
 ---
 
-## 🔔 Working with Automations & Scenes
+## 🔔 Working with Automations, Scenes & Sensors
 
 All automations are in `configs/automations.yaml` (23 total).
 All scenes are in `configs/scenes.yaml` (8 total).
+All sensors are in `configs/sensors.yaml`.
 
-**To update automations or scenes:**
-1. Edit `configs/automations.yaml` or `configs/scenes.yaml` directly in this repo
-2. Copy the entire file contents
-3. On Unraid server:
+**⚠️ IMPORTANT: Config files CANNOT be copied automatically to HA. User must manually update them.**
+
+**To update automations, scenes, or sensors:**
+1. Edit the respective file in `configs/` directory in this repo
+2. Notify user that the file needs to be manually copied to HA
+3. User will update via Unraid console:
    - Docker tab → homeassistant container → Console
-   - Run: `vi /config/automations.yaml` (or `vi /config/scenes.yaml`)
+   - Run: `vi /config/automations.yaml` (or `vi /config/scenes.yaml` or `vi /config/sensors.yaml`)
    - Delete all content (in vi: `gg` then `dG`)
    - Paste new content
    - Save and exit (`:wq`)
 4. **For scenes:** Use Developer Tools → YAML → Click "Scenes" reload button
-5. **For automations:** Restart Home Assistant container
+5. **For automations or sensors:** Restart Home Assistant container
+
+**First-time sensor setup:**
+1. Copy `configs/sensors.yaml` to `/config/sensors.yaml` on Unraid server (see above)
+2. Edit `/config/configuration.yaml` and add: `sensor: !include sensors.yaml`
+3. Restart Home Assistant container
 
 **Automations included:**
 - 1 Entertainment: Soundbar source selector

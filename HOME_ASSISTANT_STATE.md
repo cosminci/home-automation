@@ -423,13 +423,16 @@ python3 /Users/ciobanu/personal/home-automation/scripts/HyundaiFetchApiTokensSel
 - **Active hours:** 9am - 11pm
 - **Service:** `notify.notify` (sends to all registered mobile devices)
 
-### Updating Automations
-1. Edit `automations.yaml` in this directory
-2. Copy entire file contents
-3. On Unraid: Docker → homeassistant → Console
-4. Run: `vi /config/automations.yaml`
+### Updating Automations, Scenes, Sensors
+**⚠️ IMPORTANT: Config files (automations.yaml, scenes.yaml, sensors.yaml) CANNOT be copied automatically to HA. User must manually update them via Unraid console.**
+
+1. Edit the file in `configs/` directory in this repo
+2. Notify user that the file needs manual copying
+3. User updates via Unraid: Docker → homeassistant → Console
+4. Run: `vi /config/automations.yaml` (or scenes.yaml, sensors.yaml)
 5. Replace all content (in vi: `gg` then `dG` to delete, paste, `:wq` to save)
-6. Restart Home Assistant container
+6. **For scenes:** Developer Tools → YAML → Reload Scenes
+7. **For automations/sensors:** Restart Home Assistant container
 
 ---
 
