@@ -29,6 +29,29 @@ async def create_corrected_dashboard():
                             "cards": [
                         {
                             "type": "entities",
+                            "title": "👥 Presence",
+                            "show_header_toggle": False,
+                            "entities": [
+                                {
+                                    "entity": "person.sepph",
+                                    "icon": "mdi:account"
+                                },
+                                {
+                                    "entity": "person.mara",
+                                    "icon": "mdi:account"
+                                },
+                                {
+                                    "entity": "device_tracker.tucson_location",
+                                    "name": "Car",
+                                    "icon": "mdi:car"
+                                }
+                            ],
+                            "grid_options": {
+                                "columns": 12
+                            }
+                        },
+                        {
+                            "type": "entities",
                             "title": "🌡️ Climate",
                             "show_header_toggle": False,
                             "entities": [
@@ -176,8 +199,7 @@ async def create_corrected_dashboard():
                                 {"entity": "light.ceiling_spots", "name": "Ceiling Spots", "icon": "mdi:lightbulb-group"}
                             ],
                             "grid_options": {
-                                "columns": 6,
-                                "rows": 4
+                                "columns": 12
                             }
                         },
                         {
@@ -186,8 +208,7 @@ async def create_corrected_dashboard():
                             "name": "LED Strip Window",
                             "icon": "mdi:led-strip-variant",
                             "grid_options": {
-                                "columns": 6,
-                                "rows": 4
+                                "columns": 12
                             }
                         },
                         {
@@ -208,8 +229,32 @@ async def create_corrected_dashboard():
                                 {"entity": "input_select.soundbar_source", "name": "Source"}
                             ],
                             "grid_options": {
-                                "columns": 6,
-                                "rows": 4
+                                "columns": 12
+                            }
+                        },
+                        {
+                            "type": "picture-entity",
+                            "entity": "camera.camera_living_medium_resolution_channel",
+                            "camera_image": "camera.camera_living_medium_resolution_channel",
+                            "show_name": True,
+                            "show_state": False,
+                            "name": "📹 Living Room Camera",
+                            "grid_options": {
+                                "columns": 12
+                            }
+                        },
+                        {
+                            "type": "entities",
+                            "title": "🌐 Network",
+                            "show_header_toggle": False,
+                            "entities": [
+                                {"entity": "sensor.ap_living_state", "name": "Access Point", "icon": "mdi:access-point"},
+                                {"entity": "sensor.ap_living_uptime", "name": "Uptime", "icon": "mdi:clock-outline"},
+                                {"entity": "button.ap_living_restart", "name": "Restart AP", "icon": "mdi:restart"},
+                                {"entity": "button.switch_port_13_power_cycle", "name": "Cycle Switch Port", "icon": "mdi:power-cycle"}
+                            ],
+                            "grid_options": {
+                                "columns": 12
                             }
                         }
                             ]
@@ -237,8 +282,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.ceiling_spots", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"}
                             ],
                             "grid_options": {
-                                "columns": 6,
-                                "rows": 4
+                                "columns": 12
                             }
                         },
                         {
@@ -247,8 +291,7 @@ async def create_corrected_dashboard():
                             "name": "LED Strip Window",
                             "icon": "mdi:led-strip-variant",
                             "grid_options": {
-                                "columns": 6,
-                                "rows": 4
+                                "columns": 12
                             }
                         },
                         {
@@ -282,8 +325,7 @@ async def create_corrected_dashboard():
                                 {"entity": "sensor.dishwasher_rinse_aid_nearly_empty", "name": "Rinse Aid Warning", "icon": "mdi:spray-bottle"}
                             ],
                             "grid_options": {
-                                "columns": 6,
-                                "rows": 7
+                                "columns": 12
                             }
                         },
                         {
@@ -321,8 +363,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.oven_child_lock", "name": "Child Lock", "icon": "mdi:lock"}
                             ],
                             "grid_options": {
-                                "columns": 6,
-                                "rows": 7
+                                "columns": 12
                             }
                         },
                         {
@@ -335,8 +376,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.cooktop_child_lock", "name": "Child Lock", "icon": "mdi:lock"}
                             ],
                             "grid_options": {
-                                "columns": 6,
-                                "rows": 4
+                                "columns": 12
                             }
                         }
                             ]
@@ -382,7 +422,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.ceiling_light", "name": "Ceiling Light", "icon": "mdi:ceiling-light"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         },
                         {
@@ -391,14 +431,14 @@ async def create_corrected_dashboard():
                             "name": "LED Strip Window",
                             "icon": "mdi:led-strip-variant",
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         },
                         {
                             "type": "media-control",
                             "entity": "media_player.lg_webos_tv_oled48c22lb",
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         }
                             ]
@@ -445,7 +485,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.light_2", "name": "Wall Light", "icon": "mdi:wall-sconce"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         },
                         {
@@ -454,7 +494,7 @@ async def create_corrected_dashboard():
                             "name": "LED Strip Window",
                             "icon": "mdi:led-strip-variant",
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         },
                         {
@@ -463,7 +503,21 @@ async def create_corrected_dashboard():
                             "name": "LED Strip Bed",
                             "icon": "mdi:led-strip-variant",
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
+                            }
+                        },
+                        {
+                            "type": "entities",
+                            "title": "🌐 Network",
+                            "show_header_toggle": False,
+                            "entities": [
+                                {"entity": "sensor.ap_iacopewee_state", "name": "Access Point", "icon": "mdi:access-point"},
+                                {"entity": "sensor.ap_iacopewee_uptime", "name": "Uptime", "icon": "mdi:clock-outline"},
+                                {"entity": "button.ap_iacopewee_restart", "name": "Restart AP", "icon": "mdi:restart"},
+                                {"entity": "button.switch_port_14_power_cycle", "name": "Cycle Switch Port", "icon": "mdi:power-cycle"}
+                            ],
+                            "grid_options": {
+                                "columns": 12
                             }
                         }
                             ]
@@ -508,7 +562,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.ceiling_light_4", "name": "Ceiling Light", "icon": "mdi:ceiling-light"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         },
                         {
@@ -517,7 +571,7 @@ async def create_corrected_dashboard():
                             "name": "LED Strip Window",
                             "icon": "mdi:led-strip-variant",
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         }
                             ]
@@ -543,7 +597,47 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.ceiling_spots_4", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
+                            }
+                        },
+                        {
+                            "type": "picture-entity",
+                            "entity": "camera.camera_hallway_medium_resolution_channel",
+                            "camera_image": "camera.camera_hallway_medium_resolution_channel",
+                            "show_name": True,
+                            "show_state": False,
+                            "name": "📹 Hallway Camera",
+                            "grid_options": {
+                                "columns": 12
+                            }
+                        },
+                        {
+                            "type": "entities",
+                            "title": "🌐 Network (Storage Room)",
+                            "show_header_toggle": False,
+                            "entities": [
+                                {
+                                    "type": "section",
+                                    "label": "Cloud Gateway Max"
+                                },
+                                {"entity": "sensor.cloud_gateway_max_state", "name": "Status", "icon": "mdi:router-wireless"},
+                                {"entity": "sensor.cloud_gateway_max_uptime", "name": "Uptime", "icon": "mdi:clock-outline"},
+                                {"entity": "button.cloud_gateway_max_restart", "name": "Restart Gateway", "icon": "mdi:restart"},
+                                {
+                                    "type": "section",
+                                    "label": "Switch"
+                                },
+                                {"entity": "sensor.switch_state", "name": "Status", "icon": "mdi:switch"},
+                                {"entity": "sensor.switch_uptime", "name": "Uptime", "icon": "mdi:clock-outline"},
+                                {"entity": "button.switch_restart", "name": "Restart Switch", "icon": "mdi:restart"},
+                                {
+                                    "type": "section",
+                                    "label": "VPN"
+                                },
+                                {"entity": "switch.unifi_network_vpn", "name": "VPN", "icon": "mdi:vpn"}
+                            ],
+                            "grid_options": {
+                                "columns": 12
                             }
                         }
                             ]
@@ -569,7 +663,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.staircase_lights", "name": "Hanging Lights (4)", "icon": "mdi:ceiling-light-multiple"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         }
                             ]
@@ -597,7 +691,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.ventilator", "name": "Ventilator", "icon": "mdi:fan"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         }
                             ]
@@ -625,7 +719,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.ventilator_2", "name": "Ventilator", "icon": "mdi:fan"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         }
                             ]
@@ -677,7 +771,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.washing_machine_power", "name": "Power", "icon": "mdi:power"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         },
                         {
@@ -715,7 +809,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.dryer_child_lock", "name": "Child Lock", "icon": "mdi:lock"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         }
                             ]
@@ -741,7 +835,7 @@ async def create_corrected_dashboard():
                                 {"entity": "switch.terrace_lights", "name": "Terrace Lights", "icon": "mdi:outdoor-lamp"}
                             ],
                             "grid_options": {
-                                "columns": 6
+                                "columns": 12
                             }
                         }
                             ]

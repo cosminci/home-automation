@@ -120,7 +120,7 @@ async def create_insights_dashboard():
                                         {
                                             "entity": "climate.ac_iacopewee",
                                             "attribute": "current_temperature",
-                                            "name": "Iacob Measured",
+                                            "name": "Kid's Room Measured",
                                             "yaxis": "y1",
                                             "line": {
                                                 "width": 2,
@@ -133,7 +133,7 @@ async def create_insights_dashboard():
                                         },
                                         {
                                             "entity": "sensor.ac_kid_setpoint_when_on",
-                                            "name": "Iacob Set Point",
+                                            "name": "Kid's Room Set Point",
                                             "yaxis": "y1",
                                             "line": {
                                                 "dash": "dot",

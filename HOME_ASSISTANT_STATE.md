@@ -180,19 +180,83 @@ source ~/.zshrc && curl -s -H "Authorization: Bearer $HA_TOKEN" \
 
 ---
 
+## 📹 UniFi Protect (Cameras)
+
+### Cameras
+- **`camera.camera_living_medium_resolution_channel`** - Living Room
+- **`camera.camera_hallway_medium_resolution_channel`** - Hallway
+
+### Detection Sensors (per camera)
+- `binary_sensor.camera_living_motion` / `binary_sensor.camera_hallway_motion`
+- `binary_sensor.camera_living_person_detected` / `binary_sensor.camera_hallway_person_detected`
+- `binary_sensor.camera_living_vehicle_detected` / `binary_sensor.camera_hallway_vehicle_detected`
+- `binary_sensor.camera_living_animal_detected` / `binary_sensor.camera_hallway_animal_detected`
+- `binary_sensor.camera_living_is_dark` / `binary_sensor.camera_hallway_is_dark`
+
+**Dashboard Integration:**
+- Living Room tab: Camera feed card
+- Hallway tab: Camera feed card
+
+---
+
+## 🌐 UniFi Network Integration
+
+### Network Equipment
+- **Cloud Gateway Max** - Main router/gateway (Storage Room)
+- **16-Port PoE Switch** - Network switch (Storage Room)
+- **Access Point - Living Room** - WiFi AP (Port 13 on switch)
+- **Access Point - Kid's Room** - WiFi AP (Port 14 on switch)
+
+### Dashboard Integration
+**Hallway Tab (Storage Room Equipment):**
+- Cloud Gateway Max: Status, Uptime, Restart button
+- Switch: Status, Uptime, Restart button
+- VPN: On/Off toggle (`switch.unifi_network_vpn`)
+
+**Living Room Tab:**
+- Access Point: Status, Uptime, Restart button, Power Cycle Port 13 button
+
+**Kid's Room Tab:**
+- Access Point: Status, Uptime, Restart button, Power Cycle Port 14 button
+
+### Available Controls
+- **Restart Buttons:** `button.cloud_gateway_max_restart`, `button.switch_restart`, `button.ap_living_restart`, `button.ap_iacopewee_restart`
+- **Power Cycle Buttons:** `button.switch_port_13_power_cycle` (Living AP), `button.switch_port_14_power_cycle` (Kid's Room AP)
+- **VPN Toggle:** `switch.unifi_network_vpn`
+
+### Device Tracking
+- `device_tracker.cloud_gateway_max`, `device_tracker.switch`, `device_tracker.ap_living`, `device_tracker.ap_iacopewee`
+- `device_tracker.camera_living`, `device_tracker.camera_hallway`
+
+---
+
+## 🔌 Zigbee Integration (ZHA)
+
+### Coordinator
+- **Device:** SLZB-06M (Zigbee 3.0 Coordinator)
+- **Integration:** ZHA (Zigbee Home Automation)
+- **Status:** Integrated and ready to accept Zigbee devices
+
+### Supported Devices
+Ready to pair with Zigbee devices including:
+- Lights, switches, sensors, thermostats, door locks, etc.
+- Compatible with Zigbee 3.0 standard
+
+---
+
 ## 🎨 Dashboard Structure
 
 ### Current Dashboard: `clean-home`
 - **Title:** Home
 - **Path:** `/clean-home`
 - **Views (Tabs):** 13 total
-  1. **Scenes** - 8 scenes total
-  2. **Living Room** - AC + Lights + Entertainment
+  1. **Overview** - Presence + Climate + Scenes
+  2. **Living Room** - AC + Lights + Entertainment + Camera
   3. **Kitchen** - Lights + Appliances
   4. **Bedroom** - AC + Lights + LG TV
   5. **Kid's Room** - AC + Lights
   6. **Office** - AC + Lights
-  7. **Hallway** - Lights
+  7. **Hallway** - Lights + Camera
   8. **Staircase** - Lights
   9. **Bathroom - Shower** - Lights + Ventilation
   10. **Bathroom - Tub** - Lights + Ventilation

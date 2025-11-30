@@ -8,8 +8,8 @@
 **Dashboard URL:** http://tower.local:8123/clean-home
 **Dashboard Title:** Home
 
-**Structure:** 13 tabs total (Scenes + 11 rooms + Car/Garage)
-**Features:** Lighting controls, 4 air conditioners, entertainment devices, smart appliances, Hyundai Tucson monitoring
+**Structure:** 13 tabs total (Overview + 11 rooms + Car/Garage)
+**Features:** Lighting controls, 4 air conditioners, entertainment devices, smart appliances, Hyundai Tucson monitoring, UniFi network monitoring, camera feeds, Zigbee ready (ZHA)
 
 ---
 
@@ -36,6 +36,9 @@ Open and read **`HOME_ASSISTANT_STATE.md`** completely. It contains:
 - Complete lighting inventory
 - Current dashboard structure
 - Entertainment devices and appliances
+- UniFi network equipment and controls
+- Camera feeds (UniFi Protect)
+- Zigbee integration (ZHA with SLZB-06M coordinator)
 
 ### Step 2: Query Entity Information
 To find all dimmable lights:
@@ -171,12 +174,30 @@ curl -H "Authorization: Bearer $HA_TOKEN" http://tower.local:8123/api/states
 
 ---
 
+## 🔌 Integrations
+
+### Built-in Integrations
+- **UniFi Network** - Network equipment monitoring and control (Cloud Gateway Max, Switch, 2 APs)
+- **UniFi Protect** - Camera feeds (2 cameras: Living Room, Hallway)
+- **ZHA (Zigbee Home Automation)** - Zigbee coordinator (SLZB-06M) ready for Zigbee devices
+- **Hyundai Bluelink** - Hyundai Tucson monitoring (via HACS custom integration)
+
+### Custom Integrations (HACS)
+- **ConnectLife** - Hisense air conditioners (4 units)
+- **Home Connect** - Bosch appliances (dishwasher, oven, cooktop, washing machine, dryer)
+- **LG ThinQ** - LG TVs (2 units: Bedroom, Living Room)
+- **Hyundai/Kia Connect** - Vehicle monitoring
+
+---
+
 ## 📊 Dashboard Configuration
 
 The dashboard includes:
 - **4 air conditioners** with thermostat controls
 - **6 dimmable lights** with brightness sliders
 - **19 on/off switches** for ceiling lights, rail spots, and other fixtures
+- **2 camera feeds** (Living Room, Hallway)
+- **Network monitoring** (Gateway, Switch, 2 APs with restart/power cycle controls)
 - **8 scenes** organized in 3 categories (defined in `configs/scenes.yaml`):
   - **Lighting Scenes:** Ambient 10%, Ambient 70%, Ambient 100%, All Off
   - **AC Scenes:** Living & Office (24°C), All On (24°C), All Off
