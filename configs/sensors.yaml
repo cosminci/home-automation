@@ -170,8 +170,8 @@
 - platform: history_stats
   unique_id: dishwasher_count_yesterday
   name: Dishwasher Count Yesterday
-  entity_id: sensor.dishwasher_operation_state
-  state: 'finished'
+  entity_id: sensor.dishwasher_program_finished
+  state: 'present'
   type: count
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
   end: '{{ now().replace(hour=0, minute=0, second=0) }}'
@@ -179,8 +179,8 @@
 - platform: history_stats
   unique_id: dishwasher_count_7days
   name: Dishwasher Count 7 Days
-  entity_id: sensor.dishwasher_operation_state
-  state: 'finished'
+  entity_id: sensor.dishwasher_program_finished
+  state: 'present'
   type: count
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
   end: '{{ now() }}'
@@ -206,8 +206,8 @@
 - platform: history_stats
   unique_id: washing_machine_count_yesterday
   name: Washing Machine Count Yesterday
-  entity_id: sensor.washing_machine_operation_state
-  state: 'finished'
+  entity_id: sensor.washing_machine_program_finished
+  state: 'present'
   type: count
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
   end: '{{ now().replace(hour=0, minute=0, second=0) }}'
@@ -215,8 +215,8 @@
 - platform: history_stats
   unique_id: washing_machine_count_7days
   name: Washing Machine Count 7 Days
-  entity_id: sensor.washing_machine_operation_state
-  state: 'finished'
+  entity_id: sensor.washing_machine_program_finished
+  state: 'present'
   type: count
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
   end: '{{ now() }}'
@@ -242,8 +242,8 @@
 - platform: history_stats
   unique_id: dryer_count_yesterday
   name: Dryer Count Yesterday
-  entity_id: sensor.dryer_operation_state
-  state: 'finished'
+  entity_id: sensor.dryer_drying_process_finished
+  state: 'present'
   type: count
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
   end: '{{ now().replace(hour=0, minute=0, second=0) }}'
@@ -251,8 +251,8 @@
 - platform: history_stats
   unique_id: dryer_count_7days
   name: Dryer Count 7 Days
-  entity_id: sensor.dryer_operation_state
-  state: 'finished'
+  entity_id: sensor.dryer_drying_process_finished
+  state: 'present'
   type: count
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
   end: '{{ now() }}'
