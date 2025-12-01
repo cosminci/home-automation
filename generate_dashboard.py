@@ -134,22 +134,142 @@ async def create_corrected_dashboard():
                                     "type": "section",
                                     "label": "Lighting"
                                 },
-                                {"type": "button", "name": "Ambient 10%", "icon": "mdi:movie-open", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_10"}}},
-                                {"type": "button", "name": "Ambient 70%", "icon": "mdi:brightness-6", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_70"}}},
-                                {"type": "button", "name": "Ambient 100%", "icon": "mdi:lightbulb-on", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_100"}}},
-                                {"type": "button", "name": "All Off", "icon": "mdi:lightbulb-off", "tap_action": {"action": "call-service", "service": "script.turn_on", "service_data": {"entity_id": "script.lights_all_off"}}},
+                                {
+                                    "type": "custom:multiple-entity-row",
+                                    "entity": "scene.ambient_10",
+                                    "name": "Open Space Ambient",
+                                    "icon": "mdi:lightbulb-group",
+                                    "show_state": False,
+                                    "entities": [
+                                        {
+                                            "icon": "mdi:brightness-4",
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "scene.turn_on",
+                                                "service_data": {"entity_id": "scene.ambient_10"}
+                                            }
+                                        },
+                                        {
+                                            "icon": "mdi:brightness-6",
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "scene.turn_on",
+                                                "service_data": {"entity_id": "scene.ambient_70"}
+                                            }
+                                        },
+                                        {
+                                            "icon": "mdi:brightness-7",
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "scene.turn_on",
+                                                "service_data": {"entity_id": "scene.ambient_100"}
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "custom:button-card",
+                                    "name": "All Lights Off",
+                                    "icon": "mdi:lightbulb-off",
+                                    "tap_action": {
+                                        "action": "call-service",
+                                        "service": "script.turn_on",
+                                        "service_data": {"entity_id": "script.lights_all_off"}
+                                    },
+                                    "color": "rgb(255, 152, 0)",
+                                    "size": "30%",
+                                    "styles": {
+                                        "card": [
+                                            {"background-color": "rgba(255, 152, 0, 0.1)"},
+                                            {"border": "1px solid rgba(255, 152, 0, 0.3)"},
+                                            {"height": "42px"}
+                                        ]
+                                    }
+                                },
                                 {
                                     "type": "section",
                                     "label": "Air Conditioning"
                                 },
-                                {"type": "button", "name": "Living & Office (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_living_office"}}},
-                                {"type": "button", "name": "All On (24°C)", "icon": "mdi:air-conditioner", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_on"}}},
-                                {"type": "button", "name": "All Off", "icon": "mdi:snowflake-off", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ac_all_off"}}},
+                                {
+                                    "type": "custom:button-card",
+                                    "name": "Living & Office (24°C)",
+                                    "icon": "mdi:air-conditioner",
+                                    "tap_action": {
+                                        "action": "call-service",
+                                        "service": "scene.turn_on",
+                                        "service_data": {"entity_id": "scene.ac_living_office"}
+                                    },
+                                    "color": "rgb(33, 150, 243)",
+                                    "size": "30%",
+                                    "styles": {
+                                        "card": [
+                                            {"background-color": "rgba(33, 150, 243, 0.1)"},
+                                            {"border": "1px solid rgba(33, 150, 243, 0.3)"},
+                                            {"height": "42px"}
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": "custom:button-card",
+                                    "name": "All On (24°C)",
+                                    "icon": "mdi:air-conditioner",
+                                    "tap_action": {
+                                        "action": "call-service",
+                                        "service": "scene.turn_on",
+                                        "service_data": {"entity_id": "scene.ac_all_on"}
+                                    },
+                                    "color": "rgb(33, 150, 243)",
+                                    "size": "30%",
+                                    "styles": {
+                                        "card": [
+                                            {"background-color": "rgba(33, 150, 243, 0.1)"},
+                                            {"border": "1px solid rgba(33, 150, 243, 0.3)"},
+                                            {"height": "42px"}
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": "custom:button-card",
+                                    "name": "All Off",
+                                    "icon": "mdi:snowflake-off",
+                                    "tap_action": {
+                                        "action": "call-service",
+                                        "service": "scene.turn_on",
+                                        "service_data": {"entity_id": "scene.ac_all_off"}
+                                    },
+                                    "color": "rgb(33, 150, 243)",
+                                    "size": "30%",
+                                    "styles": {
+                                        "card": [
+                                            {"background-color": "rgba(33, 150, 243, 0.1)"},
+                                            {"border": "1px solid rgba(33, 150, 243, 0.3)"},
+                                            {"height": "42px"}
+                                        ]
+                                    }
+                                },
                                 {
                                     "type": "section",
                                     "label": "Leaving Home"
                                 },
-                                {"type": "button", "name": "Everything Off", "icon": "mdi:home-export-outline", "tap_action": {"action": "call-service", "service": "script.turn_on", "service_data": {"entity_id": "script.everything_off"}}}
+                                {
+                                    "type": "custom:button-card",
+                                    "name": "Everything Off",
+                                    "icon": "mdi:home-export-outline",
+                                    "tap_action": {
+                                        "action": "call-service",
+                                        "service": "script.turn_on",
+                                        "service_data": {"entity_id": "script.everything_off"}
+                                    },
+                                    "color": "rgb(244, 67, 54)",
+                                    "size": "30%",
+                                    "styles": {
+                                        "card": [
+                                            {"background-color": "rgba(244, 67, 54, 0.1)"},
+                                            {"border": "1px solid rgba(244, 67, 54, 0.3)"},
+                                            {"height": "42px"}
+                                        ]
+                                    }
+                                }
                             ],
                             "grid_options": {
                                 "columns": 12
@@ -170,93 +290,114 @@ async def create_corrected_dashboard():
                             "type": "grid",
                             "column_span": 4,
                             "cards": [
-                        {
-                            "type": "thermostat",
-                            "entity": "climate.ac_living",
-                            "name": "Air Conditioner",
-                            "features": [
                                 {
-                                    "type": "climate-hvac-modes",
-                                    "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"]
-                                },
-                                {
-                                    "type": "climate-preset-modes",
-                                    "style": "dropdown",
-                                    "preset_modes": ["none", "eco", "ai"]
+                                    "type": "vertical-stack",
+                                    "cards": [
+                                        {
+                                            "type": "grid",
+                                            "columns": 3,
+                                            "square": False,
+                                            "cards": [
+                                                {
+                                                    "type": "custom:mushroom-entity-card",
+                                                    "entity": "switch.dining_light",
+                                                    "name": " ",
+                                                    "icon": "mdi:ceiling-light",
+                                                    "icon_color": "orange",
+                                                    "tap_action": {"action": "toggle"}
+                                                },
+                                                {
+                                                    "type": "custom:mushroom-entity-card",
+                                                    "entity": "switch.ceiling_light_3",
+                                                    "name": " ",
+                                                    "icon": "mdi:ceiling-fan-light",
+                                                    "icon_color": "orange",
+                                                    "tap_action": {"action": "toggle"}
+                                                },
+                                                {
+                                                    "type": "custom:mushroom-entity-card",
+                                                    "entity": "light.ceiling_spots",
+                                                    "name": " ",
+                                                    "icon": "mdi:lightbulb-group",
+                                                    "icon_color": "orange",
+                                                    "tap_action": {"action": "toggle"}
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "custom:mushroom-light-card",
+                                            "entity": "light.led_strip_window_2",
+                                            "name": "Window",
+                                            "icon": "mdi:led-strip-variant",
+                                            "show_brightness_control": True,
+                                            "collapsible_controls": True
+                                        },
+                                        {
+                                            "type": "custom:mushroom-climate-card",
+                                            "entity": "climate.ac_living",
+                                            "name": " ",
+                                            "icon": "mdi:air-conditioner",
+                                            "show_temperature_control": True,
+                                            "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"],
+                                            "collapsible_controls": True
+                                        }
+                                    ]
                                 }
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            ]
                         },
                         {
-                            "type": "entities",
-                            "title": "💡 Lights",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.dining_light", "name": "Dining Light", "icon": "mdi:ceiling-light"},
-                                {"entity": "switch.ceiling_light_3", "name": "Ceiling Fan Light", "icon": "mdi:ceiling-fan-light"},
-                                {"entity": "light.ceiling_spots", "name": "Ceiling Spots", "icon": "mdi:lightbulb-group"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "light",
-                            "entity": "light.led_strip_window_2",
-                            "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant",
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "entities",
-                            "title": "📺 Entertainment",
-                            "show_header_toggle": False,
-                            "entities": [
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                                 {
-                                    "type": "section",
-                                    "label": "TV"
-                                },
-                                {"entity": "media_player.77_oled", "name": "77\" OLED"},
+                                    "type": "entities",
+                                    "title": "📺 Entertainment",
+                                    "show_header_toggle": False,
+                                    "entities": [
+                                        {
+                                            "type": "section",
+                                            "label": "TV"
+                                        },
+                                        {"entity": "media_player.77_oled", "name": "77\" OLED"},
+                                        {
+                                            "type": "section",
+                                            "label": "Soundbar"
+                                        },
+                                        {"entity": "media_player.soundbar_q990b", "name": "Power & Volume"},
+                                        {"entity": "input_select.soundbar_source", "name": "Source"}
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
                                 {
-                                    "type": "section",
-                                    "label": "Soundbar"
-                                },
-                                {"entity": "media_player.soundbar_q990b", "name": "Power & Volume"},
-                                {"entity": "input_select.soundbar_source", "name": "Source"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
+                                    "type": "picture-entity",
+                                    "entity": "camera.camera_living_medium_resolution_channel",
+                                    "camera_image": "camera.camera_living_medium_resolution_channel",
+                                    "show_name": True,
+                                    "show_state": False,
+                                    "name": "📹 Living Room Camera"
+                                }
+                            ]
                         },
                         {
-                            "type": "picture-entity",
-                            "entity": "camera.camera_living_medium_resolution_channel",
-                            "camera_image": "camera.camera_living_medium_resolution_channel",
-                            "show_name": True,
-                            "show_state": False,
-                            "name": "📹 Living Room Camera",
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "entities",
-                            "title": "🌐 Network",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "sensor.ap_living_state", "name": "Access Point", "icon": "mdi:access-point"},
-                                {"entity": "sensor.ap_living_uptime", "name": "Uptime", "icon": "mdi:clock-outline"},
-                                {"entity": "button.ap_living_restart", "name": "Restart AP", "icon": "mdi:restart"},
-                                {"entity": "button.switch_port_13_power_cycle", "name": "Cycle Switch Port", "icon": "mdi:power-cycle"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        }
+                            "type": "grid",
+                            "column_span": 4,
+                            "cards": [
+                                {
+                                    "type": "entities",
+                                    "title": "🌐 Network",
+                                    "show_header_toggle": False,
+                                    "entities": [
+                                        {"entity": "sensor.ap_living_state", "name": "Access Point", "icon": "mdi:access-point"},
+                                        {"entity": "sensor.ap_living_uptime", "name": "Uptime", "icon": "mdi:clock-outline"},
+                                        {"entity": "button.ap_living_restart", "name": "Restart AP", "icon": "mdi:restart"},
+                                        {"entity": "button.switch_port_13_power_cycle", "name": "Cycle Switch Port", "icon": "mdi:power-cycle"}
+                                    ]
+                                }
                             ]
                         }
                     ]
@@ -273,26 +414,48 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "entities",
-                            "title": "💡 Lights",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.led_strip_countertop", "name": "Countertop LED", "icon": "mdi:led-strip"},
-                                {"entity": "switch.rail_spots_2", "name": "Rail Spots", "icon": "mdi:track-light"},
-                                {"entity": "switch.ceiling_spots", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "light",
-                            "entity": "light.led_strip_window_3",
-                            "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant",
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            "type": "vertical-stack",
+                            "cards": [
+                                {
+                                    "type": "grid",
+                                    "columns": 3,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.led_strip_countertop",
+                                            "name": " ",
+                                            "icon": "mdi:led-strip",
+                                            "icon_color": "orange",
+                                            "tap_action": {"action": "toggle"}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.rail_spots_2",
+                                            "name": " ",
+                                            "icon": "mdi:track-light",
+                                            "icon_color": "orange",
+                                            "tap_action": {"action": "toggle"}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.ceiling_spots",
+                                            "name": " ",
+                                            "icon": "mdi:ceiling-light",
+                                            "icon_color": "orange",
+                                            "tap_action": {"action": "toggle"}
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "custom:mushroom-light-card",
+                                    "entity": "light.led_strip_window_3",
+                                    "name": "Window",
+                                    "icon": "mdi:led-strip-variant",
+                                    "show_brightness_control": True,
+                                    "collapsible_controls": True
+                                }
+                            ]
                         },
                         {
                             "type": "entities",
@@ -395,44 +558,49 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "thermostat",
-                            "entity": "climate.ac_bedroom",
-                            "name": "Air Conditioner",
-                            "features": [
+                            "type": "vertical-stack",
+                            "cards": [
                                 {
-                                    "type": "climate-hvac-modes",
-                                    "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"]
+                                    "type": "grid",
+                                    "columns": 3,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.rail_spots",
+                                            "name": " ",
+                                            "icon": "mdi:track-light",
+                                            "icon_color": "orange",
+                                            "tap_action": {"action": "toggle"}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.ceiling_light",
+                                            "name": " ",
+                                            "icon": "mdi:ceiling-light",
+                                            "icon_color": "orange",
+                                            "tap_action": {"action": "toggle"}
+                                        }
+                                    ]
                                 },
                                 {
-                                    "type": "climate-preset-modes",
-                                    "style": "dropdown",
-                                    "preset_modes": ["none", "eco", "ai"]
+                                    "type": "custom:mushroom-light-card",
+                                    "entity": "light.led_strip",
+                                    "name": "Window",
+                                    "icon": "mdi:led-strip-variant",
+                                    "show_brightness_control": True,
+                                    "collapsible_controls": True
+                                },
+                                {
+                                    "type": "custom:mushroom-climate-card",
+                                    "entity": "climate.ac_bedroom",
+                                    "name": " ",
+                                    "icon": "mdi:air-conditioner",
+                                    "show_temperature_control": True,
+                                    "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"],
+                                    "collapsible_controls": True
                                 }
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "entities",
-                            "title": "💡 Lights",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.rail_spots", "name": "Rail Spots", "icon": "mdi:track-light"},
-                                {"entity": "switch.ceiling_light", "name": "Ceiling Light", "icon": "mdi:ceiling-light"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "light",
-                            "entity": "light.led_strip",
-                            "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant",
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            ]
                         },
                         {
                             "type": "media-control",
@@ -457,54 +625,65 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "thermostat",
-                            "entity": "climate.ac_iacopewee",
-                            "name": "Air Conditioner",
-                            "features": [
+                            "type": "vertical-stack",
+                            "cards": [
                                 {
-                                    "type": "climate-hvac-modes",
-                                    "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"]
+                                    "type": "grid",
+                                    "columns": 3,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.rail_spots_3",
+                                            "name": " ",
+                                            "icon": "mdi:track-light",
+                                            "icon_color": "orange",
+                                            "tap_action": {"action": "toggle"}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.ceiling_light_2",
+                                            "name": " ",
+                                            "icon": "mdi:ceiling-light",
+                                            "icon_color": "orange",
+                                            "tap_action": {"action": "toggle"}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.light_2",
+                                            "name": " ",
+                                            "icon": "mdi:wall-sconce",
+                                            "icon_color": "orange",
+                                            "tap_action": {"action": "toggle"}
+                                        }
+                                    ]
                                 },
                                 {
-                                    "type": "climate-preset-modes",
-                                    "style": "dropdown",
-                                    "preset_modes": ["none", "eco", "ai"]
+                                    "type": "custom:mushroom-light-card",
+                                    "entity": "light.led_strip_window_4",
+                                    "name": "Window",
+                                    "icon": "mdi:led-strip-variant",
+                                    "show_brightness_control": True,
+                                    "collapsible_controls": True
+                                },
+                                {
+                                    "type": "custom:mushroom-light-card",
+                                    "entity": "light.led_strip_bed",
+                                    "name": "Bed",
+                                    "icon": "mdi:led-strip-variant",
+                                    "show_brightness_control": True,
+                                    "collapsible_controls": True
+                                },
+                                {
+                                    "type": "custom:mushroom-climate-card",
+                                    "entity": "climate.ac_iacopewee",
+                                    "name": " ",
+                                    "icon": "mdi:air-conditioner",
+                                    "show_temperature_control": True,
+                                    "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"],
+                                    "collapsible_controls": True
                                 }
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "entities",
-                            "title": "💡 Lights",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.rail_spots_3", "name": "Rail Spots", "icon": "mdi:track-light"},
-                                {"entity": "switch.ceiling_light_2", "name": "Ceiling Light", "icon": "mdi:ceiling-light"},
-                                {"entity": "switch.light_2", "name": "Wall Light", "icon": "mdi:wall-sconce"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "light",
-                            "entity": "light.led_strip_window_4",
-                            "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant",
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "light",
-                            "entity": "light.led_strip_bed",
-                            "name": "LED Strip Bed",
-                            "icon": "mdi:led-strip-variant",
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            ]
                         },
                         {
                             "type": "entities",
@@ -536,43 +715,34 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "thermostat",
-                            "entity": "climate.ac_office",
-                            "name": "Air Conditioner",
-                            "features": [
+                            "type": "vertical-stack",
+                            "cards": [
                                 {
-                                    "type": "climate-hvac-modes",
-                                    "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"]
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "switch.ceiling_light_4",
+                                    "name": " ",
+                                    "icon": "mdi:ceiling-light",
+                                    "icon_color": "orange",
+                                    "tap_action": {"action": "toggle"}
                                 },
                                 {
-                                    "type": "climate-preset-modes",
-                                    "style": "dropdown",
-                                    "preset_modes": ["none", "eco", "ai"]
+                                    "type": "custom:mushroom-light-card",
+                                    "entity": "light.led_strip_window",
+                                    "name": "Window",
+                                    "icon": "mdi:led-strip-variant",
+                                    "show_brightness_control": True,
+                                    "collapsible_controls": True
+                                },
+                                {
+                                    "type": "custom:mushroom-climate-card",
+                                    "entity": "climate.ac_office",
+                                    "name": " ",
+                                    "icon": "mdi:air-conditioner",
+                                    "show_temperature_control": True,
+                                    "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"],
+                                    "collapsible_controls": True
                                 }
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "entities",
-                            "title": "💡 Lights",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.ceiling_light_4", "name": "Ceiling Light", "icon": "mdi:ceiling-light"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
-                        },
-                        {
-                            "type": "light",
-                            "entity": "light.led_strip_window",
-                            "name": "LED Strip Window",
-                            "icon": "mdi:led-strip-variant",
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            ]
                         }
                             ]
                         }
@@ -590,15 +760,12 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "entities",
-                            "title": "💡 Lights",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.ceiling_spots_4", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            "type": "custom:mushroom-entity-card",
+                            "entity": "switch.ceiling_spots_4",
+                            "name": " ",
+                            "icon": "mdi:ceiling-light",
+                            "icon_color": "orange",
+                            "tap_action": {"action": "toggle"}
                         },
                         {
                             "type": "picture-entity",
@@ -656,15 +823,12 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "entities",
-                            "title": "💡 Lights",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.staircase_lights", "name": "Hanging Lights (4)", "icon": "mdi:ceiling-light-multiple"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            "type": "custom:mushroom-entity-card",
+                            "entity": "switch.staircase_lights",
+                            "name": " ",
+                            "icon": "mdi:ceiling-light-multiple",
+                            "icon_color": "orange",
+                            "tap_action": {"action": "toggle"}
                         }
                             ]
                         }
@@ -682,17 +846,35 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "entities",
-                            "title": "💡 Lights & Ventilation",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.ceiling_spots_3", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"},
-                                {"entity": "switch.led_strip_2", "name": "LED Strip", "icon": "mdi:led-strip"},
-                                {"entity": "switch.ventilator", "name": "Ventilator", "icon": "mdi:fan"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            "type": "grid",
+                            "columns": 3,
+                            "square": False,
+                            "cards": [
+                                {
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "switch.led_strip_2",
+                                    "name": " ",
+                                    "icon": "mdi:led-strip-variant",
+                                    "icon_color": "orange",
+                                    "tap_action": {"action": "toggle"}
+                                },
+                                {
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "switch.ceiling_spots_3",
+                                    "name": " ",
+                                    "icon": "mdi:ceiling-light",
+                                    "icon_color": "orange",
+                                    "tap_action": {"action": "toggle"}
+                                },
+                                {
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "switch.ventilator",
+                                    "name": " ",
+                                    "icon": "mdi:fan",
+                                    "icon_color": "blue",
+                                    "tap_action": {"action": "toggle"}
+                                }
+                            ]
                         }
                             ]
                         }
@@ -710,17 +892,35 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "entities",
-                            "title": "💡 Lights & Ventilation",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.ceiling_spots_2", "name": "Ceiling Spots", "icon": "mdi:ceiling-light"},
-                                {"entity": "switch.led_strip", "name": "LED Strip", "icon": "mdi:led-strip"},
-                                {"entity": "switch.ventilator_2", "name": "Ventilator", "icon": "mdi:fan"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            "type": "grid",
+                            "columns": 3,
+                            "square": False,
+                            "cards": [
+                                {
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "switch.led_strip",
+                                    "name": " ",
+                                    "icon": "mdi:led-strip-variant",
+                                    "icon_color": "orange",
+                                    "tap_action": {"action": "toggle"}
+                                },
+                                {
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "switch.ceiling_spots_2",
+                                    "name": " ",
+                                    "icon": "mdi:ceiling-light",
+                                    "icon_color": "orange",
+                                    "tap_action": {"action": "toggle"}
+                                },
+                                {
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "switch.ventilator_2",
+                                    "name": " ",
+                                    "icon": "mdi:fan",
+                                    "icon_color": "blue",
+                                    "tap_action": {"action": "toggle"}
+                                }
+                            ]
                         }
                             ]
                         }
@@ -828,15 +1028,12 @@ async def create_corrected_dashboard():
                             "column_span": 4,
                             "cards": [
                         {
-                            "type": "entities",
-                            "title": "💡 Lights",
-                            "show_header_toggle": False,
-                            "entities": [
-                                {"entity": "switch.terrace_lights", "name": "Terrace Lights", "icon": "mdi:outdoor-lamp"}
-                            ],
-                            "grid_options": {
-                                "columns": 12
-                            }
+                            "type": "custom:mushroom-entity-card",
+                            "entity": "switch.terrace_lights",
+                            "name": " ",
+                            "icon": "mdi:outdoor-lamp",
+                            "icon_color": "orange",
+                            "tap_action": {"action": "toggle"}
                         }
                             ]
                         }
