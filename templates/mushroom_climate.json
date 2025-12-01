@@ -1,0 +1,12 @@
+{
+    "card": {
+        "type": "custom:mushroom-climate-card",
+        "entity": "[[entity]]",
+        "name": "[[name]]",
+        "icon": "[[icon]]",
+        "show_temperature_control": true,
+        "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"],
+        "collapsible_controls": true
+    }
+}
+

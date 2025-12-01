@@ -9,10 +9,15 @@
 ## Quick Start Context (For New Chat Sessions)
 
 ### Current Setup
-- **Dashboard:** Generated via Python script `generate_dashboard.py` using WebSocket API
+- **Dashboard:** Generated via modular Python structure using WebSocket API
 - **Location:** `http://tower.local:8123/clean-home`
 - **Structure:** 13 tabs (Overview + 11 rooms + Car) using sections view layout
-- **Key files:** `generate_dashboard.py`, `HOME_ASSISTANT_STATE.md`, `README.md`
+- **Key files:**
+  - `generate_dashboard.py` - Main orchestrator script
+  - `dashboard_helpers.py` - Helper functions for card creation
+  - `templates/` - 6 decluttering card templates (JSON)
+  - `rooms/` - 13 room view modules (Python)
+  - `HOME_ASSISTANT_STATE.md`, `README.md` - Documentation
 
 ### Known Issues
 - ❌ **Weather card is broken** - Max temp always shows current temp, very little info displayed
@@ -29,7 +34,7 @@
 1. ✅ **Mushroom Climate Cards** - COMPLETED (individual room tabs)
 2. ✅ **Mushroom Light Cards** - COMPLETED (all 6 dimmable lights)
 3. ✅ **button-card for Scenes** - COMPLETED (Color coding + compact layout)
-4. ⏭️ **Mushroom Entity Cards** - NEXT (Complete migration)
+4. ✅ **Mushroom Entity Cards** - COMPLETED (Network devices + Appliances)
 5. **Stack In Card** - Remove borders
 6. **Fix Weather Display** - Replace broken weather card
 7. **Test Mini Media Player** - Optional
@@ -438,21 +443,38 @@
 
 ---
 
-### Phase 4: Mushroom Entity Cards (Medium Impact)
+### Phase 4: Mushroom Entity Cards ✅ COMPLETED
 **Goal:** Replace standard entities cards with Mushroom equivalents
 **Impact:** Consistent look across dashboard
 **Effort:** Low-Medium
 
-**Cards to replace:**
-1. Overview - Presence card
-2. All light switch cards (on/off switches)
-3. Network device cards
-4. Appliance cards (dishwasher, oven, cooktop, washing machine, dryer)
+**Cards replaced:**
+1. ✅ All light switch cards (on/off switches) - Converted to Mushroom entity cards with icon-only display
+2. ✅ Network device cards - Converted to Mushroom entity cards with button-card for restart/power cycle buttons
+3. ✅ Appliance cards - Converted to Mushroom entity cards for status/power/warnings, kept conditional entities for programs
 
-**Benefits:**
-- Consistent Mushroom design language
-- Better icon and color support
-- Cleaner typography
+**Implementation Details:**
+
+**Network Devices:**
+- Living Room AP: Mushroom entity cards for status/uptime + button-card for restart/power cycle
+- Kid's Room AP: Mushroom entity cards for status/uptime + button-card for restart/power cycle
+- Hallway (Storage Room): Mushroom entity cards for Gateway/Switch status/uptime + button-card for restart buttons + Mushroom entity card for VPN toggle
+- Used `icon_color: "blue"` for status sensors, `icon_color: "green"` for VPN
+- Used button-card with orange styling (`rgba(255, 152, 0, 0.1)` background) for restart/power cycle buttons
+
+**Appliances:**
+- Dishwasher: Mushroom entity card for status + conditional entities for programs + Mushroom entity cards for power/warnings
+- Oven: Mushroom entity card for status + conditional entities for programs/temperature + Mushroom entity cards for power/child lock
+- Cooktop: Mushroom entity cards for status/power/child lock (no conditional entities needed)
+- Washing Machine: Mushroom entity card for status + conditional entities for programs + Mushroom entity card for power
+- Dryer: Mushroom entity card for status + conditional entities for programs + Mushroom entity cards for power/child lock
+- Used `icon_color: "blue"` for status, `icon_color: "orange"` for oven/cooktop, `icon_color: "green"` for power, `icon_color: "red"` for child lock
+
+**Benefits Achieved:**
+- Consistent Mushroom design language across all entity cards
+- Better icon and color support for visual hierarchy
+- Cleaner typography and spacing
+- Maintained all functionality (conditional visibility, dropdowns, buttons)
 
 ---
 

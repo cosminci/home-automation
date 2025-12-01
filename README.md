@@ -15,16 +15,32 @@
 
 ## 📁 Files in This Directory
 
-1. **`README.md`** - This file (quick start guide for AI agents)
-2. **`HOME_ASSISTANT_STATE.md`** - Complete technical documentation (READ THIS FIRST)
-3. **`generate_dashboard.py`** - Main dashboard generation script
-4. **`generate_insights_dashboard.py`** - Insights dashboard generation script
-5. **`configs/automations.yaml`** - All Home Assistant automations
-6. **`configs/scenes.yaml`** - All Home Assistant scenes
-7. **`configs/sensors.yaml`** - Climate history stats sensors
-8. **`configs/scripts.yaml`** - Home Assistant scripts (lights off, everything off)
-9. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
-10. **`scripts/delete_entities.sh`** - Delete entities from HA entity registry (run on NAS)
+### Dashboard Generation (Modular Structure)
+1. **`generate_dashboard.py`** - Main dashboard orchestrator script
+2. **`generate_insights_dashboard.py`** - Insights dashboard generation script
+3. **`dashboard_helpers.py`** - Helper functions for card creation
+4. **`templates/`** - Decluttering card templates (6 JSON files)
+   - `mushroom_climate.json`, `mushroom_light.json`, `mushroom_switch.json`
+   - `button_scene.json`, `network_button.json`, `network_status.json`
+5. **`rooms/`** - Individual room view modules (13 Python files)
+   - `overview.py`, `living_room.py`, `kitchen.py`, `bedroom.py`, `kids_room.py`
+   - `office.py`, `hallway.py`, `staircase.py`, `bathroom_shower.py`, `bathroom_tub.py`
+   - `washer_room.py`, `terrace.py`, `car.py`
+
+### Documentation
+6. **`README.md`** - This file (quick start guide for AI agents)
+7. **`HOME_ASSISTANT_STATE.md`** - Complete technical documentation (READ THIS FIRST)
+8. **`DASHBOARD_VISUAL_IMPROVEMENTS.md`** - Visual improvements epic and implementation history
+
+### Configuration Files
+9. **`configs/automations.yaml`** - All Home Assistant automations
+10. **`configs/scenes.yaml`** - All Home Assistant scenes
+11. **`configs/sensors.yaml`** - Climate history stats sensors
+12. **`configs/scripts.yaml`** - Home Assistant scripts (lights off, everything off)
+
+### Utility Scripts
+13. **`scripts/HyundaiFetchApiTokensSelenium.py`** - Hyundai EU refresh token extractor
+14. **`scripts/delete_entities.sh`** - Delete entities from HA entity registry (run on NAS)
 
 ---
 
@@ -54,7 +70,19 @@ source ~/.zshrc && curl -s -H "Authorization: Bearer $HA_TOKEN" \
 ```
 
 ### Step 3: Update the Dashboard
-Modify `generate_dashboard.py` or `generate_insights_dashboard.py` as needed and **ALWAYS AUTOMATICALLY DEPLOY**:
+
+The dashboard uses a **modular structure**:
+- **Templates** (`templates/*.json`) - Decluttering card templates for reusable components
+- **Room modules** (`rooms/*.py`) - Each room has its own Python module with a `get_view()` function
+- **Helpers** (`dashboard_helpers.py`) - Shared functions for creating cards
+- **Orchestrator** (`generate_dashboard.py`) - Loads templates and room modules, combines them, deploys via WebSocket
+
+To modify the dashboard:
+1. Edit the appropriate room module in `rooms/` directory (e.g., `rooms/living_room.py`)
+2. Or edit templates in `templates/` directory for reusable components
+3. Or edit helper functions in `dashboard_helpers.py`
+4. **ALWAYS AUTOMATICALLY DEPLOY** after making changes:
+
 ```bash
 # Main dashboard
 source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_dashboard.py
@@ -62,7 +90,7 @@ source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_dashboar
 source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_insights_dashboard.py
 ```
 
-**⚠️ IMPORTANT FOR AI AGENT: Automatically deploy dashboard updates after making changes, DO NOT ask user to run these commands.**
+**⚠️ CRITICAL FOR AI AGENT: ALWAYS deploy dashboard updates yourself after making changes. NEVER ask user to run these commands. This is mandatory.**
 
 ---
 

@@ -1,0 +1,18 @@
+{
+    "card": {
+        "type": "custom:mushroom-entity-card",
+        "entity": "[[entity]]",
+        "icon": "[[icon]]",
+        "icon_color": "[[color]]",
+        "primary_info": "none",
+        "secondary_info": "none",
+        "tap_action": {
+            "action": "call-service",
+            "service": "button.press",
+            "service_data": {
+                "entity_id": "[[entity]]"
+            }
+        }
+    }
+}
+

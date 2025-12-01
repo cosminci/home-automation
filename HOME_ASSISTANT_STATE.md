@@ -375,6 +375,19 @@ All scenes are defined in `configs/scenes.yaml`. See that file for complete enti
    ```
 
 3. **Update the dashboard:**
+
+   The dashboard uses a **modular structure**:
+   - **Templates** (`templates/*.json`) - 6 decluttering card templates for reusable components
+   - **Room modules** (`rooms/*.py`) - 13 room view modules, each with a `get_view()` function
+   - **Helpers** (`dashboard_helpers.py`) - Shared card creation functions
+   - **Orchestrator** (`generate_dashboard.py`) - Loads and combines everything, deploys via WebSocket
+
+   To modify:
+   - Edit room modules in `rooms/` directory (e.g., `rooms/living_room.py`)
+   - Edit templates in `templates/` directory for reusable components
+   - Edit helper functions in `dashboard_helpers.py`
+
+   Deploy changes:
    ```bash
    source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_dashboard.py
    ```
