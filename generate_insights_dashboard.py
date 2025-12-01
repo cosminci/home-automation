@@ -56,10 +56,7 @@ async def create_insights_dashboard():
                                                 "width": 1,
                                                 "color": "#4CAF50",
                                                 "shape": "spline"
-                                            },
-                                            "filters": [
-                                                {"force_numeric": None}
-                                            ]
+                                            }
                                         },
                                         {
                                             "entity": "climate.ac_bedroom",
@@ -84,10 +81,7 @@ async def create_insights_dashboard():
                                                 "width": 1,
                                                 "color": "#FF9800",
                                                 "shape": "spline"
-                                            },
-                                            "filters": [
-                                                {"force_numeric": None}
-                                            ]
+                                            }
                                         },
                                         {
                                             "entity": "climate.ac_office",
@@ -112,10 +106,7 @@ async def create_insights_dashboard():
                                                 "width": 1,
                                                 "color": "#2196F3",
                                                 "shape": "spline"
-                                            },
-                                            "filters": [
-                                                {"force_numeric": None}
-                                            ]
+                                            }
                                         },
                                         {
                                             "entity": "climate.ac_iacopewee",
@@ -140,10 +131,7 @@ async def create_insights_dashboard():
                                                 "width": 1,
                                                 "color": "#9C27B0",
                                                 "shape": "spline"
-                                            },
-                                            "filters": [
-                                                {"force_numeric": None}
-                                            ]
+                                            }
                                         },
                                         {
                                             "entity": "sensor.outdoor_temperature",

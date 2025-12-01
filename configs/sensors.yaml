@@ -107,10 +107,10 @@
       unit_of_measurement: "°C"
       device_class: temperature
       value_template: >
-        {% if states('climate.ac_living') in ['cool', 'heat'] %}
+        {% if states('climate.ac_living') in ['cool', 'heat', 'dry', 'fan_only', 'auto'] %}
           {{ state_attr('climate.ac_living', 'temperature') }}
         {% else %}
-          {{ states('sensor.ac_living_setpoint_when_on') }}
+          {{ none }}
         {% endif %}
 
     ac_bedroom_setpoint_when_on:
@@ -119,10 +119,10 @@
       unit_of_measurement: "°C"
       device_class: temperature
       value_template: >
-        {% if states('climate.ac_bedroom') in ['cool', 'heat'] %}
+        {% if states('climate.ac_bedroom') in ['cool', 'heat', 'dry', 'fan_only', 'auto'] %}
           {{ state_attr('climate.ac_bedroom', 'temperature') }}
         {% else %}
-          {{ states('sensor.ac_bedroom_setpoint_when_on') }}
+          {{ none }}
         {% endif %}
 
     ac_office_setpoint_when_on:
@@ -131,10 +131,10 @@
       unit_of_measurement: "°C"
       device_class: temperature
       value_template: >
-        {% if states('climate.ac_office') in ['cool', 'heat'] %}
+        {% if states('climate.ac_office') in ['cool', 'heat', 'dry', 'fan_only', 'auto'] %}
           {{ state_attr('climate.ac_office', 'temperature') }}
         {% else %}
-          {{ states('sensor.ac_office_setpoint_when_on') }}
+          {{ none }}
         {% endif %}
 
     ac_kid_setpoint_when_on:
@@ -143,10 +143,10 @@
       unit_of_measurement: "°C"
       device_class: temperature
       value_template: >
-        {% if states('climate.ac_iacopewee') in ['cool', 'heat'] %}
+        {% if states('climate.ac_iacopewee') in ['cool', 'heat', 'dry', 'fan_only', 'auto'] %}
           {{ state_attr('climate.ac_iacopewee', 'temperature') }}
         {% else %}
-          {{ states('sensor.ac_kid_setpoint_when_on') }}
+          {{ none }}
         {% endif %}
 
 - platform: history_stats
