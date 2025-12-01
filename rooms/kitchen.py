@@ -1,6 +1,6 @@
 """Kitchen view configuration"""
 
-from dashboard_helpers import mushroom_switch, mushroom_light
+from dashboard_helpers import mushroom_switch, mushroom_light, mushroom_entity
 
 def get_view():
     """Return the Kitchen view configuration"""
@@ -31,38 +31,134 @@ def get_view():
                             mushroom_light("light.led_strip_window_3", "Window")
                         ]
                     },
-                    # Dishwasher (compact appliance card)
+                    # Dishwasher
                     {
-                        "type": "grid",
-                        "title": "🍽️ Dishwasher",
-                        "columns": 1,
+                        "type": "custom:stack-in-card",
                         "cards": [
-                            mushroom_switch("sensor.dishwasher_operation_state", "mdi:dishwasher", "blue"),
-                            mushroom_switch("switch.dishwasher_power", "mdi:power", "green"),
-                            mushroom_switch("sensor.dishwasher_salt_nearly_empty", "mdi:shaker", "orange"),
-                            mushroom_switch("sensor.dishwasher_rinse_aid_nearly_empty", "mdi:spray-bottle", "orange"),
+                            # Program selector (only when NOT running)
                             {
-                                "type": "entities",
-                                "show_header_toggle": False,
-                                "entities": [
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dishwasher_operation_state", "state_not": "inactive"}], "row": {"entity": "select.dishwasher_active_program", "name": "Active Program", "icon": "mdi:play"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dishwasher_operation_state", "state_not": "inactive"}], "row": {"entity": "sensor.dishwasher_program_finish_time", "name": "Finish Time", "icon": "mdi:clock-outline"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dishwasher_operation_state", "state_not": "inactive"}], "row": {"entity": "button.dishwasher_stop_program", "name": "Stop Program", "icon": "mdi:stop"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dishwasher_operation_state", "state": "inactive"}], "row": {"entity": "select.dishwasher_selected_program", "name": "Select Program", "icon": "mdi:playlist-play"}}
+                                "type": "conditional",
+                                "conditions": [{"entity": "sensor.dishwasher_operation_state", "state": "ready"}],
+                                "card": {
+                                    "type": "custom:mushroom-select-card",
+                                    "entity": "select.dishwasher_active_program",
+                                    "name": "Start Dishwasher Program",
+                                    "icon": "mdi:dishwasher",
+                                    "icon_color": "blue",
+                                    "secondary_info": "none"
+                                }
+                            },
+                            # Action buttons when running (Stop + Power Off)
+                            {
+                                "type": "conditional",
+                                "conditions": [{"entity": "sensor.dishwasher_operation_state", "state_not": "inactive"}, {"entity": "sensor.dishwasher_operation_state", "state_not": "ready"}],
+                                "card": {
+                                    "type": "grid",
+                                    "columns": 2,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "button.dishwasher_stop_program",
+                                            "name": " ",
+                                            "icon": "mdi:stop",
+                                            "icon_color": "red",
+                                            "primary_info": "none",
+                                            "secondary_info": "none",
+                                            "tap_action": {"action": "call-service", "service": "button.press", "service_data": {"entity_id": "button.dishwasher_stop_program"}}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "switch.dishwasher_power",
+                                            "name": " ",
+                                            "icon": "mdi:power",
+                                            "icon_color": "orange",
+                                            "primary_info": "none",
+                                            "secondary_info": "none",
+                                            "tap_action": {"action": "toggle"}
+                                        }
+                                    ]
+                                }
+                            },
+                            # Program info (when running)
+                            {
+                                "type": "conditional",
+                                "conditions": [{"entity": "sensor.dishwasher_operation_state", "state_not": "inactive"}, {"entity": "sensor.dishwasher_operation_state", "state_not": "ready"}],
+                                "card": {
+                                    "type": "grid",
+                                    "columns": 2,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "select.dishwasher_active_program",
+                                            "icon": "mdi:dishwasher",
+                                            "icon_color": "blue",
+                                            "primary_info": "none",
+                                            "secondary_info": "state",
+                                            "tap_action": {"action": "none"}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "sensor.dishwasher_program_finish_time",
+                                            "icon": "mdi:clock-end",
+                                            "icon_color": "blue",
+                                            "primary_info": "none",
+                                            "secondary_info": "state",
+                                            "tap_action": {"action": "none"}
+                                        }
+                                    ]
+                                }
+                            },
+                            # Salt & Rinse Aid warnings (always visible, at bottom)
+                            {
+                                "type": "grid",
+                                "columns": 2,
+                                "square": False,
+                                "cards": [
+                                    {
+                                        "type": "custom:mushroom-entity-card",
+                                        "entity": "sensor.dishwasher_salt_nearly_empty",
+                                        "name": " ",
+                                        "icon": "mdi:shaker",
+                                        "primary_info": "none",
+                                        "secondary_info": "none",
+                                        "tap_action": {"action": "more-info"},
+                                        "card_mod": {
+                                            "style": "ha-card { --card-mod-icon-color: {% if is_state('sensor.dishwasher_salt_nearly_empty', 'on') %}red{% else %}green{% endif %}; }"
+                                        }
+                                    },
+                                    {
+                                        "type": "custom:mushroom-entity-card",
+                                        "entity": "sensor.dishwasher_rinse_aid_nearly_empty",
+                                        "name": " ",
+                                        "icon": "mdi:spray-bottle",
+                                        "primary_info": "none",
+                                        "secondary_info": "none",
+                                        "tap_action": {"action": "more-info"},
+                                        "card_mod": {
+                                            "style": "ha-card { --card-mod-icon-color: {% if is_state('sensor.dishwasher_rinse_aid_nearly_empty', 'on') %}red{% else %}green{% endif %}; }"
+                                        }
+                                    }
                                 ]
                             }
-                        ],
-                        "grid_options": {"columns": 12}
+                        ]
                     },
-                    # Oven (compact appliance card)
+                    # Oven
                     {
-                        "type": "grid",
+                        "type": "custom:stack-in-card",
                         "title": "🔥 Oven",
-                        "columns": 1,
                         "cards": [
-                            mushroom_switch("sensor.oven_operation_state", "mdi:stove", "orange"),
-                            mushroom_switch("switch.oven_power", "mdi:power", "green"),
-                            mushroom_switch("switch.oven_child_lock", "mdi:lock", "red"),
+                            {
+                                "type": "grid",
+                                "columns": 3,
+                                "square": False,
+                                "cards": [
+                                    mushroom_entity("sensor.oven_operation_state", "Status", "mdi:stove", "orange"),
+                                    mushroom_switch("switch.oven_power", "mdi:power", "green"),
+                                    mushroom_switch("switch.oven_child_lock", "mdi:lock", "red")
+                                ]
+                            },
                             {
                                 "type": "entities",
                                 "show_header_toggle": False,
@@ -74,21 +170,26 @@ def get_view():
                                     {"type": "conditional", "conditions": [{"entity": "sensor.oven_operation_state", "state": "inactive"}], "row": {"entity": "select.oven_selected_program", "name": "Select Program", "icon": "mdi:playlist-play"}}
                                 ]
                             }
-                        ],
-                        "grid_options": {"columns": 12}
+                        ]
                     },
                     # Cooktop
                     {
-                        "type": "grid",
+                        "type": "custom:stack-in-card",
                         "title": "🍳 Cooktop",
-                        "columns": 1,
                         "cards": [
-                            mushroom_switch("sensor.cooktop_operation_state", "mdi:stove", "orange"),
-                            mushroom_switch("switch.cooktop_power", "mdi:power", "green"),
-                            mushroom_switch("switch.cooktop_child_lock", "mdi:lock", "red")
-                        ],
-                        "grid_options": {"columns": 12}
-                    }
+                            {
+                                "type": "grid",
+                                "columns": 3,
+                                "square": False,
+                                "cards": [
+                                    mushroom_entity("sensor.cooktop_operation_state", "Status", "mdi:stove", "orange"),
+                                    mushroom_switch("switch.cooktop_power", "mdi:power", "green"),
+                                    mushroom_switch("switch.cooktop_child_lock", "mdi:lock", "red")
+                                ]
+                            }
+                        ]
+                    },
+
                 ]
             }
         ]

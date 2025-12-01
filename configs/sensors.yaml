@@ -1,3 +1,10 @@
+- platform: template
+  sensors:
+    dishwasher_running:
+      unique_id: dishwasher_running
+      friendly_name: "Dishwasher Running"
+      value_template: "{{ is_state('sensor.dishwasher_operation_state', 'run') }}"
+
 - platform: history_stats
   unique_id: ac_living_runtime_yesterday
   name: AC Living Runtime Yesterday

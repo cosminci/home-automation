@@ -2,13 +2,11 @@
     "card": {
         "type": "custom:mushroom-entity-card",
         "entity": "[[entity]]",
-        "name": " ",
+        "name": "[[name]]",
         "icon": "[[icon]]",
         "icon_color": "[[color]]",
-        "primary_info": "none",
-        "secondary_info": "none",
         "tap_action": {
-            "action": "toggle"
+            "action": "more-info"
         }
     }
 }

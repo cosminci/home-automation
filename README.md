@@ -186,11 +186,15 @@ See room modules in `rooms/*.py` for entity IDs.
 - ✅ Use Mushroom cards for modern UI
 - ✅ Deploy dashboards automatically after changes
 - ✅ Return `none` from template sensors when data shouldn't be plotted
+- ✅ Always do thorough library, add-on and integration research before implementing features
+- ✅ Stop and ask for feedback when encountering issues - user makes decisions, not AI
 
 **DON'T:**
 - ❌ Deploy config files via API (user must manually copy via vi)
 - ❌ Assume `light.*` entities are dimmable
 - ❌ Create new test files unless requested
+- ❌ Remove or rollback features without asking for confirmation first
+- ❌ Make assumptions about how integrations work without researching documentation
 
 ---
 

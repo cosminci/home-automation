@@ -34,6 +34,14 @@ def button_scene(entity, name, icon):
         "variables": [{"entity": entity}, {"name": name}, {"icon": icon}]
     }
 
+def mushroom_entity(entity, name, icon, color="none"):
+    """Shorthand for mushroom entity template (read-only sensors)"""
+    return {
+        "type": "custom:decluttering-card",
+        "template": "mushroom_entity",
+        "variables": [{"entity": entity}, {"name": name}, {"icon": icon}, {"color": color}]
+    }
+
 def network_button(entity, icon, color="red"):
     """Shorthand for network button template"""
     return {
