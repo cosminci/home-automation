@@ -6,7 +6,10 @@
         "icon": "[[icon]]",
         "show_temperature_control": true,
         "hvac_modes": ["off", "cool", "heat", "dry", "fan_only", "auto"],
-        "collapsible_controls": true
+        "collapsible_controls": true,
+        "card_mod": {
+            "style": "mushroom-state-item { margin: 0 auto !important; }"
+        }
     }
 }
 

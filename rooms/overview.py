@@ -80,7 +80,7 @@ def get_view():
                                 "entities": [
                                     {"icon": "mdi:brightness-4", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_10"}}},
                                     {"icon": "mdi:brightness-6", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_70"}}},
-                                    {"icon": "mdi:brightness-7", "tap_action": {"action": "call-service", "service": "scene.turn_on", "service_data": {"entity_id": "scene.ambient_100"}}}
+                                    {"icon": "mdi:brightness-7", "tap_action": {"action": "call-service", "service": "script.turn_on", "service_data": {"entity_id": "script.ambient_100"}}}
                                 ]
                             },
                             button_scene_custom("All Lights Off", "mdi:lightbulb-off", "script.lights_all_off", "rgb(255, 152, 0)"),
