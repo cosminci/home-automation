@@ -17,55 +17,200 @@ def get_view():
                     # Washing Machine
                     {
                         "type": "custom:stack-in-card",
-                        "title": "👕 Washing Machine",
                         "cards": [
+                            # Power button
                             {
-                                "type": "grid",
-                                "columns": 2,
-                                "square": False,
-                                "cards": [
-                                    mushroom_entity("sensor.washing_machine_operation_state", "Status", "mdi:washing-machine", "blue"),
-                                    mushroom_switch("switch.washing_machine_power", "mdi:power", "green")
-                                ]
+                                "type": "custom:mushroom-entity-card",
+                                "entity": "switch.washing_machine_power",
+                                "name": " ",
+                                "icon": "mdi:washing-machine",
+                                "icon_color": "blue",
+                                "primary_info": "none",
+                                "secondary_info": "none",
+                                "tap_action": {"action": "toggle"}
                             },
+                            # Program Selector (when powered on)
                             {
-                                "type": "entities",
-                                "show_header_toggle": False,
-                                "entities": [
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.washing_machine_operation_state", "state_not": "inactive"}], "row": {"entity": "select.washing_machine_active_program", "name": "Active Program", "icon": "mdi:play"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.washing_machine_operation_state", "state_not": "inactive"}], "row": {"entity": "sensor.washing_machine_program_finish_time", "name": "Finish Time", "icon": "mdi:clock-outline"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.washing_machine_operation_state", "state_not": "inactive"}], "row": {"entity": "button.washing_machine_stop_program", "name": "Stop", "icon": "mdi:stop"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.washing_machine_operation_state", "state": "paused"}], "row": {"entity": "button.washing_machine_resume_program", "name": "Resume", "icon": "mdi:play"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.washing_machine_operation_state", "state": "inactive"}], "row": {"entity": "select.washing_machine_selected_program", "name": "Select Program", "icon": "mdi:playlist-play"}}
-                                ]
+                                "type": "conditional",
+                                "conditions": [{"entity": "switch.washing_machine_power", "state": "on"}],
+                                "card": {
+                                    "type": "custom:mushroom-select-card",
+                                    "entity": "select.washing_machine_active_program",
+                                    "name": "Start Washing Machine Program",
+                                    "icon": "mdi:play-circle-outline",
+                                    "icon_color": "blue",
+                                    "secondary_info": "none"
+                                }
+                            },
+                            # Stop button when running
+                            {
+                                "type": "conditional",
+                                "conditions": [{"entity": "sensor.washing_machine_operation_state", "state_not": "inactive"}, {"entity": "sensor.washing_machine_operation_state", "state_not": "ready"}],
+                                "card": {
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "button.washing_machine_stop_program",
+                                    "name": "Stop Program",
+                                    "icon": "mdi:stop",
+                                    "icon_color": "red",
+                                    "primary_info": "name",
+                                    "secondary_info": "none",
+                                    "tap_action": {"action": "call-service", "service": "button.press", "service_data": {"entity_id": "button.washing_machine_stop_program"}}
+                                }
+                            },
+                            # Program info (when running)
+                            {
+                                "type": "conditional",
+                                "conditions": [{"entity": "sensor.washing_machine_operation_state", "state_not": "inactive"}, {"entity": "sensor.washing_machine_operation_state", "state_not": "ready"}],
+                                "card": {
+                                    "type": "grid",
+                                    "columns": 2,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "select.washing_machine_active_program",
+                                            "icon": "mdi:washing-machine",
+                                            "icon_color": "blue",
+                                            "primary_info": "none",
+                                            "secondary_info": "state",
+                                            "tap_action": {"action": "none"}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "sensor.washing_machine_program_finish_time",
+                                            "icon": "mdi:clock-end",
+                                            "icon_color": "blue",
+                                            "primary_info": "none",
+                                            "secondary_info": "state",
+                                            "tap_action": {"action": "none"}
+                                        }
+                                    ]
+                                }
                             }
                         ]
                     },
                     # Dryer
                     {
                         "type": "custom:stack-in-card",
-                        "title": "🧺 Dryer",
                         "cards": [
+                            # Power button
                             {
-                                "type": "grid",
-                                "columns": 3,
-                                "square": False,
-                                "cards": [
-                                    mushroom_entity("sensor.dryer_operation_state", "Status", "mdi:tumble-dryer", "blue"),
-                                    mushroom_switch("switch.dryer_power", "mdi:power", "green"),
-                                    mushroom_switch("switch.dryer_child_lock", "mdi:lock", "red")
-                                ]
+                                "type": "custom:mushroom-entity-card",
+                                "entity": "switch.dryer_power",
+                                "name": " ",
+                                "icon": "mdi:tumble-dryer",
+                                "icon_color": "blue",
+                                "primary_info": "none",
+                                "secondary_info": "none",
+                                "tap_action": {"action": "toggle"}
                             },
+                            # Drying Target (when powered on)
                             {
-                                "type": "entities",
-                                "show_header_toggle": False,
-                                "entities": [
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dryer_operation_state", "state_not": "inactive"}], "row": {"entity": "select.dryer_active_program", "name": "Active Program", "icon": "mdi:play"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dryer_operation_state", "state_not": "inactive"}], "row": {"entity": "sensor.dryer_program_finish_time", "name": "Finish Time", "icon": "mdi:clock-outline"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dryer_operation_state", "state_not": "inactive"}], "row": {"entity": "button.dryer_stop_program", "name": "Stop", "icon": "mdi:stop"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dryer_operation_state", "state": "paused"}], "row": {"entity": "button.dryer_resume_program", "name": "Resume", "icon": "mdi:play"}},
-                                    {"type": "conditional", "conditions": [{"entity": "sensor.dryer_operation_state", "state": "inactive"}], "row": {"entity": "select.dryer_selected_program", "name": "Select Program", "icon": "mdi:playlist-play"}}
-                                ]
+                                "type": "conditional",
+                                "conditions": [{"entity": "switch.dryer_power", "state": "on"}],
+                                "card": {
+                                    "type": "custom:mushroom-chips-card",
+                                    "alignment": "center",
+                                    "chips": [
+                                        {
+                                            "type": "template",
+                                            "icon": "mdi:water",
+                                            "icon_color": "{% if is_state('select.dryer_drying_target', 'laundry_care_dryer_enum_type_drying_target_iron_dry') %}blue{% else %}grey{% endif %}",
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "select.select_option",
+                                                "service_data": {
+                                                    "entity_id": "select.dryer_drying_target",
+                                                    "option": "laundry_care_dryer_enum_type_drying_target_iron_dry"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "template",
+                                            "icon": "mdi:water-outline",
+                                            "icon_color": "{% if is_state('select.dryer_drying_target', 'laundry_care_dryer_enum_type_drying_target_cupboard_dry') %}blue{% else %}grey{% endif %}",
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "select.select_option",
+                                                "service_data": {
+                                                    "entity_id": "select.dryer_drying_target",
+                                                    "option": "laundry_care_dryer_enum_type_drying_target_cupboard_dry"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "template",
+                                            "icon": "mdi:water-off",
+                                            "icon_color": "{% if is_state('select.dryer_drying_target', 'laundry_care_dryer_enum_type_drying_target_cupboard_dry_plus') %}blue{% else %}grey{% endif %}",
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "select.select_option",
+                                                "service_data": {
+                                                    "entity_id": "select.dryer_drying_target",
+                                                    "option": "laundry_care_dryer_enum_type_drying_target_cupboard_dry_plus"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            # Program Selector (when powered on)
+                            {
+                                "type": "conditional",
+                                "conditions": [{"entity": "switch.dryer_power", "state": "on"}],
+                                "card": {
+                                    "type": "custom:mushroom-select-card",
+                                    "entity": "select.dryer_active_program",
+                                    "name": "Start Dryer Program",
+                                    "icon": "mdi:play-circle-outline",
+                                    "icon_color": "blue",
+                                    "secondary_info": "none"
+                                }
+                            },
+                            # Stop button when running
+                            {
+                                "type": "conditional",
+                                "conditions": [{"entity": "sensor.dryer_operation_state", "state_not": "inactive"}, {"entity": "sensor.dryer_operation_state", "state_not": "ready"}],
+                                "card": {
+                                    "type": "custom:mushroom-entity-card",
+                                    "entity": "button.dryer_stop_program",
+                                    "name": "Stop Program",
+                                    "icon": "mdi:stop",
+                                    "icon_color": "red",
+                                    "primary_info": "name",
+                                    "secondary_info": "none",
+                                    "tap_action": {"action": "call-service", "service": "button.press", "service_data": {"entity_id": "button.dryer_stop_program"}}
+                                }
+                            },
+                            # Program info (when running)
+                            {
+                                "type": "conditional",
+                                "conditions": [{"entity": "sensor.dryer_operation_state", "state_not": "inactive"}, {"entity": "sensor.dryer_operation_state", "state_not": "ready"}],
+                                "card": {
+                                    "type": "grid",
+                                    "columns": 2,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "select.dryer_active_program",
+                                            "icon": "mdi:tumble-dryer",
+                                            "icon_color": "blue",
+                                            "primary_info": "none",
+                                            "secondary_info": "state",
+                                            "tap_action": {"action": "none"}
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "sensor.dryer_program_finish_time",
+                                            "icon": "mdi:clock-end",
+                                            "icon_color": "blue",
+                                            "primary_info": "none",
+                                            "secondary_info": "state",
+                                            "tap_action": {"action": "none"}
+                                        }
+                                    ]
+                                }
                             }
                         ]
                     }

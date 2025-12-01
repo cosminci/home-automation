@@ -145,9 +145,17 @@ See room modules in `rooms/*.py` for entity IDs.
 
 **HACS Custom:**
 - ConnectLife (4 Hisense ACs)
-- Home Connect (5 Bosch appliances)
+- Home Connect (5 Bosch appliances: dishwasher, oven, cooktop, washing machine, dryer)
 - LG ThinQ (2 TVs)
 - Hyundai/Kia Connect (Tucson 2022 FHEV)
+
+### Bosch Home Connect API Limitations
+
+**Child Lock:** Available in Bosch Home & Connect app but not exposed via API for washing machine and dryer (returns `SDK.Error.UnsupportedSetting`)
+
+**RemoteStart:** Washing machine and dryer require power to be turned on before programs can be selected remotely
+
+**Cooktop Safety:** Cooktop power cannot be turned on remotely (safety feature), only status display available
 
 **HACS Frontend (15 cards installed):**
 - Mushroom, button-card, Stack In Card, mini-graph-card, Multiple Entity Row
