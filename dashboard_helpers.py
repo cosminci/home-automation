@@ -58,3 +58,38 @@ def network_device_status(entity, name, icon):
         "variables": [{"entity": entity}, {"name": name}, {"icon": icon}]
     }
 
+def mushroom_media_player(entity, icon="mdi:television", color="blue"):
+    """Compact media player card (power + volume)"""
+    return {
+        "type": "custom:mushroom-entity-card",
+        "entity": entity,
+        "icon": icon,
+        "icon_color": color,
+        "primary_info": "none",
+        "secondary_info": "none",
+        "tap_action": {"action": "toggle"}
+    }
+
+def mushroom_select(entity, name, icon, color="blue"):
+    """Compact select card"""
+    return {
+        "type": "custom:mushroom-select-card",
+        "entity": entity,
+        "name": name,
+        "icon": icon,
+        "icon_color": color,
+        "secondary_info": "none"
+    }
+
+def mushroom_readonly(entity, icon, color="none"):
+    """Read-only mushroom entity card (icon only)"""
+    return {
+        "type": "custom:mushroom-entity-card",
+        "entity": entity,
+        "icon": icon,
+        "icon_color": color,
+        "primary_info": "none",
+        "secondary_info": "state",
+        "tap_action": {"action": "more-info"}
+    }
+

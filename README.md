@@ -117,13 +117,15 @@ source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_insights
 - **Setup:** Import `configs/core.category_registry` to `/config/.storage/core.category_registry`, restart HA
 
 ### Scenes
-- **File:** `configs/scenes.yaml` (8 scenes)
+- **File:** `configs/scenes.yaml` (7 scenes: 3 ambient lighting, 4 AC control)
+- **Note:** `ambient_70` uses brightness 177 (not 178) - value 178 doesn't work when lights already on
 
 ### Sensors
 - **File:** `configs/sensors.yaml`
 
 ### Scripts
-- **File:** `configs/scripts.yaml` (2 scripts)
+- **File:** `configs/scripts.yaml` (3 scripts: lights_all_off, everything_off, ambient_off)
+- **Why scripts vs scenes:** Scripts use dynamic templates to target all entities of a type (e.g., all lights), which scenes cannot do
 
 ---
 

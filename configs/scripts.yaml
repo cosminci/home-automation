@@ -39,14 +39,12 @@ everything_off:
       target:
         entity_id: "{{ states.media_player | map(attribute='entity_id') | list }}"
 
-ambient_100:
-  alias: "Ambient 100"
-  icon: mdi:brightness-7
+ambient_off:
+  alias: "Ambient Off"
+  icon: mdi:lightbulb-off
   sequence:
-    - service: light.turn_on
+    - service: light.turn_off
       target:
         entity_id:
           - light.led_strip_window_2
           - light.led_strip_window_3
-      data:
-        brightness: 254

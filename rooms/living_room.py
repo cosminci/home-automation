@@ -1,6 +1,6 @@
 """Living Room view configuration"""
 
-from dashboard_helpers import mushroom_switch, mushroom_light, mushroom_climate, network_button
+from dashboard_helpers import mushroom_switch, mushroom_light, mushroom_climate, network_button, mushroom_media_player, mushroom_select
 
 def get_view():
     """Return the Living Room view configuration"""
@@ -79,15 +79,84 @@ def get_view():
                 "column_span": 4,
                 "cards": [
                     {
-                        "type": "entities",
-                        "title": "📺 Entertainment",
-                        "show_header_toggle": False,
-                        "entities": [
-                            {"type": "section", "label": "TV"},
-                            {"entity": "media_player.77_oled", "name": "77\" OLED"},
-                            {"type": "section", "label": "Soundbar"},
-                            {"entity": "media_player.soundbar_q990b", "name": "Power & Volume"},
-                            {"entity": "input_select.soundbar_source", "name": "Source"}
+                        "type": "custom:stack-in-card",
+                        "cards": [
+                            # TV and Soundbar icons
+                            {
+                                "type": "grid",
+                                "columns": 2,
+                                "square": False,
+                                "cards": [
+                                    {
+                                        "type": "custom:mushroom-media-player-card",
+                                        "entity": "media_player.77_oled",
+                                        "icon": "mdi:television",
+                                        "use_media_info": False,
+                                        "show_volume_level": False,
+                                        "volume_controls": ["volume_buttons"],
+                                        "collapsible_controls": True,
+                                        "primary_info": "none",
+                                        "secondary_info": "none"
+                                    },
+                                    {
+                                        "type": "custom:mushroom-media-player-card",
+                                        "entity": "media_player.soundbar_q990b",
+                                        "icon": "mdi:speaker",
+                                        "use_media_info": False,
+                                        "show_volume_level": False,
+                                        "volume_controls": ["volume_buttons"],
+                                        "collapsible_controls": True,
+                                        "primary_info": "none",
+                                        "secondary_info": "none"
+                                    }
+                                ]
+                            },
+                            # Soundbar source selector (Bluetooth vs HDMI only) - conditional on soundbar being on
+                            {
+                                "type": "conditional",
+                                "conditions": [{"entity": "media_player.soundbar_q990b", "state_not": "off"}],
+                                "card": {
+                                    "type": "grid",
+                                    "columns": 2,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "media_player.soundbar_q990b",
+                                            "name": "BT",
+                                            "icon": "mdi:bluetooth",
+                                            "icon_color": "{% if is_state_attr('media_player.soundbar_q990b', 'source', ' Bluetooth') %}blue{% else %}grey{% endif %}",
+                                            "primary_info": "name",
+                                            "secondary_info": "none",
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "media_player.select_source",
+                                                "service_data": {
+                                                    "entity_id": "media_player.soundbar_q990b",
+                                                    "source": " Bluetooth"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "custom:mushroom-entity-card",
+                                            "entity": "media_player.soundbar_q990b",
+                                            "name": "ARC",
+                                            "icon": "mdi:hdmi-port",
+                                            "icon_color": "{% if is_state_attr('media_player.soundbar_q990b', 'source', 'HDMI') %}blue{% else %}grey{% endif %}",
+                                            "primary_info": "name",
+                                            "secondary_info": "none",
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "media_player.select_source",
+                                                "service_data": {
+                                                    "entity_id": "media_player.soundbar_q990b",
+                                                    "source": "HDMI"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
                         ]
                     }
                 ]

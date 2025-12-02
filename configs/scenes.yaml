@@ -15,10 +15,10 @@
   entities:
     light.led_strip_window_2:
       state: on
-      brightness: 178
+      brightness: 177
     light.led_strip_window_3:
       state: on
-      brightness: 178
+      brightness: 177
 
 - id: 'ambient_100'
   name: 'Ambient 100'
@@ -26,10 +26,10 @@
   entities:
     light.led_strip_window_2:
       state: on
-      brightness: 255
+      brightness: 254
     light.led_strip_window_3:
       state: on
-      brightness: 255
+      brightness: 254
 
 - id: 'ac_living_office'
   name: 'AC Living Office'
@@ -58,6 +58,34 @@
     climate.ac_iacopewee:
       state: cool
       temperature: 24
+
+- id: 'ac_living_office_warm'
+  name: 'AC Living Office Warm'
+  icon: mdi:fire
+  entities:
+    climate.ac_living:
+      state: heat
+      temperature: 25
+    climate.ac_office:
+      state: heat
+      temperature: 25
+
+- id: 'ac_all_warm'
+  name: 'AC All Warm'
+  icon: mdi:fire
+  entities:
+    climate.ac_living:
+      state: heat
+      temperature: 25
+    climate.ac_bedroom:
+      state: heat
+      temperature: 25
+    climate.ac_office:
+      state: heat
+      temperature: 25
+    climate.ac_iacopewee:
+      state: heat
+      temperature: 25
 
 - id: 'ac_all_off'
   name: 'AC All Off'

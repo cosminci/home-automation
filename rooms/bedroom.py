@@ -1,6 +1,6 @@
 """Bedroom view configuration"""
 
-from dashboard_helpers import mushroom_switch, mushroom_light, mushroom_climate
+from dashboard_helpers import mushroom_switch, mushroom_light, mushroom_climate, mushroom_media_player
 
 def get_view():
     """Return the Bedroom view configuration"""
@@ -20,7 +20,7 @@ def get_view():
                         "cards": [
                             {
                                 "type": "grid",
-                                "columns": 3,
+                                "columns": 2,
                                 "square": False,
                                 "cards": [
                                     mushroom_switch("switch.rail_spots", "mdi:track-light"),
@@ -31,7 +31,12 @@ def get_view():
                         ]
                     },
                     # TV
-                    {"type": "media-control", "entity": "media_player.lg_webos_tv_oled48c22lb", "grid_options": {"columns": 12}}
+                    {
+                        "type": "custom:stack-in-card",
+                        "cards": [
+                            mushroom_media_player("media_player.lg_webos_tv_oled48c22lb", "mdi:television")
+                        ]
+                    }
                 ]
             },
             # AC section
