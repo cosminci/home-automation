@@ -10,7 +10,7 @@ def mushroom_switch(entity, icon, color="orange"):
         "variables": [{"entity": entity}, {"icon": icon}, {"color": color}]
     }
 
-def mushroom_light(entity, name="Window", icon="mdi:led-strip-variant"):
+def mushroom_light(entity, name=" ", icon="mdi:led-strip-variant"):
     """Shorthand for mushroom light template"""
     return {
         "type": "custom:decluttering-card",
@@ -91,5 +91,33 @@ def mushroom_readonly(entity, icon, color="none"):
         "primary_info": "none",
         "secondary_info": "state",
         "tap_action": {"action": "more-info"}
+    }
+
+def create_room_section(title, emoji, cards):
+    """
+    Create standardized room section with title and content.
+
+    Args:
+        title: Room name (e.g., "Living Room")
+        emoji: Emoji icon for the room (e.g., "🛋️")
+        cards: List of cards to display in the room section
+
+    Returns:
+        Dictionary containing the room section configuration
+    """
+    return {
+        "type": "grid",
+        "column_span": 4,
+        "cards": [
+            {
+                "type": "custom:mushroom-title-card",
+                "title": f"{emoji} {title}",
+                "alignment": "center"
+            },
+            {
+                "type": "custom:stack-in-card",
+                "cards": cards
+            }
+        ]
     }
 

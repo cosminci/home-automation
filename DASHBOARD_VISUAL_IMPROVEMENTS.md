@@ -1,8 +1,8 @@
 # Dashboard Visual Improvements
 
-**Status:** Phase 4 Complete - Remaining Work Identified
+**Status:** Phase 5 Complete - Dashboard Consolidated
 **Started:** 2025-11-30
-**Updated:** 2025-12-01
+**Updated:** 2025-12-02
 
 ---
 
@@ -28,6 +28,19 @@
 - Appliances with conditional visibility
 - All switches converted to icon-only Mushroom entity cards
 
+### Phase 5: Dashboard Consolidation (Dec 2)
+- Consolidated 13 individual room tabs into 4 unified tabs:
+  - **Overview** - Weather, AC controls, scenes, car
+  - **Open Space** - Living Room, Kitchen, Hallway, Staircase, Terrace
+  - **Private Spaces** - Bedroom, Shower Bathroom, Kid's Room, Office, Bathroom Tub
+  - **Utility Spaces** - Kitchen Appliances (Dishwasher, Oven, Cooktop), Washer Room
+- Removed legacy room modules (bathroom_tub.py, hallway.py, kitchen.py, staircase.py, terrace.py)
+- Renamed view modules (removed `tab_` prefix)
+- Icon-only room headers with consistent blue color
+- Network device icons moved to next row in 4-column/3-column grids
+- Washer Room uses dog icon (mdi:dog)
+- Open Space tab uses sofa icon (mdi:sofa)
+
 ---
 
 ## 🔧 Remaining Work
@@ -43,9 +56,8 @@
 
 ### Medium Priority
 3. **Stack In Card** - Remove borders for cleaner grouping
-   - Wrap appliance cards
-   - Wrap network cards
-   - Wrap entertainment cards
+   - Already using Stack In Card for all sections
+   - May want to customize border styling
 
 4. **Appliances** - Further refinement if needed
    - Current conditional visibility works well
@@ -60,14 +72,6 @@
 6. **Media Players** - Test Mini Media Player
    - May be more compact than current cards
    - Need to test with LG WebOS and Samsung Soundbar
-
-7. **Overview Tab** - Optimize space usage
-   - Currently uses standard cards
-   - Could be more compact
-
-8. **Car Tab** - Already well optimized
-   - Conditional visibility working perfectly
-   - No changes needed
 
 ---
 
@@ -121,6 +125,14 @@
 - `icon_color` for visual differentiation
 - Works well with conditional visibility for appliances
 
+**Dashboard Consolidation:**
+- Unified tabs reduce navigation complexity (13 tabs → 4 tabs)
+- Each tab groups related spaces logically
+- Room sections use icon-only headers with consistent blue color
+- Network devices displayed in their physical room locations
+- Appliances grouped in Utility Spaces tab
+- Icon-only display throughout (switches, lights, room headers)
+
 ---
 ---
 
@@ -128,7 +140,7 @@
 
 1. **Fix Weather Card** - Test Weather Radar Card, Clock Weather Card, or Horizon Card
 2. **Apply Theme** - User to choose and apply HA theme
-3. **Stack In Card** - Wrap appliance/network/entertainment cards to remove borders
+3. **Stack In Card Styling** - Customize border styling if needed
 4. **Floor Plan** - Create visual floor plan navigation (low priority)
 5. **Mini Media Player** - Test with LG WebOS and Samsung Soundbar (optional)
 

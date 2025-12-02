@@ -9,7 +9,7 @@
 **Insights Dashboard:** http://tower.local:8123/home-insights
 **Installation:** Docker container on Unraid NAS (`tower.local`)
 
-**Structure:** 13 tabs (Overview + 11 rooms + Car)
+**Structure:** 4 consolidated tabs (Overview, Open Space, Private Spaces, Utility Spaces)
 **Features:** 4 ACs, 25 lights, 2 TVs, 5 appliances, Hyundai Tucson, UniFi network, 2 cameras, Zigbee ready
 
 ---
@@ -22,7 +22,11 @@ home-automation/
 ├── generate_insights_dashboard.py     # Insights dashboard generator
 ├── dashboard_helpers.py               # Card creation helpers
 ├── templates/                         # Decluttering card templates (6 JSON files)
-├── rooms/                             # Room view modules (13 Python files)
+├── rooms/                             # View modules (4 Python files)
+│   ├── overview.py                   # Overview tab
+│   ├── open_space.py                 # Open Space tab (Living, Kitchen, Hallway, Staircase, Terrace)
+│   ├── private.py                    # Private Spaces tab (Bedroom, Bathrooms, Kid's Room, Office)
+│   └── utility.py                    # Utility Spaces tab (Appliances, Washer Room)
 ├── configs/                           # HA configuration files
 │   ├── automations.yaml              # 23 automations
 │   ├── scenes.yaml                   # 8 scenes
@@ -76,12 +80,12 @@ source ~/.zshrc && curl -s -H "Authorization: Bearer $HA_TOKEN" \
 
 ### Modular Structure
 - **Templates** (`templates/*.json`) - Decluttering card templates
-- **Room modules** (`rooms/*.py`) - Each room has a `get_view()` function
+- **View modules** (`rooms/*.py`) - Each tab has a `get_view()` function
 - **Helpers** (`dashboard_helpers.py`) - Shared card creation functions
 - **Orchestrator** (`generate_dashboard.py`) - Loads and combines everything
 
 ### Making Changes
-1. Edit room module in `rooms/` (e.g., `rooms/living_room.py`)
+1. Edit view module in `rooms/` (e.g., `rooms/overview.py`, `rooms/open_space.py`)
 2. Or edit templates in `templates/`
 3. Or edit helpers in `dashboard_helpers.py`
 4. **Deploy automatically:**
@@ -134,7 +138,7 @@ source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_insights
 **6 Dimmable Lights** - Use Mushroom light cards
 **19 On/Off Switches** - Use Mushroom entity cards
 
-See room modules in `rooms/*.py` for entity IDs.
+See view modules in `rooms/*.py` for entity IDs.
 
 ---
 
@@ -174,15 +178,19 @@ See room modules in `rooms/*.py` for entity IDs.
 ## 📊 Dashboard Features
 
 **Main Dashboard** (`/clean-home`):
-- 13 tabs (Overview + 11 rooms + Car)
+- 4 consolidated tabs:
+  - **Overview** - Weather, AC controls, scenes, car
+  - **Open Space** - Living Room, Kitchen, Hallway, Staircase, Terrace
+  - **Private Spaces** - Bedroom, Shower Bathroom, Kid's Room, Office, Bathroom Tub
+  - **Utility Spaces** - Kitchen Appliances (Dishwasher, Oven, Cooktop), Washer Room
 - 4 ACs with Mushroom climate cards
 - 6 dimmable lights with Mushroom light cards
-- 19 switches with Mushroom entity cards
+- 19 switches with Mushroom entity cards (icon-only display)
 - 2 camera feeds
-- Network monitoring (restart/power cycle buttons)
+- Network monitoring (UniFi devices with restart/power cycle buttons)
 - 8 scenes with color-coded button-cards
-- Entertainment (2 TVs, soundbar with source selector)
-- 5 appliances with conditional visibility
+- Entertainment (2 TVs, soundbar)
+- 5 appliances with conditional visibility (program selectors, stop buttons, status displays)
 
 **Insights Dashboard** (`/home-insights`):
 - Temperature history (24h) with Plotly graphs

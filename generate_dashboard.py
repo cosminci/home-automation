@@ -19,18 +19,9 @@ HA_TOKEN = os.environ.get("HA_TOKEN")
 # Room modules to load in order
 ROOM_MODULES = [
     "overview",
-    "living_room",
-    "kitchen",
-    "bedroom",
-    "kids_room",
-    "office",
-    "hallway",
-    "staircase",
-    "bathroom_shower",
-    "bathroom_tub",
-    "washer_room",
-    "terrace",
-    "car"
+    "open_space",
+    "private",
+    "utility"
 ]
 
 def load_templates():
