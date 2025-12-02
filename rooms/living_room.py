@@ -81,7 +81,7 @@ def get_view():
                     {
                         "type": "custom:stack-in-card",
                         "cards": [
-                            # TV and Soundbar icons
+                            # TV and Soundbar media players (power + volume controls)
                             {
                                 "type": "grid",
                                 "columns": 2,
@@ -110,52 +110,6 @@ def get_view():
                                         "secondary_info": "none"
                                     }
                                 ]
-                            },
-                            # Soundbar source selector (Bluetooth vs HDMI only) - conditional on soundbar being on
-                            {
-                                "type": "conditional",
-                                "conditions": [{"entity": "media_player.soundbar_q990b", "state_not": "off"}],
-                                "card": {
-                                    "type": "grid",
-                                    "columns": 2,
-                                    "square": False,
-                                    "cards": [
-                                        {
-                                            "type": "custom:mushroom-entity-card",
-                                            "entity": "media_player.soundbar_q990b",
-                                            "name": "BT",
-                                            "icon": "mdi:bluetooth",
-                                            "icon_color": "{% if is_state_attr('media_player.soundbar_q990b', 'source', ' Bluetooth') %}blue{% else %}grey{% endif %}",
-                                            "primary_info": "name",
-                                            "secondary_info": "none",
-                                            "tap_action": {
-                                                "action": "call-service",
-                                                "service": "media_player.select_source",
-                                                "service_data": {
-                                                    "entity_id": "media_player.soundbar_q990b",
-                                                    "source": " Bluetooth"
-                                                }
-                                            }
-                                        },
-                                        {
-                                            "type": "custom:mushroom-entity-card",
-                                            "entity": "media_player.soundbar_q990b",
-                                            "name": "ARC",
-                                            "icon": "mdi:hdmi-port",
-                                            "icon_color": "{% if is_state_attr('media_player.soundbar_q990b', 'source', 'HDMI') %}blue{% else %}grey{% endif %}",
-                                            "primary_info": "name",
-                                            "secondary_info": "none",
-                                            "tap_action": {
-                                                "action": "call-service",
-                                                "service": "media_player.select_source",
-                                                "service_data": {
-                                                    "entity_id": "media_player.soundbar_q990b",
-                                                    "source": "HDMI"
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }
                             }
                         ]
                     }

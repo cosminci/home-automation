@@ -32,7 +32,7 @@ def get_view():
                 "type": "grid",
                 "column_span": 4,
                 "cards": [
-                    # Weather - compact grid with condition and temperature
+                    # Weather - compact display
                     {
                         "type": "custom:stack-in-card",
                         "cards": [
@@ -50,13 +50,64 @@ def get_view():
                                         "tap_action": {"action": "more-info"}
                                     },
                                     {
-                                        "type": "custom:mushroom-entity-card",
-                                        "entity": "sensor.outdoor_temperature",
-                                        "icon": "mdi:thermometer",
-                                        "icon_color": "orange",
-                                        "primary_info": "none",
-                                        "secondary_info": "state",
-                                        "tap_action": {"action": "more-info"}
+                                        "type": "custom:mushroom-template-card",
+                                        "icon": "mdi:weather-windy",
+                                        "icon_color": "cyan",
+                                        "primary": " ",
+                                        "secondary": "{{ state_attr('weather.weather_home', 'wind_speed') }} km/h"
+                                    }
+                                ]
+                            },
+                            # Collapsible radar with temperature, UV, humidity
+                            {
+                                "type": "custom:expander-card",
+                                "clear": True,
+                                "padding": "0",
+                                "child-padding": "0.6em",
+                                "title-card-button-overlay": True,
+                                "title-card": {
+                                    "type": "grid",
+                                    "columns": 3,
+                                    "square": False,
+                                    "cards": [
+                                        {
+                                            "type": "custom:mushroom-template-card",
+                                            "icon": "mdi:thermometer",
+                                            "icon_color": "orange",
+                                            "primary": " ",
+                                            "secondary": "{{ state_attr('weather.weather_home', 'temperature') }}°C"
+                                        },
+                                        {
+                                            "type": "custom:mushroom-template-card",
+                                            "icon": "mdi:weather-sunny-alert",
+                                            "icon_color": "yellow",
+                                            "primary": " ",
+                                            "secondary": "{{ state_attr('weather.weather_home', 'uv_index') }}"
+                                        },
+                                        {
+                                            "type": "custom:mushroom-template-card",
+                                            "icon": "mdi:water-percent",
+                                            "icon_color": "cyan",
+                                            "primary": " ",
+                                            "secondary": "{{ state_attr('weather.weather_home', 'humidity') }}%"
+                                        }
+                                    ]
+                                },
+                                "cards": [
+                                    {
+                                        "type": "custom:weather-radar-card",
+                                        "frame_count": 20,
+                                        "frame_delay": 300,
+                                        "restart_delay": 1000,
+                                        "show_marker": True,
+                                        "show_range": True,
+                                        "show_zoom": True,
+                                        "show_recenter": True,
+                                        "show_playback": True,
+                                        "show_scale": True,
+                                        "zoom_level": 8,
+                                        "map_style": "dark",
+                                        "data_source": "RainViewer-Original"
                                     }
                                 ]
                             }

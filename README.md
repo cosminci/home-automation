@@ -159,6 +159,10 @@ See room modules in `rooms/*.py` for entity IDs.
 
 **Cooktop Safety:** Cooktop power cannot be turned on remotely (safety feature), only status display available
 
+### Samsung SmartThings API Limitations
+
+**Soundbar Source Selection (Q990B):** Samsung removed the `mediaInputSource` capability for soundbars in December 2024. Direct `media_player.select_source` service calls no longer work. Soundbar automatically switches sources, so manual source selection is not needed in dashboard. See: [SmartThings Community Issue](https://community.smartthings.com/t/mediainputsource-capability-has-disappeared-for-some-samsung-soundbars/292356)
+
 **HACS Frontend (15 cards installed):**
 - Mushroom, button-card, Stack In Card, mini-graph-card, Multiple Entity Row
 - Mini Media Player, Weather Radar Card, Horizon Card, Clock Weather Card
