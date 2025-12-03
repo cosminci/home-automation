@@ -226,7 +226,7 @@ def get_view():
                                 "secondary_info": "state",
                                 "tap_action": {"action": "more-info"},
                                 "card_mod": {
-                                    "style": "ha-card { text-align: center; }"
+                                    "style": "mushroom-state-item { margin: 0 auto !important; }"
                                 }
                             }
                         ]

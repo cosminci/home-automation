@@ -9,7 +9,7 @@
 **Insights Dashboard:** http://tower.local:8123/home-insights
 **Installation:** Docker container on Unraid NAS (`tower.local`)
 
-**Structure:** 4 consolidated tabs (Overview, Open Space, Private Spaces, Utility Spaces)
+**Structure:** 5 tabs (Overview, Open Space, Private Spaces, Utility Spaces, Floor Plan)
 **Features:** 4 ACs, 25 lights, 2 TVs, 5 appliances, Hyundai Tucson, UniFi network, 2 cameras, Zigbee ready
 
 ---
@@ -22,11 +22,12 @@ home-automation/
 ├── generate_insights_dashboard.py     # Insights dashboard generator
 ├── dashboard_helpers.py               # Card creation helpers
 ├── templates/                         # Decluttering card templates (6 JSON files)
-├── rooms/                             # View modules (4 Python files)
+├── rooms/                             # View modules (5 Python files)
 │   ├── overview.py                   # Overview tab
 │   ├── open_space.py                 # Open Space tab (Living, Kitchen, Hallway, Staircase, Terrace)
 │   ├── private.py                    # Private Spaces tab (Bedroom, Bathrooms, Kid's Room, Office)
-│   └── utility.py                    # Utility Spaces tab (Appliances, Washer Room)
+│   ├── utility.py                    # Utility Spaces tab (Appliances, Washer Room)
+│   └── floor_plan.py                 # Floor Plan tab (Interactive floor plan with 42 devices)
 ├── configs/                           # HA configuration files
 │   ├── automations.yaml              # 23 automations
 │   ├── scenes.yaml                   # 8 scenes
@@ -178,11 +179,12 @@ See view modules in `rooms/*.py` for entity IDs.
 ## 📊 Dashboard Features
 
 **Main Dashboard** (`/clean-home`):
-- 4 consolidated tabs:
+- 5 tabs:
   - **Overview** - Weather, AC controls, scenes, car
   - **Open Space** - Living Room, Kitchen, Hallway, Staircase, Terrace
   - **Private Spaces** - Bedroom, Shower Bathroom, Kid's Room, Office, Bathroom Tub
   - **Utility Spaces** - Kitchen Appliances (Dishwasher, Oven, Cooktop), Washer Room
+  - **Floor Plan** - Interactive floor plan with 42 devices (4 ACs, 25 lights, 2 TVs, soundbar, 5 appliances, 4 UniFi devices, 2 cameras)
 - 4 ACs with Mushroom climate cards
 - 6 dimmable lights with Mushroom light cards
 - 19 switches with Mushroom entity cards (icon-only display)
@@ -191,6 +193,7 @@ See view modules in `rooms/*.py` for entity IDs.
 - 8 scenes with color-coded button-cards
 - Entertainment (2 TVs, soundbar)
 - 5 appliances with conditional visibility (program selectors, stop buttons, status displays)
+- Floor plan using picture-elements card with state-icon elements on 4K inverted floor plan image
 
 **Insights Dashboard** (`/home-insights`):
 - Temperature history (24h) with Plotly graphs
@@ -239,20 +242,21 @@ See view modules in `rooms/*.py` for entity IDs.
 
 ## 📝 Dashboard Visual Improvements
 
-**Completed (Nov 30 - Dec 1, 2024):**
+**Completed (Nov 30 - Dec 3, 2024):**
 - ✅ Mushroom climate cards (all 4 ACs with collapsible controls)
 - ✅ Mushroom light cards (all 6 dimmable LED strips)
 - ✅ button-card for scenes (color-coded: orange=lighting, blue=AC, red=off)
 - ✅ Mushroom entity cards (network devices, appliances, switches)
 - ✅ Fixed AC setpoint sensors (return `none` when AC off, preserves historical data in Plotly graphs)
+- ✅ Interactive floor plan with 42 devices using picture-elements card
 
-**Remaining Work:**
-1. **Weather Card** - Replace broken card (max temp = current temp issue)
-   - Test: Weather Radar Card, Clock Weather Card, or Horizon Card
-2. **Themes** - Apply modern HA theme (user researching)
-3. **Stack In Card** - Remove borders for cleaner grouping
-4. **Floor Plan** - Create visual floor plan navigation (low priority)
-5. **Media Players** - Test Mini Media Player card (optional)
+**Floor Plan Implementation:**
+- Uses Home Assistant's built-in `picture-elements` card (no HACS addons)
+- 4K inverted floor plan image (`/local/floor_plan_4k_inverted.jpg`)
+- 42 devices positioned using percentage-based coordinates
+- Device positions stored in `floor_plan_placement.txt` for version control
+- State-based icon coloring (lights work correctly, appliances/ACs show colored when on)
+- Workflow: Position icons in HA UI → Export YAML → Update Python → Regenerate dashboard
 
 See `DASHBOARD_VISUAL_IMPROVEMENTS.md` for detailed implementation notes.
 

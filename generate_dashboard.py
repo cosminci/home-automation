@@ -21,7 +21,8 @@ ROOM_MODULES = [
     "overview",
     "open_space",
     "private",
-    "utility"
+    "utility",
+    "floor_plan"
 ]
 
 def load_templates():
