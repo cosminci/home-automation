@@ -1,4 +1,4 @@
-from dashboard_helpers import (mushroom_switch, mushroom_light, mushroom_climate, mushroom_thermostat, network_button)
+from dashboard_helpers import (mushroom_switch, mushroom_light, mushroom_climate, mushroom_thermostat, mushroom_entity, network_button)
 
 
 def get_view():
@@ -63,8 +63,43 @@ def get_view():
                             mushroom_switch("switch.ventilator", "mdi:fan", "blue")
                         ]
                     },
-                    # Floor Heating Thermostat
-                    mushroom_thermostat("climate.tze200_b6wax7g0_ts0601_thermostat")
+                    # Floor Heating Thermostat with LQI badge
+                    {
+                        "type": "custom:mushroom-climate-card",
+                        "entity": "climate.tze200_b6wax7g0_ts0601_thermostat",
+                        "name": " ",
+                        "icon": "mdi:heating-coil",
+                        "show_temperature_control": True,
+                        "collapsible_controls": True,
+                        "hvac_modes": [],
+                        "tap_action": {"action": "more-info"},
+                        "card_mod": {
+                            "style": """
+                                mushroom-state-item { margin: 0 auto !important; }
+                                ha-card::after {
+                                    content: '';
+                                    position: absolute;
+                                    top: 8px;
+                                    right: 8px;
+                                    width: 18px;
+                                    height: 18px;
+                                    {% set lqi = states('sensor.tze200_b6wax7g0_ts0601_lqi') | int(0) %}
+                                    {% if lqi >= 100 %}
+                                    {% set color = '%2344bb44' %}
+                                    {% set path = 'M12,3C7.79,3 3.7,4.41 0.38,7C4.41,12.06 7.89,16.37 12,21.5C16.08,16.42 20.24,11.24 23.65,7C20.32,4.41 16.22,3 12,3Z' %}
+                                    {% elif lqi >= 50 %}
+                                    {% set color = '%23ff9900' %}
+                                    {% set path = 'M12,3C7.79,3 3.7,4.41 0.38,7C4.41,12.06 7.89,16.37 12,21.5C16.08,16.42 20.24,11.24 23.65,7C20.32,4.41 16.22,3 12,3M12,5C15.07,5 18.09,5.86 20.71,7.45L17.5,11.43C16.26,10.74 14.37,10 12,10C9.62,10 7.74,10.75 6.5,11.43L3.27,7.44C5.91,5.85 8.93,5 12,5Z' %}
+                                    {% else %}
+                                    {% set color = '%23dd3333' %}
+                                    {% set path = 'M12,3C7.79,3 3.7,4.41 0.38,7C4.41,12.06 7.89,16.37 12,21.5C16.08,16.42 20.24,11.24 23.65,7C20.32,4.41 16.22,3 12,3M12,5C15.07,5 18.09,5.86 20.71,7.45L15.61,13.81C14.5,13.28 13.25,13 12,13C10.75,13 9.5,13.28 8.39,13.8L3.27,7.44C5.91,5.85 8.93,5 12,5Z' %}
+                                    {% endif %}
+                                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='{{ color }}' d='{{ path }}'/%3E%3C/svg%3E");
+                                    background-size: contain;
+                                }
+                            """
+                        }
+                    }
                 ]
             },
             # Kid's Room
@@ -148,8 +183,43 @@ def get_view():
                             mushroom_switch("switch.ventilator_2", "mdi:fan", "blue")
                         ]
                     },
-                    # Floor Heating Thermostat
-                    mushroom_thermostat("climate.tze200_b6wax7g0_ts0601_thermostat_2")
+                    # Floor Heating Thermostat with LQI badge
+                    {
+                        "type": "custom:mushroom-climate-card",
+                        "entity": "climate.tze200_b6wax7g0_ts0601_thermostat_2",
+                        "name": " ",
+                        "icon": "mdi:heating-coil",
+                        "show_temperature_control": True,
+                        "collapsible_controls": True,
+                        "hvac_modes": [],
+                        "tap_action": {"action": "more-info"},
+                        "card_mod": {
+                            "style": """
+                                mushroom-state-item { margin: 0 auto !important; }
+                                ha-card::after {
+                                    content: '';
+                                    position: absolute;
+                                    top: 8px;
+                                    right: 8px;
+                                    width: 18px;
+                                    height: 18px;
+                                    {% set lqi = states('sensor.tze200_b6wax7g0_ts0601_lqi_2') | int(0) %}
+                                    {% if lqi >= 100 %}
+                                    {% set color = '%2344bb44' %}
+                                    {% set path = 'M12,3C7.79,3 3.7,4.41 0.38,7C4.41,12.06 7.89,16.37 12,21.5C16.08,16.42 20.24,11.24 23.65,7C20.32,4.41 16.22,3 12,3Z' %}
+                                    {% elif lqi >= 50 %}
+                                    {% set color = '%23ff9900' %}
+                                    {% set path = 'M12,3C7.79,3 3.7,4.41 0.38,7C4.41,12.06 7.89,16.37 12,21.5C16.08,16.42 20.24,11.24 23.65,7C20.32,4.41 16.22,3 12,3M12,5C15.07,5 18.09,5.86 20.71,7.45L17.5,11.43C16.26,10.74 14.37,10 12,10C9.62,10 7.74,10.75 6.5,11.43L3.27,7.44C5.91,5.85 8.93,5 12,5Z' %}
+                                    {% else %}
+                                    {% set color = '%23dd3333' %}
+                                    {% set path = 'M12,3C7.79,3 3.7,4.41 0.38,7C4.41,12.06 7.89,16.37 12,21.5C16.08,16.42 20.24,11.24 23.65,7C20.32,4.41 16.22,3 12,3M12,5C15.07,5 18.09,5.86 20.71,7.45L15.61,13.81C14.5,13.28 13.25,13 12,13C10.75,13 9.5,13.28 8.39,13.8L3.27,7.44C5.91,5.85 8.93,5 12,5Z' %}
+                                    {% endif %}
+                                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='{{ color }}' d='{{ path }}'/%3E%3C/svg%3E");
+                                    background-size: contain;
+                                }
+                            """
+                        }
+                    }
                 ]
             },
             # Office
