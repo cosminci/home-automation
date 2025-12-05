@@ -1,0 +1,76 @@
+- binary_sensor:
+    - name: "Dishwasher Running"
+      unique_id: dishwasher_running
+      state: "{{ is_state('sensor.dishwasher_operation_state', 'run') }}"
+
+- sensor:
+    - name: "Total AC Runtime Yesterday"
+      unique_id: total_ac_runtime_yesterday
+      unit_of_measurement: "h"
+      state: >
+        {% set living = states('sensor.ac_living_runtime_yesterday') | float(0) %}
+        {% set bedroom = states('sensor.ac_bedroom_runtime_yesterday') | float(0) %}
+        {% set office = states('sensor.ac_office_runtime_yesterday') | float(0) %}
+        {% set kid = states('sensor.ac_kid_runtime_yesterday') | float(0) %}
+        {{ (living + bedroom + office + kid) | round(1) }}
+
+    - name: "Total AC Runtime 7 Days"
+      unique_id: total_ac_runtime_7days
+      unit_of_measurement: "h"
+      state: >
+        {% set living = states('sensor.ac_living_runtime_7days') | float(0) %}
+        {% set bedroom = states('sensor.ac_bedroom_runtime_7days') | float(0) %}
+        {% set office = states('sensor.ac_office_runtime_7days') | float(0) %}
+        {% set kid = states('sensor.ac_kid_runtime_7days') | float(0) %}
+        {{ (living + bedroom + office + kid) | round(1) }}
+
+    - name: "Outdoor Temperature"
+      unique_id: outdoor_temperature
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state: "{{ state_attr('weather.weather_home', 'temperature') }}"
+
+    - name: "AC Living Set Point (When On)"
+      unique_id: ac_living_setpoint_when_on
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state: >
+        {% if states('climate.ac_living') in ['cool', 'heat', 'dry', 'fan_only', 'auto'] %}
+          {{ state_attr('climate.ac_living', 'temperature') }}
+        {% else %}
+          {{ none }}
+        {% endif %}
+
+    - name: "AC Bedroom Set Point (When On)"
+      unique_id: ac_bedroom_setpoint_when_on
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state: >
+        {% if states('climate.ac_bedroom') in ['cool', 'heat', 'dry', 'fan_only', 'auto'] %}
+          {{ state_attr('climate.ac_bedroom', 'temperature') }}
+        {% else %}
+          {{ none }}
+        {% endif %}
+
+    - name: "AC Office Set Point (When On)"
+      unique_id: ac_office_setpoint_when_on
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state: >
+        {% if states('climate.ac_office') in ['cool', 'heat', 'dry', 'fan_only', 'auto'] %}
+          {{ state_attr('climate.ac_office', 'temperature') }}
+        {% else %}
+          {{ none }}
+        {% endif %}
+
+    - name: "AC Kid Set Point (When On)"
+      unique_id: ac_kid_setpoint_when_on
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state: >
+        {% if states('climate.ac_iacopewee') in ['cool', 'heat', 'dry', 'fan_only', 'auto'] %}
+          {{ state_attr('climate.ac_iacopewee', 'temperature') }}
+        {% else %}
+          {{ none }}
+        {% endif %}
+

@@ -375,47 +375,20 @@
       title: Dryer Complete
       message: Your dryer cycle has finished. Time to fold!
   mode: single
-- id: '1763893220_daily_summary'
-  alias: Informational - Smart Daily Summary
-  description: Smart daily summary at 9am - only shows items needing attention
+- id: '1763893221_late_night_lights_off'
+  alias: Convenience - Late Night Lights Off
+  description: Turn off ambient LED strips and terrace lights at 1AM if still on
   triggers:
   - platform: time
-    at: '09:00:00'
+    at: '01:00:00'
   actions:
-  - service: weather.get_forecasts
+  - service: light.turn_off
     target:
-      entity_id: weather.weather_home
-    data:
-      type: daily
-    response_variable: daily_forecast
-  - service: notify.notify
-    data:
-      title: Good Morning
-      message: >
-        {% set messages = [] %}
-
-        {# Today's weather forecast - always show #}
-        {% set today = daily_forecast['weather.weather_home'].forecast[0] %}
-        {% set temp_high = today.temperature | round(0) %}
-        {% set temp_low = today.templow | round(0) %}
-        {% set precipitation = today.precipitation | round(1) %}
-        {% set weather_msg = 'Today: ' ~ temp_low ~ '-' ~ temp_high ~ '°C, ' ~ precipitation ~ 'mm rain' %}
-        {% set messages = messages + [weather_msg] %}
-
-        {# AC runtime yesterday - only if > 1h #}
-        {% set ac_runtime = states('sensor.total_ac_runtime_yesterday') | float(0) %}
-        {% if ac_runtime > 1 %}
-          {% set messages = messages + ['AC ran ' ~ ac_runtime ~ 'h yesterday'] %}
-        {% endif %}
-
-        {# Build final message #}
-        {{ messages | join('\n') }}
-
-        Tap to view insights →
-      data:
-        # iOS - opens insights dashboard in HA app
-        url: /home-insights
-        # Android - opens insights dashboard in HA app
-        clickAction: /home-insights
+      entity_id:
+      - light.led_strip_window_2
+      - light.led_strip_window_3
+  - service: switch.turn_off
+    target:
+      entity_id: switch.terrace_lights
   mode: single
 

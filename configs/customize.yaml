@@ -1,0 +1,7 @@
+# ZHA Quirks Workarounds
+# Fix for Tuya TRV _TZE200_b6wax7g0 reporting max_temp as 300°C instead of 30°C
+# This is a known ZHA quirks bug where the temperature conversion factor is not applied correctly
+
+climate.tze200_b6wax7g0_ts0601_thermostat_2:
+  min_temp: 7
+  max_temp: 30

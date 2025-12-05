@@ -26,6 +26,14 @@ def mushroom_climate(entity, name=" ", icon="mdi:air-conditioner"):
         "variables": [{"entity": entity}, {"name": name}, {"icon": icon}]
     }
 
+def mushroom_thermostat(entity, name=" ", icon="mdi:heating-coil"):
+    """Shorthand for mushroom thermostat template (no off mode, tap opens more-info)"""
+    return {
+        "type": "custom:decluttering-card",
+        "template": "mushroom_thermostat",
+        "variables": [{"entity": entity}, {"name": name}, {"icon": icon}]
+    }
+
 def button_scene(entity, name, icon):
     """Shorthand for button scene template"""
     return {

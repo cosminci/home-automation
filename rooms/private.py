@@ -1,4 +1,4 @@
-from dashboard_helpers import (mushroom_switch, mushroom_light, mushroom_climate, network_button)
+from dashboard_helpers import (mushroom_switch, mushroom_light, mushroom_climate, mushroom_thermostat, network_button)
 
 
 def get_view():
@@ -53,7 +53,7 @@ def get_view():
                         "cards": [
                             {
                                 "type": "custom:mushroom-template-card",
-                                "icon": "mdi:shower",
+                                "icon": "mdi:shower-head",
                                 "icon_color": "blue",
                                 "primary": " ",
                                 "secondary": " "
@@ -62,7 +62,9 @@ def get_view():
                             mushroom_switch("switch.ceiling_spots_3", "mdi:spotlight"),
                             mushroom_switch("switch.ventilator", "mdi:fan", "blue")
                         ]
-                    }
+                    },
+                    # Floor Heating Thermostat
+                    mushroom_thermostat("climate.tze200_b6wax7g0_ts0601_thermostat")
                 ]
             },
             # Kid's Room
@@ -83,7 +85,7 @@ def get_view():
                             },
                             mushroom_switch("switch.rail_spots_3", "mdi:track-light"),
                             mushroom_switch("switch.ceiling_light_2", "mdi:ceiling-light"),
-                            mushroom_switch("switch.light_2", "mdi:wall-sconce")
+                            mushroom_switch("switch.wall_light", "mdi:wall-sconce")
                         ]
                     },
                     {
@@ -145,7 +147,9 @@ def get_view():
                             mushroom_switch("switch.ceiling_spots_2", "mdi:spotlight"),
                             mushroom_switch("switch.ventilator_2", "mdi:fan", "blue")
                         ]
-                    }
+                    },
+                    # Floor Heating Thermostat
+                    mushroom_thermostat("climate.tze200_b6wax7g0_ts0601_thermostat_2")
                 ]
             },
             # Office

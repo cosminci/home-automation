@@ -31,7 +31,8 @@ home-automation/
 ├── configs/                           # HA configuration files
 │   ├── automations.yaml              # 23 automations
 │   ├── scenes.yaml                   # 8 scenes
-│   ├── sensors.yaml                  # Climate & appliance sensors
+│   ├── sensors.yaml                  # History stats sensors (sensor: !include)
+│   ├── templates.yaml                # Template sensors (template: !include)
 │   ├── scripts.yaml                  # 2 scripts
 │   └── core.category_registry        # Automation categories
 ├── scripts/                           # Utility scripts
@@ -126,7 +127,9 @@ source ~/.zshrc && source /tmp/ha_venv/bin/activate && python3 generate_insights
 - **Note:** `ambient_70` uses brightness 177 (not 178) - value 178 doesn't work when lights already on
 
 ### Sensors
-- **File:** `configs/sensors.yaml`
+- **File:** `configs/sensors.yaml` - History stats sensors (included under `sensor:`)
+- **File:** `configs/templates.yaml` - Template sensors using modern syntax (included under `template:`)
+- **Note:** Template sensors were migrated from legacy `platform: template` to modern `template:` integration syntax (required before HA 2026.6)
 
 ### Scripts
 - **File:** `configs/scripts.yaml` (3 scripts: lights_all_off, everything_off, ambient_off)
