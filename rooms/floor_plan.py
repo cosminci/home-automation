@@ -89,41 +89,60 @@ DEVICES = {
 # ============================================================================
 
 def create_state_icon(entity_id, config):
-    """Create a state-based icon element for the floor plan"""
+    """Create a state-based icon element for the floor plan using card-mod for conditional styling"""
     entity_type = entity_id.split('.')[0]
 
-    # Determine state conditions based on entity type
+    # Build the condition for "active" state based on entity type
+    # These are Jinja2 templates processed by Home Assistant
     if entity_type == 'climate':
-        state_filter = "!= 'off'"
+        if config.get('icon') == 'mdi:radiator':
+            # TRV thermostats: active when setpoint > current temp (heating needed)
+            condition = (
+                f"state_attr('{entity_id}', 'temperature') | float(0) > "
+                f"state_attr('{entity_id}', 'current_temperature') | float(100)"
+            )
+        else:
+            # AC units: active when not off
+            condition = f"states('{entity_id}') != 'off'"
     elif entity_type == 'camera':
-        state_filter = "!= 'unavailable'"
+        condition = f"states('{entity_id}') != 'unavailable'"
     elif entity_type == 'media_player':
-        state_filter = "!= 'off' and != 'idle' and != 'standby'"
+        condition = f"states('{entity_id}') not in ['off', 'idle', 'standby', 'unavailable']"
+    elif entity_type == 'binary_sensor':
+        # Binary sensors: active when 'on'
+        condition = f"states('{entity_id}') == 'on'"
     elif entity_type == 'sensor' and 'operation_state' in entity_id:
-        # Appliance sensors: show color when running (not ready, inactive, or off)
-        state_filter = "not in ['ready', 'inactive', 'off']"
+        # Appliance sensors: active when running (not ready, inactive, off, etc.)
+        condition = f"states('{entity_id}') not in ['ready', 'inactive', 'off', 'unavailable', 'unknown']"
     elif entity_type == 'sensor' and '_state' in entity_id:
-        # Network device sensors: show color when connected
-        state_filter = "in ['Connected', 'connected']"
+        # Network device sensors: active when connected
+        condition = f"states('{entity_id}') in ['Connected', 'connected']"
     else:  # lights, switches
-        state_filter = "== 'on'"
+        condition = f"states('{entity_id}') == 'on'"
 
-    # Build the color template string
-    color_template = "{{{{ if states('{}') {} }}}}{}{{{{ else }}}}grey{{{{ endif }}}}".format(
-        entity_id, state_filter, config['color_on']
-    )
+    # Build card-mod style with Jinja2 template for conditional coloring
+    # Using --state-icon-color CSS variable (modern HA) with state_color: false
+    color_on = config['color_on']
+    card_mod_style = f"""
+      :host {{
+        --state-icon-color: {{% if {condition} %}}{color_on}{{% else %}}grey{{% endif %}};
+      }}
+    """
 
     return {
         "type": "state-icon",
         "entity": entity_id,
         "icon": config["icon"],
+        "state_color": False,  # Disable default state coloring
         "tap_action": {"action": "more-info"},
         "style": {
             "left": config["left"],
             "top": config["top"],
-            "color": color_template,
             "transform": "translate(-50%, -50%)",
             "--mdc-icon-size": "24px"
+        },
+        "card_mod": {
+            "style": card_mod_style
         }
     }
 
