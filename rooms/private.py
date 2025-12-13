@@ -176,6 +176,14 @@ def get_view():
                             network_button("button.ap_iacopewee_restart", "mdi:restart"),
                             network_button("button.switch_port_14_power_cycle", "mdi:power-plug-off")
                         ]
+                    },
+                    {
+                        "type": "picture-entity",
+                        "entity": "camera.tapotroceni_hd_stream",
+                        "camera_image": "camera.tapotroceni_hd_stream",
+                        "show_name": True,
+                        "show_state": False,
+                        "name": "📹 Kid's Room Camera"
                     }
                 ]
             },

@@ -67,6 +67,7 @@ DEVICES = {
     "switch.ceiling_light_2": {"left": "77%", "top": "50%", "icon": "mdi:ceiling-light", "color_on": "orange"},
     "switch.wall_light": {"left": "80%", "top": "43%", "icon": "mdi:wall-sconce", "color_on": "orange"},
     "sensor.ap_iacopewee_state": {"left": "94%", "top": "50%", "icon": "mdi:access-point", "color_on": "green"},
+    "camera.tapotroceni_hd_stream": {"left": "93%", "top": "59%", "icon": "mdi:cctv", "color_on": "red"},
 
     # Bathroom Tub
     "switch.led_strip": {"left": "56%", "top": "47%", "icon": "mdi:led-strip", "color_on": "orange"},
