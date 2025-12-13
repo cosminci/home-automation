@@ -102,5 +102,5 @@ Edit device positions in `rooms/floor_plan.py` using percentage coordinates (`le
 
 **Unraid Integration** (not working):
 - Goal: Monitor array status, disk health, Docker containers, storage capacity
-- Approach: HACS integration `domalab/ha-unraid` with Unraid 7.2+ built-in API
-- Blocker: API key configuration not completed; use LAN IP (`192.168.1.3`) not hostname
+- Approach: HACS integration `chris-mc1/unraid_api` with Unraid 7.2+ GraphQL API
+- Blocker: Integration requires Admin API key despite documentation claiming read-only scopes work ([issue #26](https://github.com/chris-mc1/unraid_api/issues/26)); `domalab/ha-unraid` alternative is abandoned
