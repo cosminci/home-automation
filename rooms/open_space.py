@@ -193,6 +193,70 @@ def get_view():
                         ]
                     },
                     {
+                        "type": "grid",
+                        "columns": 3,
+                        "square": False,
+                        "cards": [
+                            {
+                                "type": "custom:mushroom-entity-card",
+                                "entity": "binary_sensor.slzb_mr4u_ethernet",
+                                "icon": "mdi:zigbee",
+                                "icon_color": "none",
+                                "primary_info": "none",
+                                "secondary_info": "none",
+                                "card_mod": {
+                                    "style": "ha-card { --card-mod-icon-color: {% if is_state('binary_sensor.slzb_mr4u_ethernet', 'on') %}green{% else %}red{% endif %}; }"
+                                }
+                            },
+                            {
+                                "type": "custom:mushroom-entity-card",
+                                "entity": "button.slzb_mr4u_zigbee_restart",
+                                "icon": "mdi:restart",
+                                "icon_color": "red",
+                                "primary_info": "none",
+                                "secondary_info": "none",
+                                "tap_action": {"action": "toggle"},
+                                "card_mod": {
+                                    "style": """
+                                        ha-card::after {
+                                            content: '';
+                                            position: absolute;
+                                            top: 6px;
+                                            right: 6px;
+                                            width: 14px;
+                                            height: 14px;
+                                            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23888888' d='M4.93,4.93C3.12,6.74 2,9.24 2,12C2,14.76 3.12,17.26 4.93,19.07L6.34,17.66C4.89,16.22 4,14.22 4,12C4,9.79 4.89,7.78 6.34,6.34L4.93,4.93M19.07,4.93L17.66,6.34C19.11,7.78 20,9.79 20,12C20,14.22 19.11,16.22 17.66,17.66L19.07,19.07C20.88,17.26 22,14.76 22,12C22,9.24 20.88,6.74 19.07,4.93M7.76,7.76C6.67,8.85 6,10.35 6,12C6,13.65 6.67,15.15 7.76,16.24L9.17,14.83C8.45,14.11 8,13.11 8,12C8,10.89 8.45,9.89 9.17,9.17L7.76,7.76M16.24,7.76L14.83,9.17C15.55,9.89 16,10.89 16,12C16,13.11 15.55,14.11 14.83,14.83L16.24,16.24C17.33,15.15 18,13.65 18,12C18,10.35 17.33,8.85 16.24,7.76M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z'/%3E%3C/svg%3E");
+                                            background-size: contain;
+                                        }
+                                    """
+                                }
+                            },
+                            {
+                                "type": "custom:mushroom-entity-card",
+                                "entity": "button.slzb_mr4u_core_restart",
+                                "icon": "mdi:restart",
+                                "icon_color": "red",
+                                "primary_info": "none",
+                                "secondary_info": "none",
+                                "tap_action": {"action": "toggle"},
+                                "card_mod": {
+                                    "style": """
+                                        ha-card::after {
+                                            content: '';
+                                            position: absolute;
+                                            top: 6px;
+                                            right: 6px;
+                                            width: 14px;
+                                            height: 14px;
+                                            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23888888' d='M9,3V5H7A2,2 0 0,0 5,7V9H3V11H5V13H3V15H5V17A2,2 0 0,0 7,19H9V21H11V19H13V21H15V19H17A2,2 0 0,0 19,17V15H21V13H19V11H21V9H19V7A2,2 0 0,0 17,5H15V3H13V5H11V3H9M7,9H10V12H7V9M14,9H17V12H14V9M7,14H10V17H7V14M14,14H17V17H14V14Z'/%3E%3C/svg%3E");
+                                            background-size: contain;
+                                        }
+                                    """
+                                }
+                            }
+                        ]
+                    },
+                    {
                         "type": "picture-entity",
                         "entity": "camera.camera_hallway_medium_resolution_channel",
                         "camera_image": "camera.camera_hallway_medium_resolution_channel",

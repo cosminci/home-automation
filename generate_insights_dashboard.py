@@ -213,7 +213,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Living Room",
-                                    "secondary": "Yesterday: {{ states('sensor.ac_living_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.ac_living_runtime_7days') | float(0) | round(1) }}h",
+                                    "secondary": "Yesterday: {{ states('sensor.ac_living_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.ac_living_runtime_7_days') | float(0) | round(1) }}h",
                                     "icon": "mdi:air-conditioner",
                                     "icon_color": "green",
                                     "tap_action": {"action": "none"}
@@ -221,7 +221,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Bedroom",
-                                    "secondary": "Yesterday: {{ states('sensor.ac_bedroom_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.ac_bedroom_runtime_7days') | float(0) | round(1) }}h",
+                                    "secondary": "Yesterday: {{ states('sensor.ac_bedroom_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.ac_bedroom_runtime_7_days') | float(0) | round(1) }}h",
                                     "icon": "mdi:air-conditioner",
                                     "icon_color": "green",
                                     "tap_action": {"action": "none"}
@@ -229,7 +229,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Office",
-                                    "secondary": "Yesterday: {{ states('sensor.ac_office_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.ac_office_runtime_7days') | float(0) | round(1) }}h",
+                                    "secondary": "Yesterday: {{ states('sensor.ac_office_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.ac_office_runtime_7_days') | float(0) | round(1) }}h",
                                     "icon": "mdi:air-conditioner",
                                     "icon_color": "green",
                                     "tap_action": {"action": "none"}
@@ -237,7 +237,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Kid's Room",
-                                    "secondary": "Yesterday: {{ states('sensor.ac_kid_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.ac_kid_runtime_7days') | float(0) | round(1) }}h",
+                                    "secondary": "Yesterday: {{ states('sensor.ac_kid_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.ac_kid_runtime_7_days') | float(0) | round(1) }}h",
                                     "icon": "mdi:air-conditioner",
                                     "icon_color": "green",
                                     "tap_action": {"action": "none"}
@@ -245,12 +245,16 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Total",
-                                    "secondary": "Yesterday: {{ states('sensor.total_ac_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.total_ac_runtime_7days') | float(0) | round(1) }}h",
+                                    "secondary": "Yesterday: {{ states('sensor.total_ac_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.total_ac_runtime_7_days') | float(0) | round(1) }}h",
                                     "icon": "mdi:timer",
                                     "icon_color": "blue",
                                     "tap_action": {"action": "none"}
                                 }
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 12,
+                                "rows": "auto"
+                            }
                         },
                         # Appliance Stats Section
                         {
@@ -260,7 +264,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Dishwasher",
-                                    "secondary": "Yesterday: {{ states('sensor.dishwasher_count_yesterday') | int(0) }} runs ({{ states('sensor.dishwasher_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.dishwasher_count_7days') | int(0) }} runs ({{ states('sensor.dishwasher_runtime_7days') | float(0) | round(1) }}h)",
+                                    "secondary": "Yesterday: {{ states('sensor.dishwasher_count_yesterday') | int(0) }} runs ({{ states('sensor.dishwasher_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.dishwasher_count_7_days') | int(0) }} runs ({{ states('sensor.dishwasher_runtime_7_days') | float(0) | round(1) }}h)",
                                     "icon": "mdi:dishwasher",
                                     "icon_color": "blue",
                                     "tap_action": {"action": "none"}
@@ -268,7 +272,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Oven",
-                                    "secondary": "Yesterday: {{ states('sensor.oven_count_yesterday') | int(0) }} runs ({{ states('sensor.oven_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.oven_count_7days') | int(0) }} runs ({{ states('sensor.oven_runtime_7days') | float(0) | round(1) }}h)",
+                                    "secondary": "Yesterday: {{ states('sensor.oven_count_yesterday') | int(0) }} runs ({{ states('sensor.oven_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.oven_count_7_days') | int(0) }} runs ({{ states('sensor.oven_runtime_7_days') | float(0) | round(1) }}h)",
                                     "icon": "mdi:stove",
                                     "icon_color": "orange",
                                     "tap_action": {"action": "none"}
@@ -276,7 +280,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Cooktop",
-                                    "secondary": "Yesterday: {{ states('sensor.cooktop_count_yesterday') | int(0) }} runs ({{ states('sensor.cooktop_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.cooktop_count_7days') | int(0) }} runs ({{ states('sensor.cooktop_runtime_7days') | float(0) | round(1) }}h)",
+                                    "secondary": "Yesterday: {{ states('sensor.cooktop_count_yesterday') | int(0) }} runs ({{ states('sensor.cooktop_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.cooktop_count_7_days') | int(0) }} runs ({{ states('sensor.cooktop_runtime_7_days') | float(0) | round(1) }}h)",
                                     "icon": "mdi:pot-steam",
                                     "icon_color": "orange",
                                     "tap_action": {"action": "none"}
@@ -284,7 +288,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Washing Machine",
-                                    "secondary": "Yesterday: {{ states('sensor.washing_machine_count_yesterday') | int(0) }} runs ({{ states('sensor.washing_machine_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.washing_machine_count_7days') | int(0) }} runs ({{ states('sensor.washing_machine_runtime_7days') | float(0) | round(1) }}h)",
+                                    "secondary": "Yesterday: {{ states('sensor.washing_machine_count_yesterday') | int(0) }} runs ({{ states('sensor.washing_machine_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.washing_machine_count_7_days') | int(0) }} runs ({{ states('sensor.washing_machine_runtime_7_days') | float(0) | round(1) }}h)",
                                     "icon": "mdi:washing-machine",
                                     "icon_color": "cyan",
                                     "tap_action": {"action": "none"}
@@ -292,12 +296,16 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Dryer",
-                                    "secondary": "Yesterday: {{ states('sensor.dryer_count_yesterday') | int(0) }} runs ({{ states('sensor.dryer_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.dryer_count_7days') | int(0) }} runs ({{ states('sensor.dryer_runtime_7days') | float(0) | round(1) }}h)",
+                                    "secondary": "Yesterday: {{ states('sensor.dryer_count_yesterday') | int(0) }} runs ({{ states('sensor.dryer_runtime_yesterday') | float(0) | round(1) }}h) | 7 Days: {{ states('sensor.dryer_count_7_days') | int(0) }} runs ({{ states('sensor.dryer_runtime_7_days') | float(0) | round(1) }}h)",
                                     "icon": "mdi:tumble-dryer",
                                     "icon_color": "cyan",
                                     "tap_action": {"action": "none"}
                                 }
-                            ]
+                            ],
+                            "grid_options": {
+                                "columns": 12,
+                                "rows": "auto"
+                            }
                         }
                     ]
                 }
