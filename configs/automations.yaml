@@ -358,8 +358,8 @@
   mode: single
 - id: '1763893221_late_night_lights_off'
   alias: Convenience - Late Night Lights Off
-  description: Turn off all ambient LED strips and terrace lights at 1AM. Retries
-    up to 3 times with 10min delay to handle Netatmo API 429 rate limiting.
+  description: Turn off ambient LED strips and terrace lights at 1AM if still on.
+    Retries up to 3 times with 10min delay to handle Netatmo API 429 rate limiting.
   triggers:
   - platform: time
     at: '01:00:00'
@@ -372,23 +372,15 @@
           value_template: '{{ repeat.index >= 3 }}'
         - condition: template
           value_template: >-
-            {{ is_state('light.led_strip', 'off') and
-               is_state('light.led_strip_bed', 'off') and
-               is_state('light.led_strip_window', 'off') and
-               is_state('light.led_strip_window_2', 'off') and
+            {{ is_state('light.led_strip_window_2', 'off') and
                is_state('light.led_strip_window_3', 'off') and
-               is_state('light.led_strip_window_4', 'off') and
                is_state('switch.terrace_lights', 'off') }}
       sequence:
       - action: light.turn_off
         target:
           entity_id:
-          - light.led_strip
-          - light.led_strip_bed
-          - light.led_strip_window
           - light.led_strip_window_2
           - light.led_strip_window_3
-          - light.led_strip_window_4
       - action: switch.turn_off
         target:
           entity_id: switch.terrace_lights
