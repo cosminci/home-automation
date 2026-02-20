@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import asyncio
+import sys
 import websockets
 import json
 import os
@@ -9,10 +10,18 @@ HA_URL = "ws://192.168.1.3:8123/api/websocket"
 HA_TOKEN = os.environ.get("HA_TOKEN")
 
 async def create_insights_dashboard():
+    if not HA_TOKEN:
+        print("Error: HA_TOKEN environment variable is not set.")
+        print("Set it in ~/.zshrc or run: export HA_TOKEN='your_token'")
+        sys.exit(1)
+
     async with websockets.connect(HA_URL) as websocket:
-        await websocket.recv()
+        await websocket.recv()  # auth_required
         await websocket.send(json.dumps({"type": "auth", "access_token": HA_TOKEN}))
-        await websocket.recv()
+        auth_result = json.loads(await websocket.recv())
+        if auth_result.get("type") != "auth_ok":
+            print(f"Error: Authentication failed: {auth_result}")
+            sys.exit(1)
 
         dashboard_config = {
             "title": "Insights",

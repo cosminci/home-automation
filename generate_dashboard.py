@@ -78,16 +78,24 @@ def create_dashboard_config():
 
 async def deploy_dashboard(config):
     """Deploy the dashboard to Home Assistant via WebSocket API."""
+    if not HA_TOKEN:
+        print("Error: HA_TOKEN environment variable is not set.")
+        print("Set it in ~/.zshrc or run: export HA_TOKEN='your_token'")
+        sys.exit(1)
+
     print("\nDeploying dashboard...")
 
     async with websockets.connect(HA_URL) as websocket:
         # Authenticate
-        auth_response = json.loads(await websocket.recv())
+        await websocket.recv()  # auth_required
         await websocket.send(json.dumps({
             "type": "auth",
             "access_token": HA_TOKEN
         }))
         auth_result = json.loads(await websocket.recv())
+        if auth_result.get("type") != "auth_ok":
+            print(f"Error: Authentication failed: {auth_result}")
+            sys.exit(1)
 
         # Update dashboard
         await websocket.send(json.dumps({
@@ -97,8 +105,12 @@ async def deploy_dashboard(config):
             "config": config
         }))
 
-        response = await websocket.recv()
-        print(f"Dashboard deployment response: {response}")
+        response = json.loads(await websocket.recv())
+        if response.get("success"):
+            print("Dashboard deployed successfully!")
+        else:
+            print(f"Error: Deployment failed: {response}")
+            sys.exit(1)
 
 async def main():
     """Main entry point."""
