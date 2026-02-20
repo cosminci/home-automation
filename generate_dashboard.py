@@ -13,7 +13,7 @@ from pathlib import Path
 from importlib import import_module
 
 # Configuration
-HA_URL = "ws://tower.local:8123/api/websocket"
+HA_URL = "ws://192.168.1.3:8123/api/websocket"
 HA_TOKEN = os.environ.get("HA_TOKEN")
 
 # Room modules to load in order

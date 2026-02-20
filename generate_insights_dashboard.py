@@ -5,7 +5,7 @@ import websockets
 import json
 import os
 
-HA_URL = "ws://tower.local:8123/api/websocket"
+HA_URL = "ws://192.168.1.3:8123/api/websocket"
 HA_TOKEN = os.environ.get("HA_TOKEN")
 
 async def create_insights_dashboard():
@@ -350,7 +350,7 @@ async def create_insights_dashboard():
 
         if result.get("success"):
             print("✅ Insights dashboard created successfully!")
-            print("📱 Access at: http://tower.local:8123/home-insights")
+            print("📱 Access at: http://192.168.1.3:8123/home-insights")
         else:
             print(f"❌ Error: {result}")
 
