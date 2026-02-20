@@ -11,6 +11,8 @@
 | Insights Dashboard | `http://192.168.1.3:8123/home-insights` |
 
 **Token:** `~/.zshrc` → `HA_TOKEN` (long-lived access token, valid 10 years)
+**SSH:** Passwordless SSH key auth to `root@192.168.1.3` (Unraid NAS)
+**HA config path:** `/mnt/cache/appdata/homeassistant/` on NAS
 
 ## API Usage
 
@@ -84,7 +86,7 @@ generate_insights_dashboard.py # Insights dashboard generator (deploys via WebSo
 dashboard_helpers.py           # Card creation helpers
 templates/                     # Decluttering card templates (8 JSON)
 rooms/                         # View modules (overview, open_space, private, utility, floor_plan)
-configs/                       # HA config files (automations/scenes/scripts: API-deployable; sensors/templates/customize: manual vi)
+configs/                       # HA config files (all auto-deployable via REST API or SSH)
 scripts/                       # Utility scripts (Hyundai token extractor, entity cleanup)
 ```
 
@@ -100,11 +102,12 @@ python3 generate_insights_dashboard.py
 - CRUD via `/api/config/{automation,scene,script}/config/{id}` (see API Usage above)
 - Then call the appropriate reload service
 
-**YAML-only config files** (`sensors.yaml`, `templates.yaml`, `customize.yaml`) - manual copy still required:
-1. Docker → homeassistant → Console
-2. `vi /config/sensors.yaml` (or other config file)
-3. Delete all (`gg` then `dG`), paste, save (`:wq`)
-4. Call the reload service for the relevant domain (see API Usage above)
+**YAML config files** (`sensors.yaml`, `templates.yaml`, `customize.yaml`) - deploy via SSH:
+```bash
+# Write file to NAS and reload
+scp configs/sensors.yaml root@192.168.1.3:/mnt/cache/appdata/homeassistant/sensors.yaml
+curl -X POST -H "Authorization: Bearer $HA_TOKEN" http://192.168.1.3:8123/api/services/history_stats/reload
+```
 
 ## Integrations
 
@@ -124,7 +127,7 @@ python3 generate_insights_dashboard.py
 - ✅ Deploy dashboards automatically via WebSocket API
 - ✅ Deploy automations/scenes/scripts automatically via REST API config endpoints
 - ✅ Use REST API for querying states and calling services
-- ❌ `sensors.yaml`, `templates.yaml`, `customize.yaml` still require manual vi copy + reload
+- ✅ Deploy YAML configs (`sensors.yaml`, `templates.yaml`, `customize.yaml`) via SSH + reload service
 - ❌ Don't assume `light.*` entities are dimmable
 
 ## Utility Scripts
