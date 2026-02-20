@@ -1,4 +1,5 @@
-from dashboard_helpers import (mushroom_switch, mushroom_light, mushroom_climate, network_button)
+from dashboard_helpers import (mushroom_switch, mushroom_light, mushroom_climate, network_button,
+                               network_status)
 
 
 def get_view():
@@ -64,17 +65,7 @@ def get_view():
                         "columns": 4,
                         "square": False,
                         "cards": [
-                            {
-                                "type": "custom:mushroom-entity-card",
-                                "entity": "sensor.ap_living_state",
-                                "icon": "mdi:access-point",
-                                "icon_color": "none",
-                                "primary_info": "none",
-                                "secondary_info": "none",
-                                "card_mod": {
-                                    "style": "ha-card { --card-mod-icon-color: {% if is_state('sensor.ap_living_state', 'Connected') or is_state('sensor.ap_living_state', 'connected') %}green{% else %}red{% endif %}; }"
-                                }
-                            },
+                            network_status("sensor.ap_living_state"),
                             {
                                 "type": "custom:mushroom-entity-card",
                                 "entity": "sensor.ap_living_uptime",
@@ -89,7 +80,6 @@ def get_view():
                     {
                         "type": "picture-entity",
                         "entity": "camera.camera_living_medium_resolution_channel",
-                        "camera_image": "camera.camera_living_medium_resolution_channel",
                         "show_name": True,
                         "show_state": False,
                         "name": "📹 Living Room Camera"
@@ -144,17 +134,7 @@ def get_view():
                         "columns": 4,
                         "square": False,
                         "cards": [
-                            {
-                                "type": "custom:mushroom-entity-card",
-                                "entity": "sensor.cloud_gateway_max_state",
-                                "icon": "mdi:router-wireless",
-                                "icon_color": "none",
-                                "primary_info": "none",
-                                "secondary_info": "none",
-                                "card_mod": {
-                                    "style": "ha-card { --card-mod-icon-color: {% if is_state('sensor.cloud_gateway_max_state', 'Connected') or is_state('sensor.cloud_gateway_max_state', 'connected') %}green{% else %}red{% endif %}; }"
-                                }
-                            },
+                            network_status("sensor.cloud_gateway_max_state", "mdi:router-wireless"),
                             mushroom_switch("switch.unifi_network_vpn", "mdi:vpn", "green"),
                             {
                                 "type": "custom:mushroom-entity-card",
@@ -171,17 +151,7 @@ def get_view():
                         "columns": 3,
                         "square": False,
                         "cards": [
-                            {
-                                "type": "custom:mushroom-entity-card",
-                                "entity": "sensor.switch_state",
-                                "icon": "mdi:switch",
-                                "icon_color": "none",
-                                "primary_info": "none",
-                                "secondary_info": "none",
-                                "card_mod": {
-                                    "style": "ha-card { --card-mod-icon-color: {% if is_state('sensor.switch_state', 'Connected') or is_state('sensor.switch_state', 'connected') %}green{% else %}red{% endif %}; }"
-                                }
-                            },
+                            network_status("sensor.switch_state", "mdi:switch"),
                             {
                                 "type": "custom:mushroom-entity-card",
                                 "entity": "sensor.switch_uptime",
@@ -197,17 +167,7 @@ def get_view():
                         "columns": 3,
                         "square": False,
                         "cards": [
-                            {
-                                "type": "custom:mushroom-entity-card",
-                                "entity": "binary_sensor.slzb_mr4u_ethernet",
-                                "icon": "mdi:zigbee",
-                                "icon_color": "none",
-                                "primary_info": "none",
-                                "secondary_info": "none",
-                                "card_mod": {
-                                    "style": "ha-card { --card-mod-icon-color: {% if is_state('binary_sensor.slzb_mr4u_ethernet', 'on') %}green{% else %}red{% endif %}; }"
-                                }
-                            },
+                            network_status("binary_sensor.slzb_mr4u_ethernet", "mdi:zigbee", on_states=("on",)),
                             {
                                 "type": "custom:mushroom-entity-card",
                                 "entity": "button.slzb_mr4u_zigbee_restart",
@@ -259,7 +219,6 @@ def get_view():
                     {
                         "type": "picture-entity",
                         "entity": "camera.camera_hallway_medium_resolution_channel",
-                        "camera_image": "camera.camera_hallway_medium_resolution_channel",
                         "show_name": True,
                         "show_state": False,
                         "name": "📹 Hallway Camera"

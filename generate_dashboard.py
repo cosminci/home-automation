@@ -6,18 +6,14 @@ Loads templates and room configurations from separate files and generates the da
 
 import asyncio
 import json
-import os
 import sys
-import websockets
 from pathlib import Path
 from importlib import import_module
 
 # Ensure imports work from any working directory
 sys.path.insert(0, str(Path(__file__).parent))
 
-# Configuration
-HA_URL = "ws://192.168.1.3:8123/api/websocket"
-HA_TOKEN = os.environ.get("HA_TOKEN")
+from ha_deploy import deploy_dashboard
 
 # Room modules to load in order
 ROOM_MODULES = [
@@ -79,47 +75,10 @@ def create_dashboard_config():
 
     return dashboard_config
 
-async def deploy_dashboard(config):
-    """Deploy the dashboard to Home Assistant via WebSocket API."""
-    if not HA_TOKEN:
-        print("Error: HA_TOKEN environment variable is not set.")
-        print("Set it in ~/.zshrc or run: export HA_TOKEN='your_token'")
-        sys.exit(1)
-
-    print("\nDeploying dashboard...")
-
-    async with websockets.connect(HA_URL) as websocket:
-        # Authenticate
-        await websocket.recv()  # auth_required
-        await websocket.send(json.dumps({
-            "type": "auth",
-            "access_token": HA_TOKEN
-        }))
-        auth_result = json.loads(await websocket.recv())
-        if auth_result.get("type") != "auth_ok":
-            print(f"Error: Authentication failed: {auth_result}")
-            sys.exit(1)
-
-        # Update dashboard
-        await websocket.send(json.dumps({
-            "id": 2,
-            "type": "lovelace/config/save",
-            "url_path": "clean-home",
-            "config": config
-        }))
-
-        response = json.loads(await websocket.recv())
-        if response.get("success"):
-            print("Dashboard deployed successfully!")
-        else:
-            print(f"Error: Deployment failed: {response}")
-            sys.exit(1)
-
 async def main():
     """Main entry point."""
     config = create_dashboard_config()
-    await deploy_dashboard(config)
+    await deploy_dashboard("clean-home", config)
 
 if __name__ == "__main__":
     asyncio.run(main())
-

@@ -117,9 +117,10 @@ def get_view():
             {
                 "type": "custom:stack-in-card",
                 "cards": [
-                    {
+                    # Show program selector when oven is idle (inactive or ready)
+                    *[{
                         "type": "conditional",
-                        "conditions": [{"entity": "sensor.oven_operation_state", "state": "inactive"}],
+                        "conditions": [{"entity": "sensor.oven_operation_state", "state": state}],
                         "card": {
                             "type": "custom:mushroom-select-card",
                             "entity": "select.oven_active_program",
@@ -128,19 +129,7 @@ def get_view():
                             "icon_color": "orange",
                             "secondary_info": "none"
                         }
-                    },
-                    {
-                        "type": "conditional",
-                        "conditions": [{"entity": "sensor.oven_operation_state", "state": "ready"}],
-                        "card": {
-                            "type": "custom:mushroom-select-card",
-                            "entity": "select.oven_active_program",
-                            "name": "Start Oven Program",
-                            "icon": "mdi:stove",
-                            "icon_color": "orange",
-                            "secondary_info": "none"
-                        }
-                    },
+                    } for state in ("inactive", "ready")],
                     {
                         "type": "conditional",
                         "conditions": [{"entity": "sensor.oven_operation_state", "state_not": "inactive"}, {"entity": "sensor.oven_operation_state", "state_not": "ready"}],
