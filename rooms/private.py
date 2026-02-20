@@ -1,4 +1,4 @@
-from dashboard_helpers import (mushroom_switch, mushroom_light, mushroom_climate, mushroom_thermostat, mushroom_entity, network_button)
+from dashboard_helpers import (mushroom_switch, mushroom_light, mushroom_climate, network_button)
 
 
 def get_view():
