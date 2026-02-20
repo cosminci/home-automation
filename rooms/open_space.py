@@ -37,7 +37,7 @@ def get_view():
                         "cards": [
                             {
                                 "type": "custom:mushroom-media-player-card",
-                                "entity": "media_player.77_oled",
+                                "entity": "media_player.hub_77_oled",
                                 "icon": "mdi:television",
                                 "use_media_info": False,
                                 "show_volume_level": False,

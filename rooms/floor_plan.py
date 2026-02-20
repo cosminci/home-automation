@@ -19,7 +19,7 @@ DEVICES = {
     "switch.dining_light": {"left": "17%", "top": "50%", "icon": "mdi:ceiling-light", "color_on": "orange"},
     "switch.ceiling_light_3": {"left": "17%", "top": "70%", "icon": "mdi:ceiling-fan-light", "color_on": "orange"},
     "light.ceiling_spots": {"left": "23%", "top": "70%", "icon": "mdi:spotlight", "color_on": "orange"},
-    "media_player.77_oled": {"left": "33%", "top": "73%", "icon": "mdi:television", "color_on": "green"},
+    "media_player.hub_77_oled": {"left": "33%", "top": "73%", "icon": "mdi:television", "color_on": "green"},
     "media_player.soundbar_q990b": {"left": "33%", "top": "68%", "icon": "mdi:speaker", "color_on": "green"},
     "camera.camera_living_medium_resolution_channel": {"left": "28%", "top": "33%", "icon": "mdi:cctv", "color_on": "red"},
     "sensor.ap_living_state": {"left": "33%", "top": "55%", "icon": "mdi:access-point", "color_on": "green"},
