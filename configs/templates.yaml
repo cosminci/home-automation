@@ -18,10 +18,10 @@
       unique_id: total_ac_runtime_7days
       unit_of_measurement: "h"
       state: >
-        {% set living = states('sensor.ac_living_runtime_7days') | float(0) %}
-        {% set bedroom = states('sensor.ac_bedroom_runtime_7days') | float(0) %}
-        {% set office = states('sensor.ac_office_runtime_7days') | float(0) %}
-        {% set kid = states('sensor.ac_kid_runtime_7days') | float(0) %}
+        {% set living = states('sensor.ac_living_runtime_7_days') | float(0) %}
+        {% set bedroom = states('sensor.ac_bedroom_runtime_7_days') | float(0) %}
+        {% set office = states('sensor.ac_office_runtime_7_days') | float(0) %}
+        {% set kid = states('sensor.ac_kid_runtime_7_days') | float(0) %}
         {{ (living + bedroom + office + kid) | round(1) }}
 
     - name: "Outdoor Temperature"

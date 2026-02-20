@@ -245,7 +245,7 @@ async def create_insights_dashboard():
                                 {
                                     "type": "custom:mushroom-template-card",
                                     "primary": "Total",
-                                    "secondary": "Yesterday: {{ states('sensor.total_ac_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.total_ac_runtime_7_days') | float(0) | round(1) }}h",
+                                    "secondary": "Yesterday: {{ states('sensor.total_ac_runtime_yesterday') | float(0) | round(1) }}h | 7 Days: {{ states('sensor.total_ac_runtime_7days') | float(0) | round(1) }}h",
                                     "icon": "mdi:timer",
                                     "icon_color": "blue",
                                     "tap_action": {"action": "none"}
