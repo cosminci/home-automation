@@ -8,7 +8,7 @@
     for:
       minutes: 5
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Car Unlocked'
       message: Your Tucson has been unlocked for 5 minutes.
@@ -69,7 +69,7 @@
     for:
       minutes: 10
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Car {{ trigger.to_state.attributes.friendly_name | default("Opening")
         }} Open'
@@ -91,7 +91,7 @@
   - condition: template
     value_template: '{{ states(''sensor.oven_operation_state'') != ''inactive'' }}'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Oven Left On!'
       message: 'Your oven has been running for 2 hours. Current state: {{ states(''sensor.oven_operation_state'')
@@ -112,7 +112,7 @@
     value_template: '{{ states(''sensor.cooktop_operation_state'') != ''inactive''
       }}'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Cooktop Left On!'
       message: 'Your cooktop has been on for 30 minutes. Current state: {{ states(''sensor.cooktop_operation_state'')
@@ -139,7 +139,7 @@
     entity_id: sensor.dryer_operation_state
     to: error
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Appliance Error'
       message: '{{ trigger.to_state.attributes.friendly_name | default("An appliance")
@@ -159,7 +159,7 @@
     - sensor.tucson_rear_right_tire_pressure
     below: 30
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Low Tire Pressure'
       message: '{{ trigger.to_state.attributes.friendly_name | default("A tire") }}:
@@ -175,7 +175,7 @@
     entity_id: sensor.tucson_fuel_level
     below: 10
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Fuel Level Critical'
       message: Your Tucson fuel level is at {{ states('sensor.tucson_fuel_level') }}%.
@@ -190,7 +190,7 @@
     entity_id: binary_sensor.tucson_washer_fluid_warning
     to: 'on'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Washer Fluid Low'
       message: Your Tucson's washer fluid is low. Refill soon.
@@ -204,7 +204,7 @@
     entity_id: sensor.tucson_car_battery_level
     below: 20
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Car Battery Low'
       message: Your Tucson's battery is at {{ states('sensor.tucson_car_battery_level')
@@ -229,7 +229,7 @@
     for:
       minutes: 5
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: 'ALERT: Device Offline'
       message: '{% if trigger.to_state %}{{ trigger.to_state.attributes.friendly_name
@@ -248,7 +248,7 @@
     after: '09:00:00'
     before: '23:00:00'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: Dishwasher Complete
       message: Your dishwasher cycle has finished. Time to unload!
@@ -266,7 +266,7 @@
     after: '09:00:00'
     before: '23:00:00'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: Dishwasher Salt Low
       message: Your dishwasher needs salt. Refill soon.
@@ -284,7 +284,7 @@
     after: '09:00:00'
     before: '23:00:00'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: Dishwasher Rinse Aid Low
       message: Your dishwasher needs rinse aid. Refill soon.
@@ -304,7 +304,7 @@
     after: '09:00:00'
     before: '23:00:00'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: Oven Ready
       message: Your oven has finished preheating and is ready to use.
@@ -322,7 +322,7 @@
     after: '09:00:00'
     before: '23:00:00'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: Oven Cooking Complete
       message: Your oven cooking cycle has finished.
@@ -340,7 +340,7 @@
     after: '09:00:00'
     before: '23:00:00'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: Washing Machine Complete
       message: Your washing machine cycle has finished. Transfer to dryer!
@@ -358,7 +358,7 @@
     after: '09:00:00'
     before: '23:00:00'
   actions:
-  - service: notify.notify
+  - action: notify.notify
     data:
       title: Dryer Complete
       message: Your dryer cycle has finished. Time to fold!
@@ -370,12 +370,12 @@
   - platform: time
     at: '01:00:00'
   actions:
-  - service: light.turn_off
+  - action: light.turn_off
     target:
       entity_id:
       - light.led_strip_window_2
       - light.led_strip_window_3
-  - service: switch.turn_off
+  - action: switch.turn_off
     target:
       entity_id: switch.terrace_lights
   mode: single
