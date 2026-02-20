@@ -1,15 +1,3 @@
-- id: '1763887403325'
-  alias: Soundbar - Change Source
-  description: ''
-  triggers:
-  - entity_id: input_select.soundbar_source
-    trigger: state
-  actions:
-  - target:
-      entity_id: media_player.soundbar_q990b
-    data:
-      source: '{{ states(''input_select.soundbar_source'') }}'
-    action: media_player.select_source
 - id: '1763893201_car_unlocked'
   alias: Critical - Car Unlocked
   description: Notify if car unlocked for 5+ minutes
