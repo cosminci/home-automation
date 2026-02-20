@@ -2,7 +2,12 @@
   unique_id: ac_living_runtime_yesterday
   name: AC Living Runtime Yesterday
   entity_id: climate.ac_living
-  state: 'cool'
+  state:
+    - 'cool'
+    - 'heat'
+    - 'dry'
+    - 'fan_only'
+    - 'auto'
   type: time
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
   end: '{{ now().replace(hour=0, minute=0, second=0) }}'
@@ -11,7 +16,12 @@
   unique_id: ac_bedroom_runtime_yesterday
   name: AC Bedroom Runtime Yesterday
   entity_id: climate.ac_bedroom
-  state: 'cool'
+  state:
+    - 'cool'
+    - 'heat'
+    - 'dry'
+    - 'fan_only'
+    - 'auto'
   type: time
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
   end: '{{ now().replace(hour=0, minute=0, second=0) }}'
@@ -20,7 +30,12 @@
   unique_id: ac_office_runtime_yesterday
   name: AC Office Runtime Yesterday
   entity_id: climate.ac_office
-  state: 'cool'
+  state:
+    - 'cool'
+    - 'heat'
+    - 'dry'
+    - 'fan_only'
+    - 'auto'
   type: time
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
   end: '{{ now().replace(hour=0, minute=0, second=0) }}'
@@ -29,7 +44,12 @@
   unique_id: ac_kid_runtime_yesterday
   name: AC Kid Runtime Yesterday
   entity_id: climate.ac_iacopewee
-  state: 'cool'
+  state:
+    - 'cool'
+    - 'heat'
+    - 'dry'
+    - 'fan_only'
+    - 'auto'
   type: time
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=1) }}'
   end: '{{ now().replace(hour=0, minute=0, second=0) }}'
@@ -38,7 +58,12 @@
   unique_id: ac_living_runtime_7days
   name: AC Living Runtime 7 Days
   entity_id: climate.ac_living
-  state: 'cool'
+  state:
+    - 'cool'
+    - 'heat'
+    - 'dry'
+    - 'fan_only'
+    - 'auto'
   type: time
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
   end: '{{ now() }}'
@@ -47,7 +72,12 @@
   unique_id: ac_bedroom_runtime_7days
   name: AC Bedroom Runtime 7 Days
   entity_id: climate.ac_bedroom
-  state: 'cool'
+  state:
+    - 'cool'
+    - 'heat'
+    - 'dry'
+    - 'fan_only'
+    - 'auto'
   type: time
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
   end: '{{ now() }}'
@@ -56,7 +86,12 @@
   unique_id: ac_office_runtime_7days
   name: AC Office Runtime 7 Days
   entity_id: climate.ac_office
-  state: 'cool'
+  state:
+    - 'cool'
+    - 'heat'
+    - 'dry'
+    - 'fan_only'
+    - 'auto'
   type: time
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
   end: '{{ now() }}'
@@ -65,7 +100,12 @@
   unique_id: ac_kid_runtime_7days
   name: AC Kid Runtime 7 Days
   entity_id: climate.ac_iacopewee
-  state: 'cool'
+  state:
+    - 'cool'
+    - 'heat'
+    - 'dry'
+    - 'fan_only'
+    - 'auto'
   type: time
   start: '{{ now().replace(hour=0, minute=0, second=0) - timedelta(days=7) }}'
   end: '{{ now() }}'
