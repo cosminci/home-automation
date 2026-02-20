@@ -87,9 +87,6 @@
     from: inactive
     for:
       hours: 2
-  conditions:
-  - condition: template
-    value_template: '{{ states(''sensor.oven_operation_state'') != ''inactive'' }}'
   actions:
   - action: notify.notify
     data:
@@ -107,10 +104,6 @@
     from: inactive
     for:
       minutes: 30
-  conditions:
-  - condition: template
-    value_template: '{{ states(''sensor.cooktop_operation_state'') != ''inactive''
-      }}'
   actions:
   - action: notify.notify
     data:
