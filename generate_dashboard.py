@@ -12,6 +12,9 @@ import websockets
 from pathlib import Path
 from importlib import import_module
 
+# Ensure imports work from any working directory
+sys.path.insert(0, str(Path(__file__).parent))
+
 # Configuration
 HA_URL = "ws://192.168.1.3:8123/api/websocket"
 HA_TOKEN = os.environ.get("HA_TOKEN")
@@ -28,7 +31,7 @@ ROOM_MODULES = [
 def load_templates():
     """Load all decluttering templates from the templates/ directory."""
     templates = {}
-    templates_dir = Path("templates")
+    templates_dir = Path(__file__).parent / "templates"
 
     for template_file in templates_dir.glob("*.json"):
         template_name = template_file.stem
